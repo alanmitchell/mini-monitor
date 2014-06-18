@@ -1,9 +1,9 @@
 #!/usr/bin/python
 """This script uploads the two pi_logger error/debug log files to the 
-analysisnorth.com server.
+analysisnorth.com server.  Also uploads the tails of some system log files.
 """
 
-import datetime, sys
+import datetime, sys, subprocess
 import requests
 
 # This script is execute in rc.local and must not error out or it will stop
@@ -29,7 +29,15 @@ try:
     files = {'upfile': ('%s_pi_log.log' % prefix, open('/boot/pi_logger/logs/pi_log.log', 'rb'))}
     data = {'MAX_FILE_SIZE': '500000'}
     r = requests.post(url, files=files, data=data)
+    
     files = {'upfile': ('%s_pi_cron.log' % prefix, open('/boot/pi_logger/logs/pi_cron.log', 'rb'))}
+    r = requests.post(url, files=files, data=data)
+    
+    # get tails of important system log files
+    tail_syslog = subprocess.check_output('tail -n500 /var/log/syslog', shell=True)
+    tail_daemon = subprocess.check_output('tail -n200 /var/log/daemon.log', shell=True)
+    report = 'Last 500 lines of syslog:\n\n%s\n\nLast 200 lines of daemon.log:\n\n%s' % (tail_syslog, tail_daemon)
+    files = {'upfile': ('%s_system.log' % prefix, report)}
     r = requests.post(url, files=files, data=data)
 
 except:

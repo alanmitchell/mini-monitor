@@ -4,12 +4,8 @@ Checks for error conditions and reboots the system if any are detected.
 Assumes that this script is run as the root user.
 """
 import time, subprocess, calendar, datetime, logging
-import cron_logging
+import cron_logging, utils
 
-def reboot():
-    """Reboot the system.
-    """
-    subprocess.call('/sbin/shutdown -r now', shell=True)
     
 # only run these tasks every one hour
 if datetime.datetime.now().hour % 1 == 0:
@@ -30,7 +26,7 @@ if datetime.datetime.now().hour % 1 == 0:
         last_post_time = float(open('/home/pi/pi_logger/last_post_time').read())
         if (time.time() - last_post_time) > 60 * 60.0:
             logging.error('Rebooting due to last successful post being more than 1 hour ago.')
-            reboot()
+            utils.reboot()
     except:
         pass
     
@@ -49,6 +45,6 @@ if datetime.datetime.now().hour % 1 == 0:
                     error_ct += 1
         if error_ct > 75:
             logging.error('Rebooting due to %s errors during last hour.' % error_ct)
-            reboot()
+            utils.reboot()
     except:
         pass

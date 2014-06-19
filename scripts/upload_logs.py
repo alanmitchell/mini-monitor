@@ -3,8 +3,9 @@
 analysisnorth.com server.  Also uploads the tails of some system log files.
 """
 
-import datetime, sys, subprocess
+import datetime, sys, subprocess, logging
 import requests
+import cron_logging
 
 # This script is execute in rc.local and must not error out or it will stop
 # execution of rc.local (although I've double protected by using the command
@@ -30,15 +31,18 @@ try:
     data = {'MAX_FILE_SIZE': '500000'}
     r = requests.post(url, files=files, data=data)
     
-    files = {'upfile': ('%s_pi_cron.log' % prefix, open('/boot/pi_logger/logs/pi_cron.log', 'rb'))}
+    # read the cron_log file. this ensures it is closed in case an error occurs
+    # and the logging statement in the error handler needs access to the file.
+    log_contents = open('/boot/pi_logger/logs/pi_cron.log').read()
+    files = {'upfile': ('%s_pi_cron.log' % prefix, log_contents)}
     r = requests.post(url, files=files, data=data)
     
     # get tails of important system log files
-    tail_syslog = subprocess.check_output('tail -n500 /var/log/syslog', shell=True)
-    tail_daemon = subprocess.check_output('tail -n200 /var/log/daemon.log', shell=True)
+    tail_syslog = subprocess.check_output('/usr/bin/tail -n500 /var/log/syslog', shell=True)
+    tail_daemon = subprocess.check_output('/usr/bin/tail -n200 /var/log/daemon.log', shell=True)
     report = 'Last 500 lines of syslog:\n\n%s\n\nLast 200 lines of daemon.log:\n\n%s' % (tail_syslog, tail_daemon)
     files = {'upfile': ('%s_system.log' % prefix, report)}
     r = requests.post(url, files=files, data=data)
 
 except:
-    print 'Error uploading log files'
+    logging.exception('Error uploading log files.')

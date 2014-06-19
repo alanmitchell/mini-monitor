@@ -7,7 +7,6 @@ import cron_logging, utils
 
 REBOOT_DAYS = 2   # Number of days of uptime between forced reboots
 
-done = False
 try:
     # parse seconds of uptime out of proc file.
     uptime = float( open('/proc/uptime').read().split()[0] )
@@ -29,37 +28,24 @@ try:
     sys.path.insert(0, '/boot/pi_logger')
     import settings
     
-except:
-    logging.exception('Error setting up from cron tests. Rebooting.')
-    utils.reboot()
-    
-# if the system has been up for more than REBOOT_DAYS, force a reboot.
-try:
+    # if the system has been up for more than REBOOT_DAYS, force a reboot.
     if uptime > REBOOT_DAYS * 3600 * 24:
         logging.info('Reboot due to %s days of uptime.' % REBOOT_DAYS)
         utils.reboot()
-except:
-    logging.exception('Error testing total uptime. Rebooting.')
-    utils.reboot()
     
-# if the one wire system is being used, check to see if the USB adapter ID
-# chip is present in OWFS.  If not, there is a OWFS problem. OWFS malfunction
-# will generally not trigger read error, as no sensors will be found and no
-# readings will occur.
-try:
+    # if the one wire system is being used, check to see if the USB adapter ID
+    # chip is present in OWFS.  If not, there is a OWFS problem. OWFS malfunction
+    # will generally not trigger read error, as no sensors will be found and no
+    # readings will occur.
     if 'onewire.OneWireReader' in settings.READERS:
         f_list = glob.glob('/mnt/1wire/81.*')  # 81 is family code of ID chip.
         if len(f_list)==0:
             logging.error('OWFS system is not working. Rebooting.')
             utils.reboot()
-except:
-    logging.exception('Error testing OWFS system. Rebooting.')
-    utils.reboot()
     
-# Count the number of logged errors that occurred in the last 5 minutes and 
-# reboot if an excessive count.
-# Log file timestamps are in UTC.
-try:
+    # Count the number of logged errors that occurred in the last 5 minutes and 
+    # reboot if an excessive count.
+    # Log file timestamps are in UTC.
     fname = '/boot/pi_logger/logs/pi_log.log'
     if os.path.exists(fname):
         error_ct = 0
@@ -76,7 +62,7 @@ try:
             logging.error('Rebooting due to %s errors during last 5 minutes.' % error_ct)
             utils.reboot()
 except:
-    logging.exception('Error counting errors in log file. Rebooting.')
+    logging.exception('Error performing health checks. Rebooting.')
     utils.reboot()
 
 # only run these tasks once per hour (in first 15 minute interval)

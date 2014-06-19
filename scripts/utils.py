@@ -1,4 +1,4 @@
-import subprocess, logging
+import subprocess, logging, time
 import cron_logging
 
 def reboot():
@@ -18,3 +18,7 @@ def reboot():
         pass
     
     subprocess.call('/sbin/shutdown -r now', shell=True)
+
+    # wait until reboot actually occurs
+    while True:
+        time.sleep(1)

@@ -29,3 +29,7 @@ READERS = [
 # Levels in order from least to greatest severity are:  DEBUG, INFO, WARNING, 
 # ERROR, CRITICAL
 LOG_LEVEL = logging.INFO
+
+# If True, log files will be uploaded to analysisnorth.com at boot up.
+# See /pi_logger/scripts/upload_logs.py for details.
+UPLOAD_LOGS = True

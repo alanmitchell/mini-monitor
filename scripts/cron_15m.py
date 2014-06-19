@@ -7,13 +7,21 @@ import cron_logging, utils
 
 REBOOT_DAYS = 2   # Number of days of uptime between forced reboots
 
+done = False
 try:
-    # don't do these tests if the system has not been up for 20 minutes
     # parse seconds of uptime out of proc file.
     uptime = float( open('/proc/uptime').read().split()[0] )
-    if uptime < 20 * 60:
-        sys.exit()
-        
+except:
+    logging.exception('Error determining uptime. Rebooting.')
+    utils.reboot()
+
+# don't do these tests if the system has not been up for 20 minutes
+# sys.exit() throws an exception so need to do this outside the above try 
+# block.
+if uptime < 20 * 60:
+    sys.exit()
+
+try:        
     # the wall clock minute that this script is being run
     cur_min = time.localtime().tm_min
     
@@ -22,7 +30,7 @@ try:
     import settings
     
 except:
-    logging.exception('Error determining uptime. Rebooting.')
+    logging.exception('Error setting up from cron tests. Rebooting.')
     utils.reboot()
     
 # if the system has been up for more than REBOOT_DAYS, force a reboot.

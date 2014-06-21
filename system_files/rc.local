@@ -23,10 +23,11 @@ then
    /sbin/reboot
 fi
 
-# I found various statements about how to run a file system repair upon every
-# reboot.  I am using two methods.  I have set FSCKFIX=yes in the
-# /etc/default/rcS file.  Below I also create a "forcefsck" file in /, which
-# causes fsck to run on every boot (which then removes the forcefsck file).
+# Below I create a "forcefsck" file in /, which
+# causes fsck to run on every boot (which then removes the forcefsck file). I 
+# also have set FSCKFIX=yes in the/etc/default/rcS file, which will cause fsck
+# to attempt to repair even serious errors; a "no" causes fsck to repair minor
+# errors but requires human intervention for more serious errors.
 touch /forcefsck
 
 # If the Ethernet port has no IP, Set a fixed IP on the port so a 

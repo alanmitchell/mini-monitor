@@ -14,6 +14,21 @@
 # From here on, do NOT exit the script if any errors occur
 set +e
 
+# If the file system gets corrupted, it is often mounted as read-only.  I have
+# found that a reboot will generally fix the problem.  Look for a "ro" 
+# read-only indicator in /proc/mounts and reboot if it is found.  All filesystems
+# are normally mounted read-write (rw).
+if grep "ro," /proc/mounts
+then
+   /sbin/reboot
+if
+
+# I found various statements about how to run a file system repair upon every
+# reboot.  I am using two methods.  I have set FSCKFIX=yes in the
+# /etc/default/rcS file.  Below I also create a "forcefsck" file in /, which
+# causes fsck to run on every boot (which then removes the forcefsck file).
+touch /forcefsck
+
 # If the Ethernet port has no IP, Set a fixed IP on the port so a 
 # direct connection can occur.
 if /sbin/ifconfig | grep -A1 eth0 | grep inet
@@ -27,7 +42,9 @@ fi
 # Connect to the internet via the 3G modem.
 /home/pi/pi_logger/scripts/start_cell_internet.py
 
-# Upload pi_logger error/debug log files to analysisnorth.com
+# Upload pi_logger error/debug log files to analysisnorth.com. The script looks
+# at a value in the settings.py file to determine whether it really should
+# upload.
 /home/pi/pi_logger/scripts/upload_logs.py
 
 # Start up the datalogger

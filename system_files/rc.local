@@ -21,7 +21,7 @@ set +e
 if grep "ro," /proc/mounts
 then
    /sbin/reboot
-if
+fi
 
 # I found various statements about how to run a file system repair upon every
 # reboot.  I am using two methods.  I have set FSCKFIX=yes in the

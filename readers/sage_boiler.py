@@ -16,8 +16,9 @@ minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL = True
 minimalmodbus.BAUDRATE  = 38400
 
 # measured only 16 ms/read for a sequence of 100 regester reads, but
-# to be safe, set a long timeout.
-minimalmodbus.TIMEOUT  = 1.0
+# to be safe, set a long timeout.  Saw that the Aerco boilers spec a 2 second
+# timeout.  May be periods when the processor is busy.
+minimalmodbus.TIMEOUT  = 2.0
 
 
 class Sage21Reader(base_reader.Reader):

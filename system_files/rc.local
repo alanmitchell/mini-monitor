@@ -21,6 +21,7 @@ set +e
 if grep "ro," /proc/mounts
 then
    /sbin/reboot
+   exit
 fi
 
 # Below I create a "forcefsck" file in /, which

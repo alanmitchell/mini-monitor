@@ -35,8 +35,12 @@ if not os.path.exists('/dev/gsmmodem'):
             break
         time.sleep(1)
     
-# start wvdial in the background
-subprocess.call('/usr/bin/wvdial &', shell=True)
+# start wvdial in the background.  Check to see if this is the Huawei E173
+# and use a different init string for that modem.
+if '12d1:1436' in subprocess.check_output('/usr/bin/lsusb'):
+    subprocess.call('/usr/bin/wvdial E173 &', shell=True)
+else:
+    subprocess.call('/usr/bin/wvdial &', shell=True)
 
 # wait for wvdial to connect
 time.sleep(30)

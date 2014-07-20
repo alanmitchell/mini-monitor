@@ -38,8 +38,14 @@ try:
     # will generally not trigger read error, as no sensors will be found and no
     # readings will occur.
     if 'onewire.OneWireReader' in settings.READERS:
-        f_list = glob.glob('/mnt/1wire/81.*')  # 81 is family code of ID chip.
-        if len(f_list)==0:
+        ok = False
+        # try two times to find ID chip
+        for i in range(2):
+            f_list = glob.glob('/mnt/1wire/uncached/81.*')  # 81 is family code of ID chip.
+            if len(f_list)>0:
+                ok = True
+                break
+        if not ok:
             logging.error('OWFS system is not working. Rebooting.')
             utils.reboot()
     
@@ -58,7 +64,7 @@ try:
                 err_tm = calendar.timegm(time.strptime(parts[0], '%Y-%m-%d %H:%M:%S'))
                 if now - err_tm < 300:
                     error_ct += 1
-        if error_ct > 3:
+        if error_ct > 6:
             logging.error('Rebooting due to %s errors during last 5 minutes.' % error_ct)
             utils.reboot()
 except:

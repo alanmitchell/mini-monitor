@@ -19,6 +19,7 @@ POST_STORE_KEY = 'x7sGrAWjcgZW'
 # A list of sensor reader classes goes here
 READERS = [
 #'sage_boiler.Sage21Reader',
+#'aerco_boiler.BMS2reader',
 'onewire.OneWireReader',
 'sys_info.SysInfo',
 ]

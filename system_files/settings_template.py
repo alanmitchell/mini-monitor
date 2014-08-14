@@ -20,6 +20,8 @@ POST_STORE_KEY = 'x7sGrAWjcgZW'
 READERS = [
 #'sage_boiler.Sage21Reader',
 #'aerco_boiler.BMS2reader',
+#'dg700.DG700reader',
+#'labjack.LabjackTempReader',
 'onewire.OneWireReader',
 'sys_info.SysInfo',
 ]

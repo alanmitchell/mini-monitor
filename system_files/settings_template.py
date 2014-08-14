@@ -13,6 +13,8 @@ LOG_INTERVAL = 10*60  # seconds between logging data
 # URL to post readings to, and required storage key
 #POST_URL = 'http://192.168.1.43:8000/readingdb/reading/store/'
 #POST_STORE_KEY = 'PutStorageKeyHere'
+#POST_URL = 'http://rm.anthc.webfactional.com/readingdb/reading/store/'
+#POST_STORE_KEY = 'VJcRi9ztD0t1'
 POST_URL = 'http://bms.ahfconline.net/readingdb/reading/store/'
 POST_STORE_KEY = 'x7sGrAWjcgZW'
 

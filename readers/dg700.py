@@ -7,6 +7,21 @@ import glob, time
 import serial
 import base_reader
 
+
+def open_DG():
+    """Opens the DG-700 on a serial port served by a FTDI USB-to-Serial converter
+    chip.  Returns the pySerial port object.
+    """
+
+    # find the device file for the FTDI RS-232 converter and open
+    # a serial port.
+    ser_port_path = glob.glob('/dev/serial/by-id/*FT232R*')[0]
+
+    # getting 2 pressures can take 2.25 sec if auto-zero is enabled, so
+    # set an appropriate timeout.
+    return serial.Serial(ser_port_path, timeout=2.25)   # defaults to 9600,8,N,1
+
+
 def dg700cmd(dg_port, cmd, retLen):
     '''
     Issues a command to the DG700 and returns the result.  Tests for the correct
@@ -35,7 +50,7 @@ def dg700cmd(dg_port, cmd, retLen):
     
     # test echo bytes
     for i in range(cmdLen):
-        if ret[i] != cmd[i] + 1:
+        if ret[i] != ((cmd[i] + 1) % 256):
             raise ValueError('Echo bytes from DG-700 were incorrect.')
     
     return ret[cmdLen:]
@@ -63,22 +78,51 @@ def bytes_to_pascals(dg_bytes):
 class DG700reader(base_reader.Reader):
     """Class to read pressure values from the DG-700.
     """
-    
+
+    def __init__(self, settings=None):
+        """Initialize the DG-700.
+        """
+        # Call constructor of base class
+        super(DG700reader, self).__init__(settings)
+
+        # open the DG-700 serial port
+        ser_port = open_DG()
+        
+        try:
+            # disable auto-zero
+            dg700cmd(ser_port, 9, 0)
+            time.sleep(1.25)   # a delay after this command is required.
+
+        except:
+            raise   # re-raise the error.
+
+        finally:
+            ser_port.close()
+
     def read(self):
         """Read values from the DG-700 and return as a list.
         """
         
-        # find the device file for the FTDI RS-232 converter and open
-        # a serial port.
-        ser_port_path = glob.glob('/dev/serial/by-id/*FT232R*')[0]
-        # getting 2 pressures can take 2.25 sec if auto-zero is enabled
-        ser_port = serial.Serial(ser_port_path, timeout=2.25)   # defaults to 9600,8,N,1
+        # open the DG
+        ser_port = open_DG()
 
-        vals = dg700cmd(ser_port, 3, 6)
-        ch1_pascals = bytes_to_pascals(vals[:3])
-        ch2_pascals = bytes_to_pascals(vals[3:])
+        # wrap the code below in a try clause so that serial port will be explicitly
+        # closed in the finally clause in the case of an error.
+        try:
+            # disable auto-zero
+            dg700cmd(ser_port, 9, 0)
+            time.sleep(1.25)   # a delay after this command is required.
 
-        ser_port.close()
+            # read the two pressure values
+            vals = dg700cmd(ser_port, 3, 6)
+            ch1_pascals = bytes_to_pascals(vals[:3])
+            ch2_pascals = bytes_to_pascals(vals[3:])
+
+        except:
+            raise        # re-raise the error
+
+        finally:
+            ser_port.close()
 
         ts = time.time()
 

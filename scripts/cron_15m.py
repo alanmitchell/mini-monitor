@@ -28,7 +28,7 @@ try:
     
     # if the system has been up for more than settings.REBOOT_DAYS, force 
     # a reboot.  Never reboot if REBOOT_DAYS=0.
-    if settings.REBOOT_DAYS>0 and uptime > REBOOT_DAYS * 3600 * 24:
+    if settings.REBOOT_DAYS>0 and uptime > settings.REBOOT_DAYS * 3600 * 24:
         logging.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
         utils.reboot()
     

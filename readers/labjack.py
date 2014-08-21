@@ -67,6 +67,10 @@ class LabjackTempReader(base_reader.Reader):
                     sensor_id = '%s_%s' % (self._settings.LOGGER_ID, nm)                    
                     reads.append( (tm, sensor_id, temp, base_reader.VALUE) )
             
+            # read the internal temperature of the labjack and append
+            temp_lj = (dev.getTemperature() - 273.15)*1.8 + 32.0
+            reads.append( (tm, '%s_lj_temp' % self._settings.LOGGER_ID, temp_lj, base_reader.VALUE) )
+
             return reads
             
         except:

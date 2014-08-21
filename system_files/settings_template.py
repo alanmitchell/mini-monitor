@@ -10,6 +10,9 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
+# Number of days of uptime between forced reboots.  Set to 0 to never reboot.
+REBOOT_DAYS = 2
+
 # URL to post readings to, and required storage key
 #POST_URL = 'http://192.168.1.43:8000/readingdb/reading/store/'
 #POST_STORE_KEY = 'PutStorageKeyHere'

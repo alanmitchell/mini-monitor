@@ -5,8 +5,6 @@ remedies and rebooting if needed.
 import subprocess, time, logging, sys, calendar, os, glob
 import cron_logging, utils
 
-REBOOT_DAYS = 2   # Number of days of uptime between forced reboots
-
 try:
     # parse seconds of uptime out of proc file.
     uptime = float( open('/proc/uptime').read().split()[0] )
@@ -28,9 +26,10 @@ try:
     sys.path.insert(0, '/boot/pi_logger')
     import settings
     
-    # if the system has been up for more than REBOOT_DAYS, force a reboot.
-    if uptime > REBOOT_DAYS * 3600 * 24:
-        logging.info('Reboot due to %s days of uptime.' % REBOOT_DAYS)
+    # if the system has been up for more than settings.REBOOT_DAYS, force 
+    # a reboot.  Never reboot if REBOOT_DAYS=0.
+    if settings.REBOOT_DAYS>0 and uptime > REBOOT_DAYS * 3600 * 24:
+        logging.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
         utils.reboot()
     
     # if the one wire system is being used, check to see if the USB adapter ID

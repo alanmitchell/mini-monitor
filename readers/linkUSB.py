@@ -23,9 +23,14 @@ class LinkUSBreader(base_reader.Reader):
         self.port_path = None
         for p_path in base_reader.Reader.available_ftdi_ports:
             try:
-                port = serial.Serial(p_path, baudrate=9600, timeout=0.1)
-                port.write(' ')
-                if port.read(4)=='Link':
+                port = serial.Serial(p_path, baudrate=9600, timeout=1.0)
+                port.write('\r ')   # CR ensures LinkUSB is in ASCII mode
+                res = port.readline()
+                if not 'Link' in res:
+                    # read another line because I found that sometimes only a '\r\n' is
+                    # received with the first readline().
+                    res = port.readline()
+                if 'Link' in res:
                     self.port_path = p_path
                     # remove port from the available list
                     base_reader.Reader.available_ftdi_ports.remove(p_path)
@@ -140,7 +145,7 @@ class LinkUSBreader(base_reader.Reader):
         """
         
         if self.port_path:
-            port = serial.Serial(self.port_path, baudrate=9600, timeout=0.1)
+            port = serial.Serial(self.port_path, baudrate=9600, timeout=0.2)
         else:
             raise Exception('No LinkUSB connected.')
 

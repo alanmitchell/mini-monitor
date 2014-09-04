@@ -169,6 +169,8 @@ class LinkUSBreader(base_reader.Reader):
             except:
                 logging.exception('Error reading 1-wire sensor %s' % rec['id'])
 
+        port.close()
+        
         return readings
 
 if __name__=='__main__':

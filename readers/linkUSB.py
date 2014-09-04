@@ -176,7 +176,7 @@ class LinkUSBreader(base_reader.Reader):
             raise Exception('Bad 1-wire Temperature Return Value: %s' % ret)
 
 
-    regex_io = re.compile('^[0-9A-F]{2}$')
+    regex_io = re.compile('^[0-9A-F]{8}$')
     def readIO(self, port, addr):
         """Returns the sensed level of IO channel A on a DS2406 device.
         'port' is an open pySerial port connected to a LinkUSB.

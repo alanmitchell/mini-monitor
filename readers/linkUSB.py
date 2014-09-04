@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """Module used to read devices on a Dallas 1-wire bus using the OWFS library
-(see owfs.org).  The class the does the reading of the bus is OneWireReader.
+(see owfs.org).  The class that does the reading of the bus is OneWireReader.
 """
 import logging, time, re
 import serial
@@ -38,6 +38,25 @@ def crc8_is_OK(hex_string):
         val = crc8_table[val ^ x]
     # answer should be 0 if the byte string is valid
     return val==0
+
+
+def crc16_is_OK(hex_string):
+    """Returns True if the hex_string ending in two CRC16 bytes passes
+    the Dallas 1-wire CRC16 check.
+    Code adapted from:  http://forum.arduino.cc/index.php?topic=37648.0;wap2
+    """
+    # break the Hex string into a list of bytes
+    byte_list = [int(hex_string[i:i+2], 16) for i in range(0, len(hex_string), 2)]
+    crc = 0
+    for inbyte in byte_list:
+        for j in range(8):
+            mix = (crc ^ inbyte) & 0x01
+            crc = crc >> 1
+            if mix:
+                crc = crc ^ 0xA001
+            inbyte = inbyte >> 1;
+
+    return crc==0xB001
 
 # --------- End CRC Calculations ---------------
 
@@ -164,18 +183,22 @@ class LinkUSBreader(base_reader.Reader):
         'addr' is the 16 hex digit ROM code of the DS2406, using capital 
         letters for the non-numeric hex codes.
         """
-        port.write('\rrb55' + addr + 'F5C4FF')
+        cmd = 'F5C5FF'
+        port.write('\rrb55' + addr + cmd)
         time.sleep(.1)
         port.flushInput()
-        port.write('FF')
-        val = port.read(2)
+        # reads Channel Info byte, another Unknown byte, + two CRC16 bytes
+        port.write('FF'*4)  
+        ret = port.read(8)
         port.write('\r')
-        # Return of 'FF' indicates bad address or no response.
-        if val!='FF' and LinkUSBreader.regex_io.search(val):
-            val = int(val, 16) & 4
+        if LinkUSBreader.regex_io.search(ret):
+            if not crc16_is_OK(cmd + ret):
+                raise Exception('Bad CRC reading Input for %s. Return bytes were: %s' % (addr, ret))
+            val = int(ret[:2], 16) & 4
             return 1 if val else 0
         else:
-            raise Exception('Bad 1-wire DS2406 Return Value: %s' % val)            
+            raise Exception('Bad 1-wire DS2406 Return Value: %s' % ret)            
+
 
     def read(self):
         """Read the 1-wire sensors attached to the LinkUSB.

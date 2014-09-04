@@ -2,7 +2,7 @@
 """Module used with classes to read Aerco Boiler Controls.
 """
 from __future__ import division   # do floating point div even with integers
-import glob, time, logging
+import time, logging
 import minimalmodbus
 import base_reader
 
@@ -58,7 +58,7 @@ class BMS2reader(base_reader.Reader):
         
         # find the device file for the FTDI RS-485 converter, and make an
         # Instrument object.
-        device_path = glob.glob('/dev/serial/by-id/*FT232R*')[0]
+        device_path = base_reader.Reader.available_ftdi_ports[0]
         boiler = minimalmodbus.Instrument(device_path, 128)
         
         # the reading list to return.

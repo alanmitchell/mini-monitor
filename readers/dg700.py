@@ -3,7 +3,7 @@
 Use the DG700reader class.
 """
 from __future__ import division   # do floating point div even with integers
-import glob, time
+import time
 import serial
 import base_reader
 
@@ -15,7 +15,7 @@ def open_DG():
 
     # find the device file for the FTDI RS-232 converter and open
     # a serial port.
-    ser_port_path = glob.glob('/dev/serial/by-id/*FT232R*')[0]
+    ser_port_path = base_reader.Reader.available_ftdi_ports[0]
 
     # getting 2 pressures can take 2.25 sec if auto-zero is enabled, so
     # set an appropriate timeout.

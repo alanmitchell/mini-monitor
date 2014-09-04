@@ -1,6 +1,7 @@
 """Contains base Reader class that other sensor reading classes should inherit
 from.
 """
+import glob
 
 # Reading Types
 VALUE = 1       # continuous analog value like temperature, voltage, etc.
@@ -20,6 +21,12 @@ class DummySettings:
 
 class Reader(object):
     
+    # find all the FTDI FT232R serial adapters connected to the machine and 
+    # save them for use by subclasses.  A subclass may remove a port from
+    # this list if it is using the port.
+    available_ftdi_ports = glob.glob('/dev/serial/by-id/*FT232R*')
+
+
     def __init__(self, settings=None):
         """
         'settings' is the main settings module for the application.
@@ -28,6 +35,7 @@ class Reader(object):
         # save the settings module if present, otherwise substitute a dummy
         # object with the LOGGER_ID setting.
         self._settings = settings if settings else DummySettings()
+
         
     def read():
         """The Reader subclass must override this method and return a list 

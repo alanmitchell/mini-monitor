@@ -3,7 +3,7 @@
 Sage21Reader class reads Sage 2.1 Boiler controls.
 """
 from __future__ import division   # do floating point div even with integers
-import glob, time
+import time
 import minimalmodbus
 import base_reader
 
@@ -39,9 +39,9 @@ class Sage21Reader(base_reader.Reader):
         # I think it is more robust to find the RS-485 converter and make
         # a minimalmodbus Instrument object upon each call to the read() method.
         
-        # find the device file for the FTDI RS-485 converter, and make an
-        # Instrument object.
-        device_path = glob.glob('/dev/serial/by-id/*FT232R*')[0]
+        # Assume the first remaining FTDI port is the port to the Sage Boiler
+        # controller.  ** COULD DO BETTER ** by looking for a valid command response.
+        device_path = base_reader.Reader.available_ftdi_ports[0]
         boiler = minimalmodbus.Instrument(device_path, 1)
         
         # the reading list to return.

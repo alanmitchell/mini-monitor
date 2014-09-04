@@ -23,11 +23,11 @@ POST_STORE_KEY = 'x7sGrAWjcgZW'
 
 # A list of sensor reader classes goes here
 READERS = [
+'linkUSB.LinkUSBreader',
 #'sage_boiler.Sage21Reader',
 #'aerco_boiler.BMS2reader',
 #'dg700.DG700reader',
 #'labjack.LabjackTempReader',
-'onewire.OneWireReader',
 'sys_info.SysInfo',
 ]
 

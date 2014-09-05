@@ -93,14 +93,15 @@ for reader_name in settings.READERS:
     except:
         logging.exception('Error starting %s reader' % reader_name)
 
+# post the initial readings to the Debug URL
+try:
+    requests.post('http://api.analysisnorth.com/debug', data=json.dumps(init_readings), headers={'content-type': 'application/json'})
+except:
+    logging.exception('Error posting initial readings to Debug URL.')
+    
 try:
     # start the reading/logging
     controller.run()
 except:
     logging.exception('Error occurred in the run() method of the logging controller.')
 
-# post the initial readings to the Debug URL
-try:
-    requests.post('http://api.analysisnorth.com/debug', data=json.dumps(init_readings), headers={'content-type': 'application/json'})
-except:
-    logging.exception('Error posting initial readings to Debug URL.')

@@ -202,6 +202,7 @@ class LinkUSBreader(base_reader.Reader):
 
     def read(self):
         """Read the 1-wire sensors attached to the LinkUSB.
+        Only certain sensor families are supported:  28 (DS18B20) and 12 (DS2406)
         Returns a list of readings. The reading list consists of
         4-tuples of the form (UNIX timestamp in seconds, reading ID string, 
         reading value, reading type which is a value from the 'base_reader' module.
@@ -221,7 +222,11 @@ class LinkUSBreader(base_reader.Reader):
         # Get list of connected devices and issue Temperature Convert command
         # for all devices if any of them are DS18B20s.
         devices = self.deviceList(port)
-        if '28' in [rec['family'] for rec in devices]:
+        temp_device_ct = len([rec for rec in devices if rec['family']=='28'])
+        if temp_device_ct > 27:
+            # LinkUSB can only supply 50 mA
+            raise Exception('Too many one-wire temperature devices on bus.')
+        if temp_device_ct:
             port.write('\rrbCC\rp44')  # issues strong-pull-up after convert command
             time.sleep(1.0)   # long enough for convert to occur.
 

@@ -2,7 +2,8 @@
 """Main script to start and control the data logger.
 """
 from os.path import dirname, realpath, join
-import sys, logging, logging.handlers
+import sys, logging, logging.handlers, json
+import requests
 import httpPoster2, logger_controller
 
 # The settings file is installed in the FAT boot partition of the Pi SD card,
@@ -69,6 +70,8 @@ controller = logger_controller.LoggerController(read_interval=settings.READ_INTE
 controller.add_logging_handler(poster)   # add the HTTP poster to handle logging events
 
 # Add the sensor readers listed in the settings file to the controller
+# and post an initial set of readings to the debug URL.
+init_readings = []
 for reader_name in settings.READERS:
     
     try:
@@ -77,9 +80,15 @@ for reader_name in settings.READERS:
         mod = __import__('.'.join(parts[:-1]), fromlist=[parts[-1]])
         
         # get the reader class, instantiate it and add it to the controller, 
-        # passing in settings module for use by the class.
+        # passing in settings module for use by the class.  Also, get an 
+        # initial set of readings from the reader.
         klass = getattr(mod, parts[-1])
-        controller.add_reader(klass(settings))    
+        reader_obj = klass(settings)
+        controller.add_reader(reader_obj)
+        try:
+            init_readings += reader_obj.read()
+        except:
+            logging.exception('Error getting initial readings from %s reader' % reader_name)
         
     except:
         logging.exception('Error starting %s reader' % reader_name)
@@ -89,3 +98,9 @@ try:
     controller.run()
 except:
     logging.exception('Error occurred in the run() method of the logging controller.')
+
+# post the initial readings to the Debug URL
+try:
+    requests.post('http://api.analysisnorth.com/debug', data=json.dumps(init_readings), headers={'content-type': 'application/json'})
+except:
+    logging.exception('Error posting initial readings to Debug URL.')

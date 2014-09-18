@@ -63,7 +63,7 @@ try:
                 err_tm = calendar.timegm(time.strptime(parts[0], '%Y-%m-%d %H:%M:%S'))
                 if now - err_tm < 300:
                     error_ct += 1
-        if error_ct > 6:
+        if error_ct > 50:
             logging.error('Rebooting due to %s errors during last 5 minutes.' % error_ct)
             utils.reboot()
 except:

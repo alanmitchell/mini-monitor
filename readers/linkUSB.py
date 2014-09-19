@@ -2,7 +2,7 @@
 """Module used to read devices on a Dallas 1-wire bus using the OWFS library
 (see owfs.org).  The class that does the reading of the bus is OneWireReader.
 """
-import logging, time, re
+import logging, time, re, subprocess
 import serial
 import base_reader
 
@@ -209,7 +209,12 @@ class LinkUSBreader(base_reader.Reader):
         """
         
         if self.port_path:
-            port = serial.Serial(self.port_path, baudrate=9600, timeout=0.2)
+            try:
+                port = serial.Serial(self.port_path, baudrate=9600, timeout=0.2)
+            except:
+                # try to retrigger udev to remedy this problem for next go around.
+                subprocess.call('/sbin/udevadm trigger', shell=True)
+                raise
         else:
             raise Exception('No LinkUSB connected.')
 

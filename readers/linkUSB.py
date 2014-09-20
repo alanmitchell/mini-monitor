@@ -218,36 +218,39 @@ class LinkUSBreader(base_reader.Reader):
         else:
             raise Exception('No LinkUSB connected.')
 
-        # the reading list to return.
-        readings = []
+        try:      # for making sure port is closed
 
-        # Use the same timestamp for all the readings
-        ts = time.time()
-        
-        # Get list of connected devices and issue Temperature Convert command
-        # for all devices if any of them are DS18B20s.
-        devices = self.deviceList(port)
-        temp_device_ct = len([rec for rec in devices if rec['family']=='28'])
-        if temp_device_ct > 27:
-            # LinkUSB can only supply 50 mA
-            raise Exception('Too many one-wire temperature devices on bus.')
-        if temp_device_ct:
-            port.write('\rrbCC\rp44')  # issues strong-pull-up after convert command
-            time.sleep(1.0)   # long enough for convert to occur.
+            # the reading list to return.
+            readings = []
 
-        for rec in devices:
-            try:
-                if rec['family']=='28':
-                    val = self.readTemp(port, rec['addr'])
-                    read_type = base_reader.VALUE
-                elif rec['family']=='12':
-                    val = self.readIO(port, rec['addr'])
-                    read_type = base_reader.STATE
-                readings.append( (ts, rec['id'], val, read_type) )
-            except:
-                logging.exception('Error reading 1-wire sensor %s' % rec['id'])
+            # Use the same timestamp for all the readings
+            ts = time.time()
+            
+            # Get list of connected devices and issue Temperature Convert command
+            # for all devices if any of them are DS18B20s.
+            devices = self.deviceList(port)
+            temp_device_ct = len([rec for rec in devices if rec['family']=='28'])
+            if temp_device_ct > 27:
+                # LinkUSB can only supply 50 mA
+                raise Exception('Too many one-wire temperature devices on bus.')
+            if temp_device_ct:
+                port.write('\rrbCC\rp44')  # issues strong-pull-up after convert command
+                time.sleep(1.0)   # long enough for convert to occur.
 
-        port.close()
+            for rec in devices:
+                try:
+                    if rec['family']=='28':
+                        val = self.readTemp(port, rec['addr'])
+                        read_type = base_reader.VALUE
+                    elif rec['family']=='12':
+                        val = self.readIO(port, rec['addr'])
+                        read_type = base_reader.STATE
+                    readings.append( (ts, rec['id'], val, read_type) )
+                except:
+                    logging.exception('Error reading 1-wire sensor %s' % rec['id'])
+
+        finally:
+            port.close()
         
         return readings
 

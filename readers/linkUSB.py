@@ -2,7 +2,7 @@
 """Module used to read devices on a Dallas 1-wire bus using the OWFS library
 (see owfs.org).  The class that does the reading of the bus is OneWireReader.
 """
-import logging, time, re, subprocess
+import logging, time, re
 import serial
 import base_reader
 

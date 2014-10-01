@@ -110,12 +110,22 @@ class LinkUSBreader(base_reader.Reader):
         port.write('\r')   # make sure in ASCII mode
         time.sleep(.1)
         port.flushInput()
-        
+
         # list of devices found
         dev_list = []
         # find the first device
-        port.write('f')
-        r = LinkUSBreader.regex_dev.search(port.readline())
+        # I've found that every other call to this routine, I need to try 
+        # the 'f' command multiple times (usually twice if the 0.3 sec 
+        # delay is used)
+        for i in range(4):
+            port.write('f')
+            lin = port.readline()
+            r = LinkUSBreader.regex_dev.search(lin)
+            if r:
+                print i
+                break
+            time.sleep(.4)
+            port.flushInput()
         while r:
             indicator, r_addr = r.groups()
             rec = {}
@@ -139,7 +149,7 @@ class LinkUSBreader(base_reader.Reader):
 
             port.write('n')
             r = LinkUSBreader.regex_dev.search(port.readline())
-        
+
         return dev_list            
 
     regex_temp = re.compile('^[0-9A-F]{18}$')
@@ -209,12 +219,7 @@ class LinkUSBreader(base_reader.Reader):
         """
         
         if self.port_path:
-            try:
-                port = serial.Serial(self.port_path, baudrate=9600, timeout=0.2)
-            except:
-                # try to retrigger udev to remedy this problem for next go around.
-                subprocess.call('/sbin/udevadm trigger', shell=True)
-                raise
+            port = serial.Serial(self.port_path, baudrate=9600, timeout=0.2)
         else:
             raise Exception('No LinkUSB connected.')
 
@@ -251,7 +256,7 @@ class LinkUSBreader(base_reader.Reader):
 
         finally:
             port.close()
-        
+
         return readings
 
 if __name__=='__main__':

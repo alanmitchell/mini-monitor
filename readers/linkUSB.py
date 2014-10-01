@@ -122,7 +122,6 @@ class LinkUSBreader(base_reader.Reader):
             lin = port.readline()
             r = LinkUSBreader.regex_dev.search(lin)
             if r:
-                print i
                 break
             time.sleep(.4)
             port.flushInput()

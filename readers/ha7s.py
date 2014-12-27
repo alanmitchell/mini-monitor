@@ -3,7 +3,7 @@
 Devices HA7S master.
 The class that does the reading of the bus is HA7Sreader.
 """
-import logging, time, re
+import logging, time, re, glob
 import serial
 import base_reader
 
@@ -152,28 +152,12 @@ class HA7Sreader(base_reader.Reader):
         # Call constructor of base class
         super(HA7Sreader, self).__init__(settings)
 
-        # find the FTDI port that connects to the HA7S, and then
-        # remove it from the list of available FTDI ports.
-        self.port_path = None
-        for p_path in base_reader.Reader.available_ftdi_ports:
-            try:
-                port = serial.Serial(p_path, baudrate=9600, timeout=0.2)
-                port.write('R')   # Issue Reset command
-                res = port.read(1)
-                if res=='\r':    # should return <CR> if success
-                    self.port_path = p_path
-                    # remove port from the available list
-                    base_reader.Reader.available_ftdi_ports.remove(p_path)
-                    break
-
-            except:
-                pass
-
-            finally:
-                try:
-                    port.close()
-                except:
-                    pass
+        # At the moment, only one device connects to the logger through
+        # a TTL FTDI converter
+        try:
+            self.port_path = glob.glob('/dev/serial/by-id/usb-FTDI_TTL232R*')[0]
+        except:
+            self.port_path = None
 
 
     regex_temp = re.compile('^[0-9A-F]{18}$')

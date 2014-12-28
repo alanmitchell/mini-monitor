@@ -32,22 +32,6 @@ try:
         logging.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
         utils.reboot()
     
-    # if the one wire system is being used, check to see if the USB adapter ID
-    # chip is present in OWFS.  If not, there is a OWFS problem. OWFS malfunction
-    # will generally not trigger read error, as no sensors will be found and no
-    # readings will occur.
-    if 'onewire.OneWireReader' in settings.READERS:
-        ok = False
-        # try two times to find ID chip
-        for i in range(2):
-            f_list = glob.glob('/mnt/1wire/uncached/81.*')  # 81 is family code of ID chip.
-            if len(f_list)>0:
-                ok = True
-                break
-        if not ok:
-            logging.error('OWFS system is not working. Rebooting.')
-            utils.reboot()
-    
     # Count the number of logged errors that occurred in the last 5 minutes and 
     # reboot if an excessive count.
     # Log file timestamps are in UTC.
@@ -81,7 +65,8 @@ if cur_min < 15:
         tx_bytes = int(parts[2].split()[0])
         logging.info('Cellular Byte Total: %d' % (rx_bytes + tx_bytes))
     except:
-        # not critical, don't reboot
+        # not critical, don't reboot.  Will also arrive here if cellular
+        # modem is not being used.
         pass
             
     # Check to see if last successful post was too long ago
@@ -110,6 +95,6 @@ try:
     subprocess.check_output(['/usr/bin/nslookup', 'gci.net'])
 except:
     # if nslookup returns non-zero error code, an exception is raised
-    logging.error('No network connection. Restarting cellular modem.')
+    logging.error('No network connection. Restarting cellular modem, if present.')
     subprocess.call('/home/pi/pi_logger/scripts/start_cell_internet.py', shell=True)
     

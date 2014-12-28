@@ -41,8 +41,18 @@ else
    echo eth0 set to 169.254.30.2
 fi
 
-# Connect to the internet via the 3G modem.
-/home/pi/pi_logger/scripts/start_cell_internet.py
+# Connect to the internet via the cell modem, if it is present.
+# First run config utility.
+if /usr/bin/wvdialconf
+then
+    # There is a cell modem connected.  Indicate that
+    # in a file and dial the cell modem.
+    echo 1 > /var/run/network/cell_modem
+    /home/pi/pi_logger/scripts/start_cell_internet.py
+else
+    # Indicate no cell modem connected.
+    echo 0 > /var/run/network/cell_modem
+fi
 
 # Upload pi_logger error/debug log files to analysisnorth.com. The script looks
 # at a value in the settings.py file to determine whether it really should

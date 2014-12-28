@@ -89,12 +89,14 @@ if cur_min < 15:
         logging.exception('Error checking last post time. Rebooting.')
         utils.reboot()
 
-# check to see if the network is working.  If not, kill wvdial and restart it.
+# If there is a cell modem present, check to see if the network is working.  
+# If network not working, redial cell modem.
 # I put it at the end to ensure critical errors were caught above before this.
-try:
-    subprocess.check_output(['/usr/bin/nslookup', 'gci.net'])
-except:
-    # if nslookup returns non-zero error code, an exception is raised
-    logging.error('No network connection. Restarting cellular modem, if present.')
-    subprocess.call('/home/pi/pi_logger/scripts/start_cell_internet.py', shell=True)
-    
+# The /var/run/network/cell_modem contents are set in the rc.local script.
+if open('/var/run/network/cell_modem').read(1)=='1':
+    try:
+        subprocess.check_output(['/usr/bin/nslookup', 'gci.net'])
+    except:
+        # if nslookup returns non-zero error code, an exception is raised
+        logging.error('No network connection. Restarting cellular modem, if present.')
+        subprocess.call('/home/pi/pi_logger/scripts/start_cell_internet.py', shell=True)

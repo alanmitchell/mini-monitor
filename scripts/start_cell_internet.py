@@ -23,5 +23,12 @@ for i in range(10):
 # start wvdial in the background.  
 subprocess.call('/usr/bin/wvdial &', shell=True)
 
-# wait for wvdial to connect
-time.sleep(30)
+# wait for wvdial to connect but no longer than 30 seconds
+tstart = time.time()
+while time.time() - tstart < 30:
+    try:
+        subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
+        break
+    except:
+        # if nslookup is unsuccessful, it throws an error
+        pass

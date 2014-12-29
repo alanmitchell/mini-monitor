@@ -95,7 +95,7 @@ if cur_min < 15:
 # The /var/run/network/cell_modem contents are set in the rc.local script.
 if open('/var/run/network/cell_modem').read(1)=='1':
     try:
-        subprocess.check_output(['/usr/bin/nslookup', 'gci.net'])
+        subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
     except:
         # if nslookup returns non-zero error code, an exception is raised
         logging.error('No network connection. Restarting cellular modem, if present.')

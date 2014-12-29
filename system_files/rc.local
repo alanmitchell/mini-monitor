@@ -41,13 +41,26 @@ else
    echo eth0 set to 169.254.30.2
 fi
 
+# sometime usb_modeswitch does not work the first time and needs
+# to be retriggered.  If we see a Huawei USB device but not modem
+# sym link, retrigger the modem.
+if ! [ -e /dev/gsmmodem ]
+then
+    # check for Huawei device
+    if lsusb | grep Huawei 
+    then
+        /sbin/udevadm trigger
+        sleep 25
+    fi
+fi
+
 # Connect to the internet via the cell modem, if it is present.
-# First run config utility.
-if /usr/bin/wvdialconf
+if [ -e /dev/gsmmodem ]
 then
     # There is a cell modem connected.  Indicate that
-    # in a file and dial the cell modem.
+    # in a file, then configure and dial the cell modem.
     echo 1 > /var/run/network/cell_modem
+    /usr/bin/wvdialconf     # run config utility
     /home/pi/pi_logger/scripts/start_cell_internet.py
 else
     # Indicate no cell modem connected.

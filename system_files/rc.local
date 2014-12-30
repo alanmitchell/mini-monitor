@@ -31,16 +31,6 @@ fi
 # errors but requires human intervention for more serious errors.
 touch /forcefsck
 
-# If the Ethernet port has no IP, Set a fixed IP on the port so a 
-# direct connection can occur.
-if /sbin/ifconfig | grep -A1 eth0 | grep inet
-then
-   echo Ethernet has address
-else
-   /sbin/ifconfig eth0 169.254.30.2
-   echo eth0 set to 169.254.30.2
-fi
-
 # sometime usb_modeswitch does not work the first time and needs
 # to be retriggered.  If we see a Huawei USB device but not modem
 # sym link, retrigger the modem.

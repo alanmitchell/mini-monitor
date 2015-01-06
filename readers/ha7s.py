@@ -72,6 +72,7 @@ class HA7_port(serial.Serial):
         '''Open the port using the 'port_name' port, e.g. 'COM29', '/dev/ttyUSB0'.
         '''
         super(HA7_port, self).__init__(port_name, baudrate=9600, timeout=0.2)
+        time.sleep(0.5)   # HA7S sometimes doesn't wake up fast enough.
 
     def __del__(self):
         """Close port when object is destroyed.
@@ -106,13 +107,21 @@ class HA7_port(serial.Serial):
         Each item in the returned list is a dictionary with characteristics
         of the found device.
         '''
-        self.flushInput()
     
         # list of devices found
         dev_list = []
-        # find the first device
-        self.write('S')
-        lin = self.readline()
+
+        # find the first device, but try three times if nothing
+        # shows up.
+        for i in range(3):
+            self.flushInput()
+            self.write('S')
+            lin = self.readline()
+            if HA7_port.regex_dev.search(lin):
+                break
+            else:
+                time.sleep(0.4)
+
         while HA7_port.regex_dev.search(lin):
             rec = {}
             
@@ -162,26 +171,30 @@ class HA7Sreader(base_reader.Reader):
 
         # find the FTDI port that connects to the HA7S, and then
         # remove it from the list of available FTDI ports.
+        # Go through this process three times in case it doesn't 
+        # find a port on the first pass (I've seen the 'S' function
+        # fail).
         self.port_path = None
-        for p_path in base_reader.Reader.available_ftdi_ports:
-            try:
-                port = HA7_port(p_path)
-                port.write('S')     # searches for first device
-                res = port.readline()
-                if HA7_port.regex_dev.search(res):
-                    self.port_path = p_path
-                    # remove port from the available list
-                    base_reader.Reader.available_ftdi_ports.remove(p_path)
-                    break
-
-            except:
-                pass
-
-            finally:
+        for i in range(3):
+            for p_path in base_reader.Reader.available_ftdi_ports:
                 try:
-                    port.close()
+                    port = HA7_port(p_path)
+                    port.flushInput()
+                    port.write('S')     # searches for first device
+                    res = port.readline()
+                    if HA7_port.regex_dev.search(res):
+                        self.port_path = p_path
+                        # remove port from the available list
+                        base_reader.Reader.available_ftdi_ports.remove(p_path)
+                        break
                 except:
                     pass
+                finally:
+                    port.close()
+
+            # if arrived here due to success, break out of the 3 times loop
+            if self.port_path:
+                break
 
 
     regex_temp = re.compile('^[0-9A-F]{18}$')

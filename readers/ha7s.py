@@ -152,12 +152,28 @@ class HA7Sreader(base_reader.Reader):
         # Call constructor of base class
         super(HA7Sreader, self).__init__(settings)
 
-        # At the moment, only one device connects to the logger through
-        # a TTL FTDI converter
-        try:
-            self.port_path = glob.glob('/dev/serial/by-id/usb-FTDI_TTL232R*')[0]
-        except:
-            self.port_path = None
+        # find the FTDI port that connects to the HA7S, and then
+        # remove it from the list of available FTDI ports.
+        self.port_path = None
+        for p_path in base_reader.Reader.available_ftdi_ports:
+            try:
+                port = HA7_port(p_path)
+                port.write('S')     # searches for first device
+                res = port.readline()
+                if HA7_port.regex_dev.search(res):
+                    self.port_path = p_path
+                    # remove port from the available list
+                    base_reader.Reader.available_ftdi_ports.remove(p_path)
+                    break
+
+            except:
+                pass
+
+            finally:
+                try:
+                    port.close()
+                except:
+                    pass
 
 
     regex_temp = re.compile('^[0-9A-F]{18}$')

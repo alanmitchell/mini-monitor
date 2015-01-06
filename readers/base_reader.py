@@ -21,11 +21,10 @@ class DummySettings:
 
 class Reader(object):
     
-    # find all the FTDI FT232R serial adapters connected to the machine and 
+    # find all the FTDI serial adapters connected to the machine and 
     # save them for use by subclasses.  A subclass may remove a port from
     # this list if it is using the port.
-    available_ftdi_ports = glob.glob('/dev/serial/by-id/*FT232R*')
-
+    available_ftdi_ports = glob.glob('/dev/serial/by-id/*FTDI*')
 
     def __init__(self, settings=None):
         """

@@ -72,7 +72,15 @@ class HA7_port(serial.Serial):
         '''Open the port using the 'port_name' port, e.g. 'COM29', '/dev/ttyUSB0'.
         '''
         super(HA7_port, self).__init__(port_name, baudrate=9600, timeout=0.2)
-        
+
+    def __del__(self):
+        """Close port when object is destroyed.
+        """
+        try:
+            self.close()
+        except:
+            pass
+
     def readline(self):
         '''Overrides the pySerial readline() method, because that metho reads until
         a \n is received.  Instead, this method reads until a <CR> is received and 

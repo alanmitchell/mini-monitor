@@ -13,12 +13,12 @@ import base_reader
 minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL = True
 
 # baudrate for the Sage 2.1 controller
-minimalmodbus.BAUDRATE  = 38400
+minimalmodbus.BAUDRATE = 38400
 
 # measured only 16 ms/read for a sequence of 100 regester reads, but
 # to be safe, set a long timeout.  Saw that the Aerco boilers spec a 2 second
 # timeout.  May be periods when the processor is busy.
-minimalmodbus.TIMEOUT  = 2.0
+minimalmodbus.TIMEOUT = 2.0
 
 
 class Sage21Reader(base_reader.Reader):
@@ -30,7 +30,7 @@ class Sage21Reader(base_reader.Reader):
         proper logger ID prefix to the reader name from the settings module.
         """
         sensor_id = '%s_%s' % (self._settings.LOGGER_ID, rd_name)
-        self.readings.append( (time.time(), sensor_id, rd_val, rd_type) )
+        self.readings.append((time.time(), sensor_id, rd_val, rd_type))
     
     def read(self):
         """Read values from the boiler control and return in a list.
@@ -54,14 +54,25 @@ class Sage21Reader(base_reader.Reader):
         firing_reg = boiler.read_register(8, functioncode=3)
         mask = 2**31   # mask for MSbit.
         
-        if (firing_reg & mask)>0:
+        if (firing_reg & mask) > 0:
             # register is in tenths of percent firing rate, but remove the MSbit.
             firing_rate = (firing_reg - mask) * 0.1
         else:
             # register is in RPM.  Get max RPM to then convert to % of max.
-            max_RPM = boiler.read_register(193, functioncode=3) # max heating modulation rate
+            max_RPM = boiler.read_register(193, functioncode=3)  # max heating modulation rate
             firing_rate = 100.0 * firing_reg / max_RPM   # in %, 0 - 100.0
         self.add_reading('firing_rate', firing_rate)
+
+        # Special handling to create an alert_code reading
+        alarm_reason = boiler.read_register(35, functioncode=3)
+        if alarm_reason == 2:  # 0 = None, 1 = Lockout, 2 = Alert, 3 = Other
+            # read the most recent code from the alert log if there is a current alert
+            # note, this same code might also be stored in register 1119 which we're reading as 'alarm_code'
+            alert_code = boiler.read_register(1120, functioncode=3)
+        else:
+            # no current alert
+            alert_code = 0
+        self.add_reading('alert_code', alert_code, base_reader.STATE)
 
         # Other registers to read and record, in the form (register #, sensor name,
         # multiplier to scale register value, offset to add to scaled register value,
@@ -86,10 +97,11 @@ class Sage21Reader(base_reader.Reader):
         for addr, read_name, mult, offset, read_type in registers_to_read:
             val = boiler.read_register(addr, functioncode=3)
             self.add_reading(read_name, val*mult + offset, read_type)
-            
+
         return self.readings
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     from pprint import pprint    
     rdr = Sage21Reader()
     pprint(rdr.read())

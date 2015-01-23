@@ -36,7 +36,7 @@ class Reader(object):
         self._settings = settings if settings else DummySettings()
 
         
-    def read():
+    def read(self):
         """The Reader subclass must override this method and return a list 
         (or tuple) of sensor readings.  Each sensor reading in the list should 
         be a tuple of the format:

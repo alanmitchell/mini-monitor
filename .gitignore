@@ -6,3 +6,4 @@ last_post_time
 *.log.*
 *.gz
 *.bak
+.idea

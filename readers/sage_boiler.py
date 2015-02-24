@@ -96,6 +96,16 @@ class Sage21Reader(base_reader.Reader):
         )
         for addr, read_name, mult, offset, read_type in registers_to_read:
             val = boiler.read_register(addr, functioncode=3)
+
+            # despite the documentation saying these are unsigned 16-bit integers
+            # the temperature values (for sure the register 170 outdoor temperature)
+            # are encoded as 16-bit signed integers, using 2s complement format.
+            # Detect temperature readings by looking at the multiplier and offset
+            if mult==0.18 and offset==32.0:
+                # this is a temperature value
+                if val > 32767:
+                    # this is really a negative number, make the 2s complement adjustment.
+                    val -= 65536
             self.add_reading(read_name, val*mult + offset, read_type)
 
         return self.readings

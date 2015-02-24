@@ -25,7 +25,11 @@ class SysInfo(base_reader.Reader):
         cpu_temp = float(open('/sys/class/thermal/thermal_zone0/temp').read())/1000.0
         if cpu_temp > -50.0 and cpu_temp < 150.0:
             readings.append( (ts, sensor_id, cpu_temp, base_reader.VALUE) )
-            
+
+        # Software version number
+        sensor_id = '%s_version' % (self._settings.LOGGER_ID)
+        readings.append( (ts, sensor_id, getattr(self._settings, 'VERSION', 0.0), base_reader.STATE) )
+
         return readings
 
 if __name__=='__main__':

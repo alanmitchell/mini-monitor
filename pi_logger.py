@@ -12,6 +12,11 @@ import httpPoster2, logger_controller
 sys.path.insert(0, '/boot/pi_logger')
 import settings
 
+# ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
+# Set the Software Version number as a property on the Settings module
+settings.VERSION = 1.0
+#***********************************************************************
+
 # The full directory path to this script file
 APP_PATH = realpath(dirname(__file__))
 

@@ -59,4 +59,3 @@ class Reader(object):
         method.
         """
         pass 
-        

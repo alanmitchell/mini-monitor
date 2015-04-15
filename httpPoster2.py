@@ -16,6 +16,13 @@ import threading, json, logging
 import requests
 import sqlite_queue
 
+# Disable warning messages that result from having to use Python 2.7.3 instead of
+# 2.7.9 and from having to disable SSL verification due to problems with Python 2.7.3
+# in conjunction with urllib3.
+from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+requests.packages.urllib3.disable_warnings(InsecurePlatformWarning)
+
 class HttpPoster:
     """A class to post readings to a URL via HTTP.  The readings to be posted
     are delivered to this object via the addReadings() method.
@@ -104,10 +111,12 @@ class PostWorker(threading.Thread):
             retry_delay = 15  # start with a 15 second delay before retrying a post
             while True:
                 try:
-                    req = requests.post(self.post_URL, data=post_data, timeout=15)
+                    # need to *not* verify SSL requests as Python 2.7.3 has an issue with
+                    # requests SSL verification causing to fail when cert is actually OK.
+                    req = requests.post(self.post_URL, data=post_data, timeout=15, verify=False)
                     if req.status_code == 200:
                         if logging.root.level == logging.DEBUG:
-                            logging.debug('posted: %s' % readings)
+                            logging.debug('posted: %s, %s' % (readings, req.text))
                         else:
                             logging.info('posted %d bytes' % len(post_data))
                         

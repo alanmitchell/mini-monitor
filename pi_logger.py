@@ -14,7 +14,7 @@ import settings
 
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
-settings.VERSION = 1.0
+settings.VERSION = 1.1
 #***********************************************************************
 
 # The full directory path to this script file

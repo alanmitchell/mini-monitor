@@ -1,4 +1,4 @@
-# mini-monitor: Raspberry Pi Data Collection System
+# Mini-Monitor: Raspberry Pi Data Collection System
 
 ##### Copyright (c) 2014, Alaska Housing Finance Corporation.  All Rights Reserved.
 

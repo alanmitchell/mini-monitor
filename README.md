@@ -4,9 +4,18 @@
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this software except in compliance with the License,
-as described in the [LICENSE.md File](LICENSE.md).
+as described in the [LICENSE.md file](LICENSE.md).
 
-The Mini-Monitor software is data acquisition software that runs on a [Raspberry Pi computer](https://www.raspberrypi.org/).  It is designed to post the collected data to the [BMON web-based sensor reading database and analysis software](../../../bmon).
+The Mini-Monitor software is data acquisition software that runs on a [Raspberry Pi computer](https://www.raspberrypi.org/).  It is designed to post the collected data to the [BMON web-based sensor reading database and analysis software](../../../bmon).  The Mini-Monitor software has the ability to collect data from a number of different sources, including:
+
+- [Maxim DS18B20 Temperature Sensors](http://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html)
+- Sensors utilizing the [Maxim DS2406 chip](http://www.maximintegrated.com/en/products/digital/memory-products/DS2406.html) to sense the On/Off state of a device.
+- [Burnham Alpine Boilers](http://www.usboiler.net/product/alpine-high-efficiency-condensing-gas-boiler.html) utilizing the Sage controller.  The Mini-Monitor interfaces to the boiler via the boiler's RS485 Modbus interface and extracts numerous sensor and state values from the boiler.
+- The [AERCO BMS II Boiler controller](http://www.aerco.com/Products/Accessories/Controls/BMS-II-Model-5R5-384), which controls a set of AERCO boilers.  The Raspberry Pi interfaces via a serial RS232 MODBUS interface.
+- Thermistors connected to a [Labjack U3 data acquisition board](http://labjack.com/u3).
+- Gauge air pressure measured by an [Energy Conservatory DG-700 Pressure Gauge](http://products.energyconservatory.com/dg-700-pressure-and-flow-gauge/).
+
+The software design is flexible and allows for the easy addition of other data sources.  To add a new data source, an appropriate "Reader" class written in Python must be created, and can then be combined with other Reader classes to create a customized data acquisition system.
 
 For detailed information about this software: 
 

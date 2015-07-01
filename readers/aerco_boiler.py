@@ -92,7 +92,16 @@ class BMS2reader(base_reader.Reader):
         for addr, read_name, mult, offset, read_type in registers_to_read:
             try:
                 val = try_read(boiler, addr)
+
+                # Temperature values are 2's complement, so correct them
+                if ('temp' in read_name) or ('setpoint' in read_name):
+                    # this is a temperature value
+                    if val > 32767:
+                        # this is really a negative number, make the 2s complement adjustment.
+                        val -= 65536
+
                 self.add_reading(read_name, val*mult + offset, read_type)
+                
             except:
                 logging.exception('Error reading register %s of BMS II.' % addr)
             

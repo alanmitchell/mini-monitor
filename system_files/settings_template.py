@@ -21,13 +21,12 @@ POST_STORE_KEY = 'Store Key Goes Here'
 
 # A list of sensor reader classes goes here
 READERS = [
-'ha7s.HA7Sreader',
-#'linkUSB.LinkUSBreader',
-#'sage_boiler.Sage21Reader',
-#'aerco_boiler.BMS2reader',
-#'dg700.DG700reader',
-#'labjack.LabjackTempReader',
-'sys_info.SysInfo',
+'ha7s.HA7Sreader',             # 1-Wire Sensors
+#'sage_boiler.Sage21Reader',   # Burnham Alpine Boilers w/ Sage 2.1 controller
+#'aerco_boiler.BMS2reader',    # AERCO BMS II Boiler Mangager
+#'dg700.DG700reader',          # Energy Conservatory DG-700 Pressure Gauge
+#'labjack.LabjackTempReader',  # Thermistors connected to Labjack U3
+'sys_info.SysInfo',            # System uptime, CPU temperature, software version
 ]
 
 # This controls what messages will actually get logged in the system log
@@ -38,5 +37,6 @@ READERS = [
 LOG_LEVEL = logging.INFO
 
 # If True, log files will be uploaded to analysisnorth.com at boot up.
+# Set to False otherwise.
 # See /pi_logger/scripts/upload_logs.py for details.
 UPLOAD_LOGS = True

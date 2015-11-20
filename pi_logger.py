@@ -21,9 +21,8 @@ settings.VERSION = 1.2
 APP_PATH = realpath(dirname(__file__))
 
 # ----- Setup Exception/Debug Logging for the Application
-# Log file for the application.  Need to be root to write to this directory.
-# So, must start this app as root.
-LOG_FILE = '/boot/pi_logger/logs/pi_log.log'
+# Log file for the application.  
+LOG_FILE = '/var/log/pi_log.log'
 
 # Use the root logger for the application.
 
@@ -63,7 +62,7 @@ for i in range(100):
         poster = httpPoster2.HttpPoster(settings.POST_URL, 
                                         reading_converter=httpPoster2.BMSreadConverter(settings.POST_STORE_KEY),
                                         post_q_filename=join(APP_PATH, fname),
-                                        post_time_file=join(APP_PATH, 'last_post_time'))
+                                        post_time_file='/var/tmp/last_post_time')
         logging.info('Post Queue file is: %s' % fname)
         break
     except:

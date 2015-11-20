@@ -32,7 +32,7 @@ class HttpPoster:
                        reading_converter=None, 
                        post_q_filename='postQ.sqlite', 
                        post_thread_count=2, 
-                       post_time_file='last_post_time'):
+                       post_time_file='/var/tmp/last_post_time'):
         """Parameters are:
         'post_URL': URL to post the data to.
         'reading_converter': function or callable to convert the format

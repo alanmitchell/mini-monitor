@@ -3,6 +3,7 @@
 remedies and rebooting if needed.
 """
 import subprocess, time, logging, sys, calendar, os, glob
+import shutil
 import cron_logging, utils
 
 try:
@@ -13,20 +14,20 @@ except:
     utils.reboot()
 
 # don't do these tests if the system has not been up for 20 minutes
-# sys.exit() throws an exception so need to do this outside the above try 
+# sys.exit() throws an exception so need to do this outside the above try
 # block.
 if uptime < 20 * 60:
     sys.exit()
 
-try:        
+try:
     # the wall clock minute that this script is being run
     cur_min = time.localtime().tm_min
-    
+
     # import the settings file
     sys.path.insert(0, '/boot/pi_logger')
     import settings
-    
-    # if the system has been up for more than settings.REBOOT_DAYS, force 
+
+    # if the system has been up for more than settings.REBOOT_DAYS, force
     # a reboot.  Never reboot if REBOOT_DAYS=0.
     if settings.REBOOT_DAYS>0 and uptime > settings.REBOOT_DAYS * 3600 * 24:
         logging.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
@@ -35,7 +36,7 @@ try:
     # Count the number of logged errors that occurred in the last 5 minutes and 
     # reboot if an excessive count.
     # Log file timestamps are in UTC.
-    fname = '/boot/pi_logger/logs/pi_log.log'
+    fname = '/var/log/pi_log.log'
     if os.path.exists(fname):
         error_ct = 0
         now = time.time()
@@ -56,6 +57,13 @@ except:
 
 # only run these tasks once per hour (in first 15 minute interval)
 if cur_min < 15:
+
+    # Copy the application log files to a directory on the SD Card, because
+    # they are on a RAM disk that will not persist a reboot.
+    if os.path.exists('/var/log/pi_log.log'):
+        shutil.copyfile('/var/log/pi_log.log', '/var/local/pi_log.log')
+    if os.path.exists('/var/log/pi_cron.log'):
+        shutil.copyfile('/var/log/pi_cron.log', '/var/local/pi_cron.log')
     
     # record the total number of bytes passed through the ppp0 interface
     try:
@@ -78,7 +86,7 @@ if cur_min < 15:
         
         # but don't do the test if the system has not been up that long
         if uptime > post_max:
-            last_post_time = float(open('/home/pi/pi_logger/last_post_time').read())
+            last_post_time = float(open('/var/tmp/last_post_time').read())
             if (time.time() - last_post_time) > post_max:
                 logging.error('Rebooting due to last successful post being too long ago.')
                 utils.reboot()

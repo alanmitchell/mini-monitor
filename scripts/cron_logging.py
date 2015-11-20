@@ -10,7 +10,7 @@ import settings
 
 # Log file for the application.  Need to be root to write to this directory.
 # So, must start this app as root.
-LOG_FILE = '/boot/pi_logger/logs/pi_cron.log'
+LOG_FILE = '/var/log/pi_cron.log'
 
 # Use the root logger for the application.
 

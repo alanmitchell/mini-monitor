@@ -14,7 +14,10 @@ import settings
 
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
-settings.VERSION = 1.3
+#
+# Version 1.4:  Added Sensaphone reader class.
+#
+settings.VERSION = 1.4
 #***********************************************************************
 
 # The full directory path to this script file

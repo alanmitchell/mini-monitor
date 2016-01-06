@@ -32,7 +32,7 @@ READERS = [
 # This controls what messages will actually get logged in the system log
 # 'Logging' here does *not* refer to sensor logging; this is error and debug
 # logging.
-# Levels in order from least to greatest severity are:  DEBUG, INFO, WARNING, 
+# Levels in order from least to greatest severity are:  DEBUG, INFO, WARNING,
 # ERROR, CRITICAL
 LOG_LEVEL = logging.INFO
 
@@ -40,3 +40,7 @@ LOG_LEVEL = logging.INFO
 # Set to False otherwise.
 # See /pi_logger/scripts/upload_logs.py for details.
 UPLOAD_LOGS = True
+
+# If you are using the sensaphone.SensaphoneReader reader, then you need
+# to set the IP address of the Host Sensaphone unit below
+SENSAPHONE_HOST_IP = '10.30.5.77'

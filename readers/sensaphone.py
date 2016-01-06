@@ -1,112 +1,84 @@
 #!/usr/bin/python
 '''Module used to read sensor values from a Sensaphone IMS-4000 system.
+If changes need to be made, it is helpful to download the free MIB browser available at:
+http://www.ireasoning.com/ . To use this properly you have to "Load mib" and then load
+the IMS-4000 MIB available from Sensaphone's website.
 '''
 
 from pysnmp.entity.rfc3413.oneliner import cmdgen
 import time
 import base_reader
 
-# Settings: Ensure that the sensaphone host ip address is correct, name this particular
-# sensaphone unit, and put in the maximum number of nodes.
-# If changes need to be made, it is helpful to download the free MIB browser available at:
-# http://www.ireasoning.com/ . To use this properly you have to "Load mib" and then load
-# the IMS-4000 MIB available from Sensaphone's website.
-sensaphone_host_ip = '10.30.5.77'
-hostname = 'YKHC'
-node_max = 31
-
 
 class SensaphoneReader(base_reader.Reader):
     """Class to read sensor and status values from an IMS-4000 Sensaphone host unit.
     """
+    # The highest valid node
+    NODE_MAX = 32
 
-    def add_reading(self, hostname, node_name, sensaphone_host_ip, rd_name, rd_val, rd_type=base_reader.VALUE):
+    def get_value_list(self, oid):
+        '''Reuturns a list of values at the object id, 'oid'.  If an error occurs
+        an empty list is returned.
+        '''
 
-            # Creates a list of readings for one node.
-            readings = []
-            sensor_id = '%s_%s_%s' % (hostname, self.get1value(node_name, sensaphone_host_ip), rd_name)
-            readings.append((time.time(), sensor_id, rd_val, rd_type))
+        cmdGen = cmdgen.CommandGenerator()
 
-            return readings
+        errorIndication, errorStatus, errorIndex, varBindTable = cmdGen.bulkCmd(
+            cmdgen.CommunityData('public', mpModel=0),
+            cmdgen.UdpTransportTarget((self.host_ip, 161)),
+            0, 1,
+            oid
+        )
 
-    def getNodeData(self, node, sensaphone_host_ip):
+        val_list = []
 
-        # Set object id for this particular node
-        rd_name_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.8.1.1.2'
-        rd_val_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.8.1.1.7'
+        if errorIndication:
+            print(errorIndication)
+        else:
+            if errorStatus:
+                print('%s at %s' % (
+                    errorStatus.prettyPrint(),
+                    errorIndex and varBindTable[-1][int(errorIndex)-1] or '?'
+                    )
+                )
+            else:
+                for varBindTableRow in varBindTable:
+                    for name, val in varBindTableRow:
+                        if val.prettyPrint().startswith('No more var'):
+                            break
+                        else:
+                            val_list.append(val)
+        return val_list
+
+    def getNodeData(self, node):
+        '''Returns a list of two-tuples (sensor name, value) for a particular
+        'node'.  'node' is a number from 2 to NODE_MAX.
+        '''
 
         # Get list of sensor names
-        rd_name_list = []
-
-        cmdGen = cmdgen.CommandGenerator()
-
-        errorIndication, errorStatus, errorIndex, varBindTable = cmdGen.bulkCmd(
-            cmdgen.CommunityData('public', mpModel=0),
-            cmdgen.UdpTransportTarget((sensaphone_host_ip, 161)),
-            0, 1,
-            rd_name_oid
-        )
-
-        if errorIndication:
-            print(errorIndication)
-        else:
-            if errorStatus:
-                print('%s at %s' % (
-                    errorStatus.prettyPrint(),
-                    errorIndex and varBindTable[-1][int(errorIndex)-1] or '?'
-                    )
-                )
-            else:
-                for varBindTableRow in varBindTable:
-                    for name, val in varBindTableRow:
-                        if val.prettyPrint() == 'No more variables left in this MIB View':
-                            break
-                        else:
-                            rd_name_list.append(val.prettyPrint())
+        rd_name_oid = '.1.3.6.1.4.1.8338.1.1.1.%d.8.1.1.2' % node
+        rd_name_list = [val.prettyPrint() for val in self.get_value_list(rd_name_oid)]
 
         # Get associated values for each sensor
-        rd_val_list = []
+        rd_val_oid = '.1.3.6.1.4.1.8338.1.1.1.%d.8.1.1.7' % node
+        rd_val_list = [int(val) for val in self.get_value_list(rd_val_oid)]
 
-        cmdGen = cmdgen.CommandGenerator()
+        return zip(rd_name_list, rd_val_list)
 
-        errorIndication, errorStatus, errorIndex, varBindTable = cmdGen.bulkCmd(
-            cmdgen.CommunityData('public', mpModel=0),
-            cmdgen.UdpTransportTarget((sensaphone_host_ip, 161)),
-            0, 1,
-            rd_val_oid
-        )
-
-        if errorIndication:
-            print(errorIndication)
-        else:
-            if errorStatus:
-                print('%s at %s' % (
-                    errorStatus.prettyPrint(),
-                    errorIndex and varBindTable[-1][int(errorIndex)-1] or '?'
-                    )
-                )
-            else:
-                for varBindTableRow in varBindTable:
-                    for name, val in varBindTableRow:
-                        if val.prettyPrint() == 'No more variables left in this MIB View':
-                            break
-                        else:
-                            rd_val_list.append(int(val))
-
-        name_val_tuple = zip(rd_name_list, rd_val_list)
-
-        return name_val_tuple
-
-    def get1value(self, oid, senaphone_host_ip):
-    # Gets a single value for an object id from the sensaphone unit
+    def get1value(self, oid):
+        '''Gets a single value for an object id, 'oid' from the sensaphone unit.
+        Returns None if an error occurs.
+        '''
 
         cmdGen = cmdgen.CommandGenerator()
 
         errorIndication, errorStatus, errorIndex, varBinds = cmdGen.getCmd(
             cmdgen.CommunityData('public'),
-            cmdgen.UdpTransportTarget((sensaphone_host_ip, 161)),
+            cmdgen.UdpTransportTarget((self.host_ip, 161)),
             oid
         )
+
+        value = None    # will be overridden unless an error occurs
 
         # Check for errors and print out results
         if errorIndication:
@@ -124,31 +96,52 @@ class SensaphoneReader(base_reader.Reader):
 
         return value
 
-    def read(self, sensaphone_host_ip, hostname, node_max):
-        # Reads in the values from all nodes on a sensaphone with the given host ip.
+    def read(self):
+        '''Reads in the values from all nodes on a sensaphone with the given host ip.
+        '''
 
-        self.readings = []
+        readings = []
+
+        # pull the HOST IP address from the settings file and store as an object
+        # variable.
+        self.host_ip = self._settings.SENSAPHONE_HOST_IP
 
         # Note: the range starts at 2 because there is nothing at zero, and 1 is the number for the Host unit, which
         # only has sensors for the battery and sound.
-
-        for node in xrange(2, node_max):
+        for node in xrange(2, SensaphoneReader.NODE_MAX + 1):
 
             node_ip_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.10.1.0'
-            node_name_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.10.2.0'
-
-            if self.get1value(node_ip_oid, sensaphone_host_ip) == '0.0.0.0':
+            if self.get1value(node_ip_oid) == '0.0.0.0':
+                # no more nodes to read if we got a 0.0.0.0 IP address
+                # we're all done.
                 break
 
-            else:
-                name_val_tuple = self.getNodeData(node, sensaphone_host_ip)
-                for rd_name, rd_val in name_val_tuple:
-                    self.readings.append(self.add_reading(hostname, node_name_oid, sensaphone_host_ip, rd_name, rd_val))
+            # Get the plain text name of this node
+            node_name_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.10.2.0'
+            node_name = self.get1value(node_name_oid)
 
-        return self.readings
+            ts = time.time()     # use the same timestamp for all the readings from this node
+            name_val_tuples = self.getNodeData(node)
+            for rd_name, rd_val in name_val_tuples:
+                # create a unique Sensor ID for this sensor
+                sensor_id = '%s_%s_%s' % (self._settings.LOGGER_ID,
+                                          node_name,
+                                          rd_name)
+                # replace spaces with underscore in the Sensor ID
+                sensor_id = sensor_id.replace(' ', '_')
+
+                readings.append((ts, sensor_id, rd_val, base_reader.VALUE))
+
+        return readings
 
 
 if __name__ == '__main__':
     from pprint import pprint
-    rdr = SensaphoneReader()
-    pprint(rdr.read(sensaphone_host_ip, hostname, node_max))
+
+    # Create a Settings object to test with.  Normally, these settings will appear in the main
+    # settings file for the logger.
+    test_settings = base_reader.DummySettings()
+    test_settings.SENSAPHONE_HOST_IP = '10.30.5.77'
+
+    rdr = SensaphoneReader(settings=test_settings)
+    pprint(rdr.read())

@@ -113,7 +113,7 @@ class SensaphoneReader(base_reader.Reader):
         # only has sensors for the battery and sound.
         for node in xrange(2, SensaphoneReader.NODE_MAX + 1):
 
-            node_ip_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.10.1.0'
+            node_ip_oid = '.1.3.6.1.4.1.8338.1.1.1.%s.10.1.0' % node
             node_ip = self.get1value(node_ip_oid)
             if node_ip == '0.0.0.0' or node_ip is None:
                 # no more nodes to read if we got a 0.0.0.0 IP address or
@@ -122,7 +122,7 @@ class SensaphoneReader(base_reader.Reader):
                 break
 
             # Get the plain text name of this node
-            node_name_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.10.2.0'
+            node_name_oid = '.1.3.6.1.4.1.8338.1.1.1.%s.10.2.0' % node
             node_name = self.get1value(node_name_oid)
 
             ts = time.time()     # use the same timestamp for all the readings from this node

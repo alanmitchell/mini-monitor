@@ -42,6 +42,9 @@ LOG_LEVEL = logging.INFO
 # See /pi_logger/scripts/upload_logs.py for details.
 UPLOAD_LOGS = True
 
+# ---------------------------------------------------------------------------
+# Below are settings that are only used for certain Sensor Readers
+
 # If you are using the sensaphone.SensaphoneReader reader, then you need
 # to set the IP address of the Host Sensaphone unit below
 SENSAPHONE_HOST_IP = '10.30.5.77'

@@ -5,8 +5,9 @@ http://www.ireasoning.com/ . To use this properly you have to "Load mib" and the
 the IMS-4000 MIB available from Sensaphone's website.
 '''
 
-from pysnmp.entity.rfc3413.oneliner import cmdgen
 import time
+import logging
+from pysnmp.entity.rfc3413.oneliner import cmdgen
 import base_reader
 
 
@@ -33,14 +34,15 @@ class SensaphoneReader(base_reader.Reader):
         val_list = []
 
         if errorIndication:
-            print(errorIndication)
+            logging.exception('Error reading value list at OID %s: %s' % (oid, errorIndication))
         else:
             if errorStatus:
-                print('%s at %s' % (
+                err_msg = 'Error reading OID %s: %s at %s' % (
+                    oid,
                     errorStatus.prettyPrint(),
-                    errorIndex and varBindTable[-1][int(errorIndex)-1] or '?'
+                    errorIndex and varBinds[int(errorIndex)-1] or '?'
                     )
-                )
+                logging.exception(err_msg)
             else:
                 for varBindTableRow in varBindTable:
                     for name, val in varBindTableRow:
@@ -82,14 +84,15 @@ class SensaphoneReader(base_reader.Reader):
 
         # Check for errors and print out results
         if errorIndication:
-            print(errorIndication)
+            logging.exception('Error reading OID %s: %s' % (oid, errorIndication))
         else:
             if errorStatus:
-                print('%s at %s' % (
+                err_msg = 'Error reading OID %s: %s at %s' % (
+                    oid,
                     errorStatus.prettyPrint(),
                     errorIndex and varBinds[int(errorIndex)-1] or '?'
                     )
-                )
+                logging.exception(err_msg)
             else:
                 for name, val in varBinds:
                     value = val
@@ -111,8 +114,10 @@ class SensaphoneReader(base_reader.Reader):
         for node in xrange(2, SensaphoneReader.NODE_MAX + 1):
 
             node_ip_oid = '.1.3.6.1.4.1.8338.1.1.1.' + str(node) + '.10.1.0'
-            if self.get1value(node_ip_oid) == '0.0.0.0':
-                # no more nodes to read if we got a 0.0.0.0 IP address
+            node_ip = self.get1value(node_ip_oid)
+            if node_ip == '0.0.0.0' or node_ip is None:
+                # no more nodes to read if we got a 0.0.0.0 IP address or
+                # an Error occurred.
                 # we're all done.
                 break
 

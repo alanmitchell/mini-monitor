@@ -1,5 +1,8 @@
-import subprocess, logging, time
+import subprocess
+import logging
+import time
 import cron_logging
+
 
 def reboot():
     """Reboot the system but first include some system info in the cron_log
@@ -16,9 +19,23 @@ def reboot():
         logging.info(report)
     except:
         pass
-    
+
     subprocess.call('/sbin/shutdown -r now', shell=True)
 
     # wait until reboot actually occurs
     while True:
         time.sleep(1)
+
+
+def ip_addrs():
+    """Returns a list of IP addresses assigned to network interfaces on this
+    system, ignoring the loopback interface.  Returns an empty list if an
+    error occurs.
+    """
+    try:
+        result = subprocess.check_output("ifconfig | grep 'inet addr' | cut -f 2 -d : | cut -f 1 -d ' '", shell=True)
+        ips = [ip for ip in result.splitlines() if ip != '127.0.0.1']
+    except:
+        ips = []
+
+    return ips

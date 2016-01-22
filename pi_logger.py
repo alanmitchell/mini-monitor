@@ -5,6 +5,7 @@ from os.path import dirname, realpath, join
 import sys, logging, logging.handlers, json
 import requests
 import httpPoster2, logger_controller
+import scripts.utils
 
 # The settings file is installed in the FAT boot partition of the Pi SD card,
 # so that it can be easily configured from the PC that creates the SD card.  
@@ -102,6 +103,8 @@ for reader_name in settings.READERS:
 
 # post the initial readings to the Debug URL
 try:
+    # first, add the IP addresses assigned to this system to the readings
+    init_readings += scripts.utils.ip_addrs()
     requests.post('http://api.analysisnorth.com/debug_store', data=json.dumps(init_readings), headers={'content-type': 'application/json'})
 except:
     logging.exception('Error posting initial readings to Debug URL.')

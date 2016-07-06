@@ -1,0 +1,10 @@
+# Need to install the Exodriver and then this module direct from the LabJack
+# GitHub sites.  See Evernote notes.
+# LabJackPython==4-24-2014
+
+MinimalModbus==0.6
+numpy==1.6.2
+pyasn1==0.1.9              # might be used for SNMP
+pyserial==2.5
+pysnmp==4.3.1
+requests==2.6.0

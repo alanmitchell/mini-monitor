@@ -4,6 +4,7 @@ remedies and rebooting if needed.
 """
 import subprocess, time, logging, sys, calendar, os, glob
 import shutil
+import sqlite3
 import cron_logging, utils
 
 try:
@@ -55,16 +56,53 @@ except:
     logging.exception('Error performing health checks. Rebooting.')
     utils.reboot()
 
-# only run these tasks once per hour (in first 15 minute interval)
-if cur_min < 15:
+# only run these tasks once per hour (at the 30 minute time point)
+if cur_min > 20 and cur_min < 40:
 
-    # Copy the application log files to a directory on the SD Card, because
-    # they are on a RAM disk that will not persist a reboot.
-    if os.path.exists('/var/log/pi_log.log'):
-        shutil.copyfile('/var/log/pi_log.log', '/var/local/pi_log.log')
-    if os.path.exists('/var/log/pi_cron.log'):
-        shutil.copyfile('/var/log/pi_cron.log', '/var/local/pi_cron.log')
-    
+    try:
+        # Copy the application log files to a directory on the SD Card, because
+        # they are on a RAM disk that will not persist a reboot.
+        if os.path.exists('/var/log/pi_log.log'):
+            shutil.copyfile('/var/log/pi_log.log', '/var/local/pi_log.log')
+        if os.path.exists('/var/log/pi_cron.log'):
+            shutil.copyfile('/var/log/pi_cron.log', '/var/local/pi_cron.log')
+    except:
+        # continue on if there is a problem with this non-essential
+        # operation.
+        pass
+
+    try:
+        # Copy the reading post queue from the RAM disk to non-volatile
+        # storage.
+        # Before copying the database file, need to force a lock on it so that no
+        # write operations occur during the copying process
+
+        fname = '/var/run/postQ.sqlite'
+        fname_bak = '/var/local/postQ.sqlite'   # non-volatile
+        conn = sqlite3.connect(fname)
+        cursor = conn.cursor()
+
+        # create a dummy table to write into.
+        try:
+            cursor.execute('CREATE TABLE _junk (x integer)')
+        except:
+            # table already existed
+            pass
+
+        # write a value into the table to create a lock on the database
+        cursor.execute('INSERT INTO _junk VALUES (1)')
+
+        # now copy database
+        shutil.copy(fname, fname_bak)
+
+        # Rollback the Insert as we don't really need it.
+        conn.rollback()
+
+    except:
+        # continue on if there is a problem with this non-essential
+        # operation.
+        pass
+
     # record the total number of bytes passed through the ppp0 interface
     try:
         res = subprocess.check_output('/sbin/ifconfig | /bin/grep -A7 ppp0 | /bin/grep "RX bytes"', shell=True)
@@ -87,7 +125,7 @@ if cur_min < 15:
 
             # but don't do the test if the system has not been up that long
             if uptime > post_max:
-                last_post_time = float(open('/var/tmp/last_post_time').read())
+                last_post_time = float(open('/var/run/last_post_time').read())
                 if (time.time() - last_post_time) > post_max:
                     logging.error('Rebooting due to last successful post being too long ago.')
                     utils.reboot()

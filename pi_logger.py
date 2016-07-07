@@ -1,8 +1,10 @@
 #!/usr/bin/python
 """Main script to start and control the data logger.
 """
-from os.path import dirname, realpath, join
+from os.path import dirname, realpath, join, exists
+import os
 import sys, logging, logging.handlers, json
+import shutil
 import requests
 import httpPoster2, logger_controller
 import scripts.utils
@@ -22,9 +24,6 @@ import settings
 #
 settings.VERSION = 1.6
 #***********************************************************************
-
-# The full directory path to this script file
-APP_PATH = realpath(dirname(__file__))
 
 # ----- Setup Exception/Debug Logging for the Application
 # Log file for the application.  
@@ -60,19 +59,29 @@ logging.root.addHandler(console_h)
 logging.warning('pi_logger has restarted')
 
 # Create the object that will post the readings to the HTTP server.
-# In case of corruption of the database file that stores the readings
-# to post, try sequential file names until one works.
-for i in range(100):
+# First copy over the saved copy of the database, since this DB is
+# created on RAM disk and is lost every reboot.
+db_fname = '/var/run/postQ.sqlite'       # working, RAM disk version
+db_fname_nv = '/var/local/postQ.sqlite'  # non-volatile backup
+if exists(db_fname_nv):
+    shutil.copyfile(db_fname_nv, db_fname)
+
+# try twice to create Posting queue
+for i in range(2):
     try:
-        fname = join(APP_PATH, 'postQ%02d.sqlite' % i)
-        poster = httpPoster2.HttpPoster(settings.POST_URL, 
+        poster = httpPoster2.HttpPoster(settings.POST_URL,
                                         reading_converter=httpPoster2.BMSreadConverter(settings.POST_STORE_KEY),
-                                        post_q_filename=join(APP_PATH, fname),
-                                        post_time_file='/var/tmp/last_post_time')
-        logging.info('Post Queue file is: %s' % fname)
+                                        post_q_filename=db_fname,
+                                        post_time_file='/var/run/last_post_time')
         break
     except:
-        logging.exception('Error starting HttpPoster with queue filename: %s' % fname)
+        if i==0:
+            # On first pass, try deleting the Post DB as it may be corrupted
+            if exists(db_fname):
+                os.remove(db_fname)
+        else:
+            logging.exception('Error creating Posting queue: %s. Terminating application.' % db_fname)
+            sys.exit(1)
 
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 

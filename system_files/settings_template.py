@@ -10,9 +10,6 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
-# Number of days of uptime between forced reboots.  Set to 0 to never reboot.
-REBOOT_DAYS = 2
-
 # URL to post readings to, and required storage key
 # An example BMON URL is "https://bms.ahfc.us"
 # The Store Key can be any string with no spaces
@@ -29,6 +26,24 @@ READERS = [
 #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000
 'sys_info.SysInfo',               # System uptime, CPU temperature, software version
 ]
+
+# -------- Flags and Variables that control application health checks
+
+# These default values are appropriate for a system that is on a clock
+# timer that forces a power-cycle every so often.
+
+# Number of days of uptime between forced reboots.  Set to 0 to never reboot.
+REBOOT_DAYS = 0
+
+# Reboots if Error Count is too high
+CHECK_ERROR_CT = False
+
+# Reboots if Last Post was too long ago
+CHECK_LAST_POST = False
+
+# Check Cell Modem connection (only if cell modem present)
+# Restart cell Internet if no connection
+CHECK_CELL_MODEM = True
 
 # This controls what messages will actually get logged in the system log
 # 'Logging' here does *not* refer to sensor logging; this is error and debug

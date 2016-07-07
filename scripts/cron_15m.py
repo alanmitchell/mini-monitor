@@ -37,7 +37,7 @@ try:
     # reboot if an excessive count.
     # Log file timestamps are in UTC.
     fname = '/var/log/pi_log.log'
-    if os.path.exists(fname):
+    if settings.CHECK_ERROR_CT and os.path.exists(fname):
         error_ct = 0
         now = time.time()
         for lin in open(fname):
@@ -80,16 +80,17 @@ if cur_min < 15:
     # Check to see if last successful post was too long ago
     # If so, reboot.
     try:
-        # trigger reboot if no post in last hour or 1.2 x post interval, 
-        # whichever is greater.
-        post_max = max(3600, 1.2 * settings.LOG_INTERVAL)
-        
-        # but don't do the test if the system has not been up that long
-        if uptime > post_max:
-            last_post_time = float(open('/var/tmp/last_post_time').read())
-            if (time.time() - last_post_time) > post_max:
-                logging.error('Rebooting due to last successful post being too long ago.')
-                utils.reboot()
+        if settings.CHECK_LAST_POST:
+            # trigger reboot if no post in last hour or 1.2 x post interval,
+            # whichever is greater.
+            post_max = max(3600, 1.2 * settings.LOG_INTERVAL)
+
+            # but don't do the test if the system has not been up that long
+            if uptime > post_max:
+                last_post_time = float(open('/var/tmp/last_post_time').read())
+                if (time.time() - last_post_time) > post_max:
+                    logging.error('Rebooting due to last successful post being too long ago.')
+                    utils.reboot()
     except:
         # could get an error from missing last_post_time file, but it should be
         # there as we don't execute this test until enough time has passed for a
@@ -101,7 +102,7 @@ if cur_min < 15:
 # If network not working, redial cell modem.
 # I put it at the end to ensure critical errors were caught above before this.
 # The /var/run/network/cell_modem contents are set in the rc.local script.
-if open('/var/run/network/cell_modem').read(1)=='1':
+if settings.CHECK_CELL_MODEM and open('/var/run/network/cell_modem').read(1)=='1':
     try:
         subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
     except:

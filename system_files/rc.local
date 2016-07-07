@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # rc.local
 #
@@ -12,6 +12,8 @@
 # By default this script does nothing.
 
 # From here on, do NOT exit the script if any errors occur
+# (this may already be the case, since I removed the "-e" option from
+# the shebang line above).
 set +e
 
 # If the file system gets corrupted, it is often mounted as read-only.  I have

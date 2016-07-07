@@ -57,11 +57,6 @@ else
     echo 0 > /var/run/network/cell_modem
 fi
 
-# Upload pi_logger error/debug log files to analysisnorth.com. The script looks
-# at a value in the settings.py file to determine whether it really should
-# upload.
-/home/pi/pi_logger/scripts/upload_logs.py
-
 # Start up the datalogger
 /home/pi/pi_logger/pi_logger.py &
 

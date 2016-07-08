@@ -121,13 +121,13 @@ for reader_name in settings.READERS:
 # wait for up to one minute for the network to be available
 for i in range(30):
     try:
-        subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
+        subprocess.check_output(['/usr/bin/curl', 'http://google.com'])
         logging.debug('Network is available')
         break
     except:
-        # if nslookup returns non-zero error code, an exception is raised
+        # if curl returns non-zero error code, an exception is raised
         # wait and try again
-        time.time(2)
+        time.sleep(2)
 
 # post the initial readings to the Debug URL
 try:

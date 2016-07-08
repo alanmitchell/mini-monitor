@@ -16,16 +16,6 @@
 # the shebang line above).
 set +e
 
-# If the file system gets corrupted, it is often mounted as read-only.  I have
-# found that a reboot will generally fix the problem.  Look for a "ro" 
-# read-only indicator in /proc/mounts and reboot if it is found.  All filesystems
-# are normally mounted read-write (rw).
-if grep "ro," /proc/mounts
-then
-   /sbin/reboot
-   exit
-fi
-
 # Below I create a "forcefsck" file in /, which
 # causes fsck to run on every boot (which then removes the forcefsck file). I 
 # also have set FSCKFIX=yes in the/etc/default/rcS file, which will cause fsck

@@ -44,6 +44,9 @@ def backup_files():
             shutil.copyfile('/var/log/pi_log.log', '/var/local/pi_log.log')
         if os.path.exists('/var/log/pi_cron.log'):
             shutil.copyfile('/var/log/pi_cron.log', '/var/local/pi_cron.log')
+
+        logger.info('Backed up Log files.')
+
     except:
         # continue on if there is a problem with this non-essential
         # operation.
@@ -76,6 +79,8 @@ def backup_files():
         # Rollback the Insert as we don't really need it.
         conn.rollback()
         conn.close()
+        
+        logger.info('Backed up Post database.')
 
     except:
         # continue on if there is a problem with this non-essential

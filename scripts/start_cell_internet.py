@@ -27,7 +27,7 @@ subprocess.call('/usr/bin/wvdial &', shell=True)
 tstart = time.time()
 while time.time() - tstart < 30:
     try:
-        subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
+        subprocess.check_call(['/usr/bin/curl', 'http://google.com'])
         break
     except:
         # if nslookup is unsuccessful, it throws an error

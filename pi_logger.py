@@ -121,7 +121,7 @@ for reader_name in settings.READERS:
 # wait for up to one minute for the network to be available
 for i in range(30):
     try:
-        subprocess.check_output(['/usr/bin/curl', 'http://google.com'])
+        subprocess.check_call(['/usr/bin/curl', 'http://google.com'])
         logging.debug('Network is available')
         break
     except:

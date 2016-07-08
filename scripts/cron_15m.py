@@ -143,8 +143,8 @@ if cur_min > 20 and cur_min < 40:
 # The /var/run/network/cell_modem contents are set in the rc.local script.
 if settings.CHECK_CELL_MODEM and open('/var/run/network/cell_modem').read(1)=='1':
     try:
-        subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
+        subprocess.check_call(['/usr/bin/curl', 'http://google.com'])
     except:
-        # if nslookup returns non-zero error code, an exception is raised
+        # if curl returns non-zero error code, an exception is raised
         logging.error('No network connection. Restarting cellular modem, if present.')
         subprocess.call('/home/pi/pi_logger/scripts/start_cell_internet.py', shell=True)

@@ -5,6 +5,8 @@ from os.path import dirname, realpath, join, exists
 import os
 import sys, logging, logging.handlers, json
 import shutil
+import time
+import subprocess
 import requests
 import httpPoster2, logger_controller
 import scripts.utils
@@ -111,6 +113,16 @@ for reader_name in settings.READERS:
         
     except:
         logging.exception('Error starting %s reader' % reader_name)
+
+# wait for up to one minute for the network to be available
+for i in range(30):
+    try:
+        subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
+        break
+    except:
+        # if nslookup returns non-zero error code, an exception is raised
+        # wait and try again
+        time.time(2)
 
 # post the initial readings to the Debug URL
 try:

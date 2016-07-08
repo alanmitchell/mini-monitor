@@ -67,6 +67,7 @@ db_fname = '/var/run/postQ.sqlite'       # working, RAM disk version
 db_fname_nv = '/var/local/postQ.sqlite'  # non-volatile backup
 if exists(db_fname_nv):
     shutil.copyfile(db_fname_nv, db_fname)
+    logging.debug('Restored Post queue.')
 
 # try twice to create Posting queue
 for i in range(2):
@@ -75,6 +76,7 @@ for i in range(2):
                                         reading_converter=httpPoster2.BMSreadConverter(settings.POST_STORE_KEY),
                                         post_q_filename=db_fname,
                                         post_time_file='/var/run/last_post_time')
+        logging.debug('Created HttpPoster.')
         break
     except:
         if i==0:
@@ -89,6 +91,7 @@ for i in range(2):
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 
                                     log_interval=settings.LOG_INTERVAL)
 controller.add_logging_handler(poster)   # add the HTTP poster to handle logging events
+logging.debug('Created logging controller.')
 
 # Add the sensor readers listed in the settings file to the controller
 # and post an initial set of readings to the debug URL.
@@ -108,6 +111,7 @@ for reader_name in settings.READERS:
         controller.add_reader(reader_obj)
         try:
             init_readings += reader_obj.read()
+            logging.debug('Created and initially read %s' % reader_name)
         except:
             logging.exception('Error getting initial readings from %s reader' % reader_name)
         
@@ -118,6 +122,7 @@ for reader_name in settings.READERS:
 for i in range(30):
     try:
         subprocess.check_output(['/usr/bin/nslookup', 'google.com'])
+        logging.debug('Network is available')
         break
     except:
         # if nslookup returns non-zero error code, an exception is raised
@@ -129,6 +134,7 @@ try:
     # first, add the IP addresses assigned to this system to the readings
     init_readings += scripts.utils.ip_addrs()
     requests.post('http://api.analysisnorth.com/debug_store', data=json.dumps(init_readings), headers={'content-type': 'application/json'})
+    logging.debug('Successfully posted First Readings.')
 except:
     logging.exception('Error posting initial readings to Debug URL.')
 

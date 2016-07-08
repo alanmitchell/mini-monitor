@@ -12,11 +12,12 @@ import settings
 # So, must start this app as root.
 LOG_FILE = '/var/log/pi_cron.log'
 
-# Use the root logger for the application.
+# Use the 'pi_cron' logger for the application.
+logger = logging.getLogger('pi_cron')
 
 # set the log level. Because we are setting this on the logger, it will apply
 # to all handlers (unless maybe you set a specific level on a handler?).
-logging.root.setLevel(settings.LOG_LEVEL)
+logger.setLevel(settings.LOG_LEVEL)
 
 # create a rotating file handler
 fh = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=200000, backupCount=5)
@@ -30,7 +31,7 @@ console_h = logging.StreamHandler()
 console_h.setFormatter(formatter)
 
 # add the handlers to the logger
-logging.root.addHandler(fh)
-logging.root.addHandler(console_h)
+logger.addHandler(fh)
+logger.addHandler(console_h)
 
 

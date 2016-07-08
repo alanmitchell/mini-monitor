@@ -97,6 +97,7 @@ if cur_min > 20 and cur_min < 40:
 
         # Rollback the Insert as we don't really need it.
         conn.rollback()
+        conn.close()
 
     except:
         # continue on if there is a problem with this non-essential

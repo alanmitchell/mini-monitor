@@ -1,2 +1,7 @@
 #!/bin/bash
+
+# Starts the Huawei E173 cell modem using the
+# umtskeeper script.  See documentation of that script at:
+# http://mintakaconciencia.net/squares/umtskeeper/
+
 /home/pi/umtskeeper/umtskeeper --sakisoperators "USBINTERFACE='0' OTHER='USBMODEM' USBMODEM='12d1:1436' APN='CUSTOM_APN' CUSTOM_APN='web.gci' APN_USER='0' APN_PASS='0'" --sakisswitches "--sudo --console" --devicename 'Huawei' --statfilepath /var/log --log

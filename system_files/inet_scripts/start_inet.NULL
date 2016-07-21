@@ -1,2 +1,4 @@
 #!/bin/bash
-# Blank script for use when Internet start up is automatic
+
+# Blank script for use when Internet start up is automatic and
+# needs no additional commands.

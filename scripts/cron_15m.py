@@ -100,15 +100,3 @@ if cur_min > 20 and cur_min < 40:
         # post to occur.
         logger.exception('Error checking last post time. Rebooting.')
         utils.reboot()
-
-# If there is a cell modem present, check to see if the network is working.  
-# If network not working, redial cell modem.
-# I put it at the end to ensure critical errors were caught above before this.
-# The /var/run/network/cell_modem contents are set in the rc.local script.
-if settings.CHECK_CELL_MODEM and open('/var/run/network/cell_modem').read(1)=='1':
-    try:
-        subprocess.check_call(['/usr/bin/curl', 'http://google.com'])
-    except:
-        # if curl returns non-zero error code, an exception is raised
-        logger.error('No network connection. Restarting cellular modem, if present.')
-        subprocess.call('/home/pi/pi_logger/scripts/start_cell_internet.py', shell=True)

@@ -79,7 +79,7 @@ def backup_files():
         # Rollback the Insert as we don't really need it.
         conn.rollback()
         conn.close()
-        
+
         logger.info('Backed up Post database.')
 
     except:

@@ -41,10 +41,6 @@ CHECK_ERROR_CT = False
 # Reboots if Last Post was too long ago
 CHECK_LAST_POST = False
 
-# Check Cell Modem connection (only if cell modem present)
-# Restart cell Internet if no connection
-CHECK_CELL_MODEM = True
-
 # This controls what messages will actually get logged in the system log
 # 'Logging' here does *not* refer to sensor logging; this is error and debug
 # logging.

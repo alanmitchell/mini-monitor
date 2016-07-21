@@ -20,7 +20,8 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
-# Version 1.6:  Requirements file. Control over Reboot tests.
+# Version 1.6:  Requirements file. Control over Reboot tests. Removed
+#               Cell modem code, cuz using UMTSkeeper now.
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #

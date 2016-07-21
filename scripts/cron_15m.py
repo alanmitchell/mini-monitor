@@ -68,18 +68,6 @@ if cur_min > 20 and cur_min < 40:
     # backup log and Post database files to non-volatile storage
     utils.backup_files()
 
-    # record the total number of bytes passed through the ppp0 interface
-    try:
-        res = subprocess.check_output('/sbin/ifconfig | /bin/grep -A7 ppp0 | /bin/grep "RX bytes"', shell=True)
-        parts = res.split(':')
-        rx_bytes = int(parts[1].split()[0])
-        tx_bytes = int(parts[2].split()[0])
-        logger.info('Cellular Byte Total: %d' % (rx_bytes + tx_bytes))
-    except:
-        # not critical, don't reboot.  Will also arrive here if cellular
-        # modem is not being used.
-        pass
-            
     # Check to see if last successful post was too long ago
     # If so, reboot.
     try:

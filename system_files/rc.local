@@ -49,6 +49,9 @@ else
     echo 0 > /var/run/network/cell_modem
 fi
 
+# Start up the Internet
+/boot/pi_logger/start_inet &
+
 # Start up the datalogger
 /home/pi/pi_logger/pi_logger.py &
 

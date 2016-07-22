@@ -174,6 +174,8 @@ class HA7Sreader(base_reader.Reader):
         # Go through this process three times in case it doesn't 
         # find a port on the first pass (I've seen the 'S' function
         # fail).
+        # NOTE: this process depends on there being at least one 1-wire
+        # device connected to the bus.
         self.port_path = None
         for i in range(3):
             for p_path in base_reader.Reader.available_ftdi_ports:

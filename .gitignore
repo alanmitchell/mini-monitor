@@ -7,3 +7,9 @@ last_post_time
 *.gz
 *.bak
 .idea
+bin/
+obj/
+*.pyproj
+*.suo
+*.config
+*.sln

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 """Main script to start and control the data logger.
 """
 from os.path import dirname, realpath, join, exists
@@ -60,33 +60,6 @@ logging.root.addHandler(console_h)
 
 # log a restart of the app
 logging.warning('pi_logger has restarted')
-
-# Create the object that will post the readings to the HTTP server.
-# First copy over the saved copy of the database, since this DB is
-# created on RAM disk and is lost every reboot.
-db_fname = '/var/run/postQ.sqlite'       # working, RAM disk version
-db_fname_nv = '/var/local/postQ.sqlite'  # non-volatile backup
-if exists(db_fname_nv):
-    shutil.copyfile(db_fname_nv, db_fname)
-    logging.debug('Restored Post queue.')
-
-# try twice to create Posting queue
-for i in range(2):
-    try:
-        poster = httpPoster2.HttpPoster(settings.POST_URL,
-                                        reading_converter=httpPoster2.BMSreadConverter(settings.POST_STORE_KEY),
-                                        post_q_filename=db_fname,
-                                        post_time_file='/var/run/last_post_time')
-        logging.debug('Created HttpPoster.')
-        break
-    except:
-        if i==0:
-            # On first pass, try deleting the Post DB as it may be corrupted
-            if exists(db_fname):
-                os.remove(db_fname)
-        else:
-            logging.exception('Error creating Posting queue: %s. Terminating application.' % db_fname)
-            sys.exit(1)
 
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 

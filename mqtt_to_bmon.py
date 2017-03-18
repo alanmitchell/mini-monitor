@@ -91,10 +91,17 @@ def on_message(client, userdata, msg):
     # Need to convert this to a list of 3-element tuples
     reads = []
     for line in msg.payload.split('\n'):
-        ts, sensor_id, val = line.split('\t')
-        reads.append( (int(float(ts)), sensor_id, float(val)) )
-    # hand the readings to the HTTPposter
-    poster.add_readings(reads)
+        try:
+            ts, sensor_id, val = line.split('\t')
+            reads.append( (int(float(ts)), sensor_id, float(val)) )
+        except:
+            logging.exception('Bad reading: %s' % line)
+            # continue with the next reading
+            continue
+
+    # hand the readings to the HTTPposter if there are any
+    if len(reads):
+        poster.add_readings(reads)
 
 client = mqtt.Client()
 client.on_connect = on_connect

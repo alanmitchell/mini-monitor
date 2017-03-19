@@ -8,7 +8,7 @@ import shutil
 import time
 import subprocess
 import requests
-import httpPoster2, logger_controller
+import logger_controller
 import scripts.utils
 
 # The settings file is installed in the FAT boot partition of the Pi SD card,
@@ -64,7 +64,6 @@ logging.warning('pi_logger has restarted')
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 
                                     log_interval=settings.LOG_INTERVAL)
-controller.add_logging_handler(poster)   # add the HTTP poster to handle logging events
 logging.debug('Created logging controller.')
 
 # Add the sensor readers listed in the settings file to the controller

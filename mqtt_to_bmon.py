@@ -5,6 +5,7 @@ topics, those messages being a set of sensor readings.  The readings
 are posted to a BMON server through use of the httpPoster2 module.
 """
 import sys
+import logging
 import httpPoster2
 import paho.mqtt.client as mqtt
 

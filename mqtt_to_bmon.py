@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 """This script listens to an MQTT broker on the localhost.  
 The script processes messages on the "readings/final/#"
 topics, those messages being a set of sensor readings.  The readings
@@ -30,8 +30,10 @@ LOG_FILE = '/var/log/mqtt_to_bmon.log'
 # to all handlers (unless maybe you set a specific level on a handler?).
 logging.root.setLevel(settings.LOG_LEVEL)
 
-# stop propagation of messages from the 'requests' module
+# Set logging level and stop propagation of messages from the 'requests' module
 logging.getLogger('requests').propagate = False
+logging.getLogger("requests").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 # create a rotating file handler
 fh = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=200000, backupCount=5)

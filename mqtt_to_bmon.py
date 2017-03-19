@@ -6,6 +6,7 @@ are posted to a BMON server through use of the httpPoster2 module.
 """
 import sys
 import logging
+import logging.handlers
 import httpPoster2
 import paho.mqtt.client as mqtt
 

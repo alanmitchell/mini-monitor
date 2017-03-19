@@ -112,7 +112,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
  
-client.connect()
+client.connect('localhost')
  
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.

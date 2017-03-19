@@ -1,9 +1,10 @@
-"""Periodically requests readings from an object and then logs them
-to handler at specified intervals.
+﻿"""Periodically requests readings from reader objects and then posts summarized
+sets of the readings to an MQTT broker on localhost.
 """
 import logging, time
 import numpy as np
 import readers.base_reader
+import mqtt_poster
 
 class LoggerController:
 
@@ -33,6 +34,9 @@ class LoggerController:
         # (timestamp, value)
         self.read_data = {}
 
+        # Create a poster object to post readings to the local MQTT broker
+        self.poster = mqtt_poster.MQTTposter()
+
 
     def add_reader(self, reader):
         """Adds an object to the list of sensor readers.  Each reader object must have a 
@@ -45,20 +49,9 @@ class LoggerController:
         """
         self.readers.append(reader)
 
-
-    def add_logging_handler(self, handler):
-        """Adds a handler that will be delivered summarized readings at each
-        logging event.  Each handler must have an add_readings(readings) method,
-        which will be passed a list of readings; each reading is a tuple
-        of the form: (UNIX timestamp, sensor ID, summarized reading value): 
-        """
-        self.logging_handlers.append(handler)
-
-
     def log_readings(self):
-        """Summarizes readings for one logging interval and passes the
-        summarized values to each logging handler.  Timestamps are converted
-        to integers.
+        """Summarizes readings for one logging interval and posts them to
+        the MQTT broker. Timestamps are converted to integers.
         """
         
         # summarize the readings
@@ -112,15 +105,16 @@ class LoggerController:
         # last readings from the STATE type sensors.
         self.read_data = new_read_data
         
-        # Pass summarized readings to all of the logging handlers, if there
+        # Post summarized readings to the MQTT broker, if there
         # are any summarized readings
         if len(summarized_readings):
-            for handler in self.logging_handlers:
-                try:
-                    handler.add_readings(summarized_readings)
-                except:
-                    logging.exception('Error handling logged readings in %s' % handler)
-                
+            # convert readings into a string, one reading per line with
+            # tab-delimited fields
+            post_str = '\n'.join([ '%s\t%s\t%s' % (ts, sensor_id, val) for ts, sensor_id, val in summarized_readings])
+            try:
+                self.poster.publish('readings/final/pi_logger', post_str)
+            except:
+                logging.exception('Error posting readings to MQTT broker.')
 
     def run(self):
         """Called to starting the reading and logging process.  Infinite loop 
@@ -130,7 +124,6 @@ class LoggerController:
         # determine the time at which readings should be read and logged.
         next_read_time = time.time()     # read right away
         next_log_time = time.time() + self.log_interval
-        
 
         while True:
 

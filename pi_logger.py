@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 """Main script to start and control the data logger.
 """
 from os.path import dirname, realpath, join, exists
@@ -20,12 +20,14 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
+# Version 1.7:  Implmented MQTT Broker and restructured app to use it.
+#               Add the Utility Meter reader.
 # Version 1.6:  Requirements file. Control over Reboot tests. Removed
 #               Cell modem code, cuz using UMTSkeeper now.
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 1.6
+settings.VERSION = 1.7
 #***********************************************************************
 
 # ----- Setup Exception/Debug Logging for the Application

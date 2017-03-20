@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 """This script listens to an MQTT broker on the localhost.  
 The script processes messages on the "readings/final/#"
 topics, those messages being a set of sensor readings.  The readings
@@ -88,7 +88,7 @@ def on_connect(client, userdata, flags, rc):
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
     # Messages on this topic are sets of readings.
-    client.subscribe("readings/final/#")
+    client.subscribe("readings/final/#", qos=1)
  
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):

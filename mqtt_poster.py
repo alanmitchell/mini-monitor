@@ -33,7 +33,7 @@ class MQTTposter(threading.Thread):
             retry_wait = 1  # seconds
             while True:    # try to publish until successful
                 try:
-                    publish.single(topic, payload=payload, hostname=self.host, port=self.port)
+                    publish.single(topic, payload=payload, qos=1, hostname=self.host, port=self.port)
                 except socket.error:
                     # couldn't connect to MQTT broker, try again after short wait
                     time.sleep(retry_wait)

@@ -26,11 +26,17 @@ touch /forcefsck
 # Start up the Internet
 /boot/pi_logger/start_inet &
 
-# Start the service that listens for sensor readings from the MQTT broker
-# and then posts those to a BMON server.
-/home/pi/pi_logger/mqtt_to_bmon.py &
+# If requested in the mini-monitor settins file, start the service that listens 
+# for sensor readings from the MQTT broker and then posts those to a BMON server.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_BMON_POST
+then
+	/home/pi/pi_logger/scripts/run_mqtt_to_bmon &
+fi
 
-# Start up the datalogger
-/home/pi/pi_logger/pi_logger.py &
+# Start up the datalogger if there are any readers enabled
+if /home/pi/pi_logger/scripts/test_setting.py "len(READERS)>0"
+then
+	/home/pi/pi_logger/scripts/run_pi_logger &
+fi
 
 exit 0

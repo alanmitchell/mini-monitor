@@ -1,4 +1,4 @@
-"""Holds the user modifiable settings for the application.
+﻿"""Holds the user modifiable settings for the application.
 """
 import logging
 
@@ -10,7 +10,10 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
-# URL to post readings to, and required storage key
+# Set following to True to enable posting to a BMON server
+ENABLE_BMON_POST = True
+
+# BMON URL to post readings to, and required storage key
 # An example BMON URL is "https://bms.ahfc.us"
 # The Store Key can be any string with no spaces
 POST_URL = '[BMON URL goes here]/readingdb/reading/store/'

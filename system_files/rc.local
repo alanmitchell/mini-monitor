@@ -26,6 +26,10 @@ touch /forcefsck
 # Start up the Internet
 /boot/pi_logger/start_inet &
 
+# Start the service that listens for sensor readings from the MQTT broker
+# and then posts those to a BMON server.
+/home/pi/pi_logger/mqtt_to_bmon.py &
+
 # Start up the datalogger
 /home/pi/pi_logger/pi_logger.py &
 

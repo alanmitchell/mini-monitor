@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 """This script listens to an MQTT broker on the localhost.  
 The script processes messages on the "readings/final/#"
 topics, those messages being a set of sensor readings.  The readings

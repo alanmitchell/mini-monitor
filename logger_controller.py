@@ -34,8 +34,10 @@ class LoggerController:
         # (timestamp, value)
         self.read_data = {}
 
-        # Create a poster object to post readings to the local MQTT broker
+        # Create a poster object to post readings to the local MQTT broker.
+        # It runs in a separate thread and must be started
         self.poster = mqtt_poster.MQTTposter()
+        self.poster.start()
 
 
     def add_reader(self, reader):

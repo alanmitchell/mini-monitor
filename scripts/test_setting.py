@@ -17,12 +17,8 @@ args = parser.parse_args()
 expr = args.setting_expr
 
 # if the test is True, then exit with 0, a success value.  Otherwise
-# exit with 1.  An error exits with 1 as well.
-try:
-    if eval(expr):
-        sys.exit(0)
-    else:
-        sys.exit(1)
-except:
+# exit with 1.  An error will naturally exit with a non-zero exit code.
+if eval(expr):
+    sys.exit(0)
+else:
     sys.exit(1)
-

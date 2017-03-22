@@ -3,6 +3,7 @@ all the scripts used by the mini-monitor system.
 """
 
 import logging.handlers
+import sys
 
 # Access the mini-monitor settings file
 # The settings file is installed in the FAT boot partition of the Pi SD card,

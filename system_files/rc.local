@@ -39,4 +39,13 @@ then
 	/home/pi/pi_logger/scripts/run_pi_logger &
 fi
 
+# Start the programs for Utility Meter reading, if requested in the settings
+# file.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
+then
+	/home/pi/pi_logger/scripts/run_rtl_tcp &
+	sleep 3
+	/home/pi/pi_logger/scripts/run_meter_reader &
+fi
+
 exit 0

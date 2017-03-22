@@ -1,0 +1,6 @@
+#!/bin/bash
+# This scripts starts and restarts, if necessary, the rtl_tcp program.
+until /usr/local/bin/rtl_tcp; do
+    echo "Server 'rtl_tcp' crashed with exit code $?.  Respawning.." >&2
+    sleep 2
+done

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 """Main script to start and control the data logger.
 """
 from os.path import dirname, realpath, join, exists
@@ -10,6 +10,11 @@ import subprocess
 import requests
 import logger_controller
 import scripts.utils
+import config_logging
+
+# Configure logging and log a restart of the app
+config_logging.configure_logging(logging, '/var/log/pi_log.log')
+logging.warning('pi_logger has restarted')
 
 # The settings file is installed in the FAT boot partition of the Pi SD card,
 # so that it can be easily configured from the PC that creates the SD card.  
@@ -21,7 +26,7 @@ import settings
 # Set the Software Version number as a property on the Settings module
 #
 # Version 1.7:  Implmented MQTT Broker and restructured app to use it.
-#               Add the Utility Meter reader.
+#               Add the Utility Meter reader script.
 # Version 1.6:  Requirements file. Control over Reboot tests. Removed
 #               Cell modem code, cuz using UMTSkeeper now.
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
@@ -29,39 +34,6 @@ import settings
 #
 settings.VERSION = 1.7
 #***********************************************************************
-
-# ----- Setup Exception/Debug Logging for the Application
-# Log file for the application.  
-LOG_FILE = '/var/log/pi_log.log'
-
-# Use the root logger for the application.
-
-# set the log level. Because we are setting this on the logger, it will apply
-# to all handlers (unless maybe you set a specific level on a handler?).
-logging.root.setLevel(settings.LOG_LEVEL)
-
-# stop propagation of messages from the 'requests' module
-logging.getLogger('requests').propagate = False
-
-# create a rotating file handler
-fh = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=200000, backupCount=5)
-
-# create formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(module)s - %(message)s')
-fh.setFormatter(formatter)
-
-# create a handler that will print to console as well.
-console_h = logging.StreamHandler()
-console_h.setFormatter(formatter)
-
-# add the handlers to the logger
-logging.root.addHandler(fh)
-logging.root.addHandler(console_h)
-
-# -------------------
-
-# log a restart of the app
-logging.warning('pi_logger has restarted')
 
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 

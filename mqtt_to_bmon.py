@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 """This script listens to an MQTT broker on the localhost.  
 The script processes messages on the "readings/final/#"
 topics, those messages being a set of sensor readings.  The readings
@@ -12,6 +12,11 @@ from os.path import exists
 import shutil
 import httpPoster2
 import paho.mqtt.client as mqtt
+import config_logging
+
+# Configure logging and log a restart of the app
+config_logging.configure_logging(logging, '/var/log/mqtt_to_bmon.log')
+logging.warning('mqtt_to_bmon has restarted')
 
 # Access the mini-monitor settings file
 # The settings file is installed in the FAT boot partition of the Pi SD card,
@@ -19,39 +24,6 @@ import paho.mqtt.client as mqtt
 # Include that directory in the Path so the settings file can be found.
 sys.path.insert(0, '/boot/pi_logger')
 import settings
-
-# ----- Setup Exception/Debug Logging for the Application
-# Log file for the application.  
-LOG_FILE = '/var/log/mqtt_to_bmon.log'
-
-# Use the root logger for the application.
-
-# set the log level. Because we are setting this on the logger, it will apply
-# to all handlers (unless maybe you set a specific level on a handler?).
-logging.root.setLevel(settings.LOG_LEVEL)
-
-# Set logging level and stop propagation of messages from the 'requests' module
-logging.getLogger('requests').propagate = False
-logging.getLogger("requests").setLevel(logging.WARNING)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-
-# create a rotating file handler
-fh = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=200000, backupCount=5)
-
-# create formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(module)s - %(message)s')
-fh.setFormatter(formatter)
-
-# create a handler that will print to console as well.
-console_h = logging.StreamHandler()
-console_h.setFormatter(formatter)
-
-# add the handlers to the logger
-logging.root.addHandler(fh)
-logging.root.addHandler(console_h)
-
-# log a restart of the app
-logging.warning('mqtt_to_bmon has restarted')
 
 # ---- Create the object that will post the readings to the HTTP server.
 # First copy over the saved copy of the database, since this DB is

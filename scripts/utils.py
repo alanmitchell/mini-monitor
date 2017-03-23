@@ -1,4 +1,4 @@
-import subprocess
+﻿import subprocess
 import logging
 import time
 import os
@@ -29,7 +29,8 @@ def reboot():
     # backup log and Post database files before rebooting
     backup_files()
 
-    subprocess.call('/sbin/shutdown -r now', shell=True)
+    # rtlamr is stubborn to kill, so force a reboot with the -f flag
+    subprocess.call('/sbin/reboot -f now', shell=True)
 
     # wait until reboot actually occurs
     while True:

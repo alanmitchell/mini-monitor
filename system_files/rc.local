@@ -44,8 +44,8 @@ fi
 if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
 then
 	/home/pi/pi_logger/scripts/run_rtl_tcp &
-	sleep 3
-	/home/pi/pi_logger/scripts/run_meter_reader &
+	#sleep 3
+	#/home/pi/pi_logger/scripts/run_meter_reader &
 fi
 
 exit 0

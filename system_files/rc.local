@@ -26,6 +26,9 @@ touch /forcefsck
 # Start up the Internet
 /boot/pi_logger/start_inet &
 
+# The Mosquitto MQTT broker is started as a service, see: 
+# /etc/systemd/system/mosquitto.service
+
 # If requested in the mini-monitor settins file, start the service that listens 
 # for sensor readings from the MQTT broker and then posts those to a BMON server.
 if /home/pi/pi_logger/scripts/test_setting.py ENABLE_BMON_POST
@@ -44,8 +47,7 @@ fi
 if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
 then
 	/home/pi/pi_logger/scripts/run_rtl_tcp &
-	#sleep 3
-	#/home/pi/pi_logger/scripts/run_meter_reader &
+	echo "/home/pi/pi_logger/scripts/run_meter_reader &" | at now + 1 minute
 fi
 
 exit 0

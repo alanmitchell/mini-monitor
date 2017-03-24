@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 '''Script to read utility meter transmissions and post the rate of change 
 in meter reading (reading change per hour) at a specified interval.  Values 
 are posted to the 'readings/final/rtlamr' topic on the MQTT broker running 

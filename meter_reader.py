@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 '''Script to read utility meter transmissions and post the rate of change 
 in meter reading (reading change per hour) at a specified interval.  Values 
 are posted to the 'readings/final/rtlamr' topic on the MQTT broker running 
@@ -82,8 +82,10 @@ while True:
             # valid readings have nine fields
             continue
 
+        # If the list of Meter IDs to record is not empty, make sure this ID
+        # is in the list of IDs to record.
         meter_id = int(flds[3])
-        if meter_id not in settings.METER_IDS:
+        if len(settings.METER_IDS) and meter_id not in settings.METER_IDS:
             continue
 
         ts_cur = time.time()

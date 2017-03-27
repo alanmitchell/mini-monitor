@@ -1,4 +1,4 @@
-"""Holds the user modifiable settings for the application.
+﻿"""Holds the user modifiable settings for the application.
 """
 import logging
 
@@ -10,7 +10,10 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
-# URL to post readings to, and required storage key
+# Set following to True to enable posting to a BMON server
+ENABLE_BMON_POST = True
+
+# BMON URL to post readings to, and required storage key
 # An example BMON URL is "https://bms.ahfc.us"
 # The Store Key can be any string with no spaces
 POST_URL = '[BMON URL goes here]/readingdb/reading/store/'
@@ -49,8 +52,25 @@ CHECK_LAST_POST = False
 LOG_LEVEL = logging.INFO
 
 # ---------------------------------------------------------------------------
-# Below are settings that are only used for certain Sensor Readers
+# Below are settings that are only used for certain pi_logger Sensor Readers and
+# processes producing sensor readings.
 
+# ---- Sensaphone settings
 # If you are using the sensaphone.SensaphoneReader reader, then you need
 # to set the IP address of the Host Sensaphone unit below
 SENSAPHONE_HOST_IP = '10.30.5.77'
+
+# --- Utility Meter Reader script
+
+# Set to True to enable the meter reader
+ENABLE_METER_READER = False
+
+# A Python list of the Meter IDs you wish to capture and post.
+# If you leave this list blank, i.e. [], all received Meter IDs 
+# will be posted.
+METER_IDS = [1234, 6523, 1894]
+
+# The minimum number of minutes between postings. If you set
+# this too low, the resolution of the posted meter reading delta
+# will be low.
+METER_POST_INTERVAL = 30  # minutes

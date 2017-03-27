@@ -1,0 +1,6 @@
+#!/bin/bash
+# This scripts starts and restarts, if necessary, the meter_reader.py program.
+until /home/pi/pi_logger/meter_reader.py; do
+    echo "Server 'meter_reader.py' crashed with exit code $?.  Respawning.." >&2
+    sleep 2
+done

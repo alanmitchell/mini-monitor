@@ -1,0 +1,6 @@
+#!/bin/bash
+# This scripts starts and restarts, if necessary, the mqtt_to_bmon.py program.
+until /home/pi/pi_logger/mqtt_to_bmon.py; do
+    echo "Server 'mqtt_to_bmon.py' crashed with exit code $?.  Respawning.." >&2
+    sleep 2
+done

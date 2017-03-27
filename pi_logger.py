@@ -8,8 +8,13 @@ import shutil
 import time
 import subprocess
 import requests
-import httpPoster2, logger_controller
+import logger_controller
 import scripts.utils
+import config_logging
+
+# Configure logging and log a restart of the app
+config_logging.configure_logging(logging, '/var/log/pi_log.log')
+logging.warning('pi_logger has restarted')
 
 # The settings file is installed in the FAT boot partition of the Pi SD card,
 # so that it can be easily configured from the PC that creates the SD card.  
@@ -20,78 +25,19 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
+# Version 1.7:  Implmented MQTT Broker and restructured app to use it.
+#               Add the Utility Meter reader script.
 # Version 1.6:  Requirements file. Control over Reboot tests. Removed
 #               Cell modem code, cuz using UMTSkeeper now.
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 1.6
+settings.VERSION = 1.7
 #***********************************************************************
-
-# ----- Setup Exception/Debug Logging for the Application
-# Log file for the application.  
-LOG_FILE = '/var/log/pi_log.log'
-
-# Use the root logger for the application.
-
-# set the log level. Because we are setting this on the logger, it will apply
-# to all handlers (unless maybe you set a specific level on a handler?).
-logging.root.setLevel(settings.LOG_LEVEL)
-
-# stop propagation of messages from the 'requests' module
-logging.getLogger('requests').propagate = False
-
-# create a rotating file handler
-fh = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=200000, backupCount=5)
-
-# create formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(module)s - %(message)s')
-fh.setFormatter(formatter)
-
-# create a handler that will print to console as well.
-console_h = logging.StreamHandler()
-console_h.setFormatter(formatter)
-
-# add the handlers to the logger
-logging.root.addHandler(fh)
-logging.root.addHandler(console_h)
-
-# -------------------
-
-# log a restart of the app
-logging.warning('pi_logger has restarted')
-
-# Create the object that will post the readings to the HTTP server.
-# First copy over the saved copy of the database, since this DB is
-# created on RAM disk and is lost every reboot.
-db_fname = '/var/run/postQ.sqlite'       # working, RAM disk version
-db_fname_nv = '/var/local/postQ.sqlite'  # non-volatile backup
-if exists(db_fname_nv):
-    shutil.copyfile(db_fname_nv, db_fname)
-    logging.debug('Restored Post queue.')
-
-# try twice to create Posting queue
-for i in range(2):
-    try:
-        poster = httpPoster2.HttpPoster(settings.POST_URL,
-                                        reading_converter=httpPoster2.BMSreadConverter(settings.POST_STORE_KEY),
-                                        post_q_filename=db_fname,
-                                        post_time_file='/var/run/last_post_time')
-        logging.debug('Created HttpPoster.')
-        break
-    except:
-        if i==0:
-            # On first pass, try deleting the Post DB as it may be corrupted
-            if exists(db_fname):
-                os.remove(db_fname)
-        else:
-            logging.exception('Error creating Posting queue: %s. Terminating application.' % db_fname)
-            sys.exit(1)
 
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 
                                     log_interval=settings.LOG_INTERVAL)
-controller.add_logging_handler(poster)   # add the HTTP poster to handle logging events
 logging.debug('Created logging controller.')
 
 # Add the sensor readers listed in the settings file to the controller

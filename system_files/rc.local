@@ -26,7 +26,31 @@ touch /forcefsck
 # Start up the Internet
 /boot/pi_logger/start_inet &
 
-# Start up the datalogger
-/home/pi/pi_logger/pi_logger.py &
+# The Mosquitto MQTT broker is started as a service, see: 
+# /etc/systemd/system/mosquitto.service
+
+# If requested in the mini-monitor settins file, start the service that listens 
+# for sensor readings from the MQTT broker and then posts those to a BMON server.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_BMON_POST
+then
+	/home/pi/pi_logger/scripts/run_mqtt_to_bmon &
+fi
+
+# Start up the datalogger if there are any readers enabled
+if /home/pi/pi_logger/scripts/test_setting.py "len(READERS)>0"
+then
+	/home/pi/pi_logger/scripts/run_pi_logger &
+fi
+
+# Start the programs for Utility Meter reading, if requested in the settings
+# file.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
+then
+	/home/pi/pi_logger/scripts/run_rtl_tcp &
+
+	# For some reason, I need to delay start of meter_reader.py, which
+	# starts rtlamr.  The 'at' command does this.
+	echo "/home/pi/pi_logger/scripts/run_meter_reader &" | at now + 2 minutes
+fi
 
 exit 0

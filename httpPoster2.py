@@ -1,4 +1,4 @@
-"""Software to receive sensor readings from data sources and post
+﻿"""Software to receive sensor readings from data sources and post
 them to a HTTP URL.  Readings are cached if an Internet connection 
 is not available, or the the post fails for any reason.
 
@@ -15,13 +15,6 @@ import time, sys
 import threading, json, logging
 import requests
 import sqlite_queue
-
-# Disable warning messages that result from having to use Python 2.7.3 instead of
-# 2.7.9 and from having to disable SSL verification due to problems with Python 2.7.3
-# in conjunction with urllib3.
-from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-requests.packages.urllib3.disable_warnings(InsecurePlatformWarning)
 
 class HttpPoster:
     """A class to post readings to a URL via HTTP.  The readings to be posted

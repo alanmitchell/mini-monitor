@@ -105,7 +105,7 @@ while True:
             # time stamp in the middle of the reading period
             ts_post = (ts_cur + ts_last) / 2.0
 
-            mqtt.publish('readings/final/rtlamr', '%s\t%s_%s\t%s' % (int(ts_post), settings.LOGGER_ID, meter_id, rate) )
+            mqtt.publish('readings/final/meter_reader', '%s\t%s_%s\t%s' % (int(ts_post), settings.LOGGER_ID, meter_id, rate) )
             set_last(meter_id, ts_cur, read_cur)
 
     except:

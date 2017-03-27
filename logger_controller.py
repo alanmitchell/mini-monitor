@@ -1,4 +1,4 @@
-﻿"""Periodically requests readings from reader objects and then posts summarized
+"""Periodically requests readings from reader objects and then posts summarized
 sets of the readings to an MQTT broker on localhost.
 """
 import logging, time

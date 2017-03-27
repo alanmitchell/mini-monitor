@@ -1,4 +1,4 @@
-﻿"""Holds the user modifiable settings for the application.
+"""Holds the user modifiable settings for the application.
 """
 import logging
 

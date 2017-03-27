@@ -1,4 +1,4 @@
-﻿"""Software to receive sensor readings from data sources and post
+"""Software to receive sensor readings from data sources and post
 them to a HTTP URL.  Readings are cached if an Internet connection 
 is not available, or the the post fails for any reason.
 

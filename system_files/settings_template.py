@@ -66,8 +66,6 @@ SENSAPHONE_HOST_IP = '10.30.5.77'
 ENABLE_METER_READER = False
 
 # A Python list of the Meter IDs you wish to capture and post.
-# If you leave this list blank, i.e. [], all received Meter IDs 
-# will be posted.
 METER_IDS = [1234, 6523, 1894]
 
 # The minimum number of minutes between postings. If you set

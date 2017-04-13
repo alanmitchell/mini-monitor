@@ -53,4 +53,12 @@ then
 	echo "/home/pi/pi_logger/scripts/run_meter_reader &" | at now + 2 minutes
 fi
 
+# Turn off he HDMI interface to save power
+/usr/bin/tvservice -o
+
+# Run the site-specific startup file.  Add any other commands to this
+# rc.local.site file, and they will execute at boot up.  Make sure 
+# rc.local.site is executable.
+/etc/rc.local.site
+
 exit 0

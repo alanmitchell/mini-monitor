@@ -16,6 +16,7 @@ class MQTTposter(threading.Thread):
         """'host' is the hostname to publish to.
         'port' is the port on the host to publish to."""
         threading.Thread.__init__(self)
+        self.daemon = True    # exit if main thread is gone
         self.host = host
         self.port = port
         self.q = Queue.Queue()

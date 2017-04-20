@@ -72,3 +72,27 @@ METER_IDS = [1234, 6523, 1894]
 # this too low, the resolution of the posted meter reading delta
 # will be low.
 METER_POST_INTERVAL = 30  # minutes
+
+# --- Pulse Counter script ---
+# See pi-energy-sensors GitHub project
+
+# Interval between logging events in seconds
+PULSE_LOG_INTERVAL = 10 * 60    # seconds
+
+# Determines whether both edges of the pulse are counted
+# or just the rising edge.
+PULSE_BOTH_EDGES = False
+
+# --- BTU Meter script ----
+# See pi-energy-sensors GitHub project
+
+# Interval between logging events in seconds
+BTU_LOG_INTERVAL = 10 * 60    # seconds
+
+# Delta-T's (deg F) less than this will be considered to be
+# a zero delta-T (no energy flow)
+BTU_MIN_DELTA_T = 0.2    # deg F
+
+# Determines whether both edges of the pulse are counted
+# or just the rising edge.
+BTU_BOTH_EDGES = False

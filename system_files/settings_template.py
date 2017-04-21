@@ -80,7 +80,7 @@ METER_POST_INTERVAL = 30  # minutes
 PULSE_LOG_INTERVAL = 10 * 60    # seconds
 
 # Determines whether both edges of the pulse are counted
-# or just the rising edge.
+# or just the falling edge.
 PULSE_BOTH_EDGES = False
 
 # --- BTU Meter script ----
@@ -94,5 +94,5 @@ BTU_LOG_INTERVAL = 10 * 60    # seconds
 BTU_MIN_DELTA_T = 0.2    # deg F
 
 # Determines whether both edges of the pulse are counted
-# or just the rising edge.
+# or just the falling edge.
 BTU_BOTH_EDGES = False

@@ -70,6 +70,9 @@ def on_message(client, userdata, msg):
     # Need to convert this to a list of 3-element tuples
     reads = []
     for line in msg.payload.split('\n'):
+		if len(line.strip())==0:
+			# skip blank lines
+			continue
         try:
             ts, sensor_id, val = line.split('\t')
             reads.append( (int(float(ts)), sensor_id, float(val)) )

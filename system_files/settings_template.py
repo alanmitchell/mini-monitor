@@ -96,3 +96,8 @@ BTU_MIN_DELTA_T = 0.2    # deg F
 # Determines whether both edges of the pulse are counted
 # or just the falling edge.
 BTU_BOTH_EDGES = False
+
+# Calibration offsets to add to hot and cold temperature
+# sensors.  Degrees F.
+CALIBRATE_ADJ_HOT = 0.0
+CALIBRATE_ADJ_COLD = 0.0

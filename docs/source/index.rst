@@ -82,6 +82,16 @@ Contents
 ^^^^^^^^
 .. toctree::
    :maxdepth: 1
+   
+   software
+   available-sensor-readers
+   hardware
+   configuring-the-dovado-tiny-cellular-router
+   one-wire-master-interface-circuit
+   one-wire-sensors-and-cabling
+   developers
+   relevant-manuals
+   contact-info
 
 
 

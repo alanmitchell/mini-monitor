@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'mini-mon'
+project = 'Mini-Monitor Documentation'
 copyright = 'Alaska Housing Finance Corporation'
 author = 'Alan Mitchell'
 

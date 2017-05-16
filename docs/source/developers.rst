@@ -34,7 +34,7 @@ As of version 1.7, there are two different processes that acquire sensor
 readings and publish them to the MQTT broker:
 
 *  ``pi_logger.py``: This script instantiates "Readers" that are enabled
-   in the :ref:`settings`file (more details in the next section), and these readers periodically read
+   in the :ref:`settings` file (more details in the next section), and these readers periodically read
    their associated sensors. After passage of a logging interval of time
    (as entered in the Settings file), ``pi_logger.py`` publishes reading
    summaries to the MQTT broker (average values for analog sensors, or

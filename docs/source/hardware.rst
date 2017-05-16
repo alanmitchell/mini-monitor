@@ -217,7 +217,7 @@ Option 2) for one minute and then back On each day or every few days.
 The reboot will generally bring the device out of lock-up. Here are
 models that will perform the task:
 
-`Woods 50007 / 50027 24-Hour Digital Timer <https://www.amazon.com/Woods-50007-24-Hour-Digital-Settings/dp/B005WQIDHY/ref=sr\_1\_1?s=hi&ie=UTF8&qid=1482365792&sr=1-1&keywords=woods+50007>`_
+`Woods 50007-50027 24-Hour Digital Timer <https://www.amazon.com/Woods-50007-24-Hour-Digital-Settings/dp/B005WQIDHY/ref=sr\_1\_1?s=hi&ie=UTF8&qid=1482365792&sr=1-1&keywords=woods+50007>`_
 
 `Woods 50008 7-Day Digital Timer <https://www.amazon.com/Woods-50008-Digital-Programmable-Settings/dp/B006LYHEEY/ref=pd\_sim\_60\_10?\_encoding=UTF8&psc=1&refRID=BXSRCQXK95HM7K3EB6AE>`_
 
@@ -228,8 +228,7 @@ If you are collecting data from a Burnham Alpine Boiler using the Sage
 2.1 controller, you need to connect parts CV1, a USB-to-RS485 converter,
 and J1, a punch-down RJ45 jack. The boiler controller has a MODBUS RS485
 interface that is accessed through a standard RJ45 jack on the side of
-the boiler. For CV1, we use the `EKM Blink - RS-485 to USB
-Converter <http://www.ekmmetering.com/ekm-blink-rs-485-to-usb-converter.html>`_,
+the boiler. For CV1, we use the `EKM Blink - RS-485 to USB Converter <http://www.ekmmetering.com/ekm-blink-rs-485-to-usb-converter.html>`_,
 available direct from EKM Metering or on Ebay. If you choose to
 substitute a different USB-to-RS485 converter, it must utilize an FTDI
 converter chip to work with the Mini-Monitor software.

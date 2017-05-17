@@ -62,7 +62,7 @@ is needed; in this case ``start_inet`` should contain no commands. A
 blank script file is available at
 ``pi_logger/inet_scripts/start_inet.NULL``, and this file can be copied
 into ``pi_logger/start_inet``. This is also the appropriate set up for
-an Ethernet connection to a Cellular Router, :ref:`See Option 2 in the hardware document <hardware.html#part-cm1-usb-cell-modem>`.
+an Ethernet connection to a Cellular Router, `See Option 2 in the hardware document <hardware.html#part-cm1-usb-cell-modem>`_.
 
 The same blank ``start_inet`` file can be used when Internet Access is
 being provided via WiFi (either the built-in WiFi adapter in the

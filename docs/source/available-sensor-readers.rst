@@ -56,9 +56,10 @@ Currently Available Sensor Readers
 1-Wire Sensor Reader
 --------------------
 
-**Class Name:** ``ha7s.HA7Sreader`` (named after the Embedded Data Systems HA7S hardware module used to read the 1-Wire sensors).
+**Class Name:** ``ha7s.HA7Sreader``
 
-This Reader reads `Maxim DS18B20 1-Wire Temperature Sensors (Family Code 28) <http://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html>`_
+This Reader was named after the Embedded Data Systems HA7S hardware module used to read the 1-Wire sensors and 
+reads `Maxim DS18B20 1-Wire Temperature Sensors (Family Code 28) <http://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html>`_
 and sensors utilizing the `Maxim DS2406 1-Wire chip (Family Code 12) <http://www.maximintegrated.com/en/products/digital/memory-products/DS2406.html>`_
 to sense the On/Off state of a device. `Analysis North <http://analysisnorth.com>`_ sells an easily-installed
 motor/pump/zone valve/gas valve sensor utilizing this chip that can interface to the Mini-Monitor through the 1-Wire network.
@@ -69,33 +70,26 @@ returns the current sensor readings for all of the compatible 1-Wire
 sensors on the network. The table below shows the information returned
 for each compatible type of 1-Wire sensor:
 
-+----------------+-------------+---------+--------------+
-| Sensor Type    | Sensor ID   | Value   | Reading Type |
-+================+=============+=========+==============+
-| Family Code 28 | Unique      | Tempera | VALUE        |
-| Temperature    | 1-Wire ID   | ture    |              |
-| Sensors        | of the      | in      |              |
-|                | Sensor,     | degrees |              |
-|                | e.g.        | F       |              |
-|                | ``28.EFED4C |         |              |
-|                | 050000``    |         |              |
-+----------------+-------------+---------+--------------+
-| Family Code 12 | Unique      | The     | STATE        |
-| Switch/State   | 1-Wire ID   | state   |              |
-| Sensors        | of the      | of      |              |
-|                | Sensor,     | Channel |              |
-|                | e.g.        | A of    |              |
-|                | ``12.FDF4A0 | the     |              |
-|                | 000000``    | Sensor: |              |
-|                |             | 1 for   |              |
-|                |             | High    |              |
-|                |             | Voltage |              |
-|                |             | ,       |              |
-|                |             | 0 for   |              |
-|                |             | Low     |              |
-|                |             | Voltage |              |
-|                |             | .       |              |
-+----------------+-------------+---------+--------------+
++----------------+-------------+---------------+--------------+
+| Sensor Type    | Sensor ID   | Value         | Reading Type |
++================+=============+===============+==============+
+| Family Code 28 | Unique      | Temperature   | VALUE        |
+| Temperature    | 1-Wire ID   | in degrees F  |              |
+| Sensors        | of the      |               |              |
+|                | Sensor,     |               |              |
+|                | e.g.        |               |              |
+|                | ``28.EFED4C |               |              |
+|                | 050000``    |               |              |
++----------------+-------------+---------------+--------------+
+| Family Code 12 | Unique      | The state of  | STATE        |
+| Switch/State   | 1-Wire ID   | Channel A of  |              |
+| Sensors        | of the      | the Sensor:   |              |
+|                | Sensor,     | 1 for High    |              |
+|                | e.g.        | Voltage, 0    |              |
+|                | ``12.FDF4A0 | for Low       |              |
+|                | 000000``    | Voltage.      |              |
+|                |             |               |              |
++----------------+-------------+---------------+--------------+
 
 Sage 2.1 Boiler Control (used in Burnham Alpine Boilers)
 --------------------------------------------------------
@@ -103,17 +97,17 @@ Sage 2.1 Boiler Control (used in Burnham Alpine Boilers)
 **Class Name:** ``sage_boiler.Sage21Reader``
 
 This reader reads numerous values present in a Sage 2.1 Boiler Control,
-which is the boiler control used by the Burnham Alpine condensing
-boilers. The values are read through an RS485 connection to the boiler,
+which is the boiler control used by Burnham Alpine condensing
+boilers. The values are read through an RS-485 connection to the boiler,
 using the MODBUS protocol. The Sage 2.1 control is manufactured by
 Honeywell and is known as the SOLA control when sold directly by
-Honeywell. `Here is the MODBUS manual <https://customer.honeywell.com/resources/Techlit/TechLitDocuments/65-0000s/65-0310.pdf>`_
-for the Honeywell SOLA boiler controller.
+Honeywell. The MODBUS manual for the Honeywell SOLA boiler controller 
+can be found `here <https://customer.honeywell.com/resources/Techlit/TechLitDocuments/65-0000s/65-0310.pdf>`_.
 
 The RS485 connection to the boiler is on the left side of the boiler.
-There are two RJ45 jacks (8-pin network-type jacks). Standard CAT-5/6
+There are two RJ45 jacks (8-pin network-type jacks). A standard CAT-5/6
 network cable can be used to connect to the boiler, and the **top**
-jack, labeled "BOILER TO BOILER" must be used. Also, you must set the
+jack, labeled "Boiler-to-Boiler" must be used. Also, you must set the
 "Boiler Address" to 1 in order to read data from the boiler. This is
 done on the "Adjust", "Sequence Slave", "Boiler Address" menu item
 available through the touch screen control on the boiler. The Factory
@@ -128,169 +122,169 @@ that is entered into the Mini-Monitor settings file, as described in the
 Mini-Monitor is ``Burton152``, the first sensor value in the table below
 will have the Sensor ID of ``Burton152_firing_rate``.
 
-+-------------+---------+-----------------+
-| Sensor ID   | Value   | Reading Type    |
-+=============+=========+=================+
-| <LOGGER\_ID | Boiler  | STATE           |
-| >\_alert\_c | alert   |                 |
-| ode         | code,   |                 |
-|             | if any; |                 |
-|             | see     |                 |
-|             | Table   |                 |
-|             | 11 in   |                 |
-|             | MODBUS  |                 |
-|             | manual. |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Boiler  | VALUE           |
-| >\_firing\_ | firing  |                 |
-| rate        | rate in |                 |
-|             | % of    |                 |
-|             | maximum |                 |
-|             | .       |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Indicat | STATE           |
-| >\_limits   | es      |                 |
-|             | when a  |                 |
-|             | Boiler  |                 |
-|             | Limit,  |                 |
-|             | such as |                 |
-|             | Outlet  |                 |
-|             | High    |                 |
-|             | Tempera |                 |
-|             | ture    |                 |
-|             | Limit,  |                 |
-|             | is      |                 |
-|             | reached |                 |
-|             | .       |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Source  | STATE           |
-| >\_demand\_ | of      |                 |
-| source      | demand  |                 |
-|             | that    |                 |
-|             | caused  |                 |
-|             | the     |                 |
-|             | boiler  |                 |
-|             | to      |                 |
-|             | fire,   |                 |
-|             | either  |                 |
-|             | Space   |                 |
-|             | Heat or |                 |
-|             | Domesti |                 |
-|             | c       |                 |
-|             | Hot     |                 |
-|             | Water   |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Boiler  | VALUE           |
-| >\_outlet\_ | outlet  |                 |
-| temp        | tempera |                 |
-|             | ture,   |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Flame   | VALUE           |
-| >\_flame\_s | signal, |                 |
-| ignal       | Volts.  |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Boiler  | VALUE           |
-| >\_inlet\_t | return  |                 |
-| emp         | water   |                 |
-|             | tempera |                 |
-|             | ture,   |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Boiler  | VALUE           |
-| >\_stack\_t | stack   |                 |
-| emp         | tempera |                 |
-|             | ture,   |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Space   | VALUE           |
-| >\_ch\_setp | Heating |                 |
-| oint        | boiler  |                 |
-|             | tempera |                 |
-|             | ture    |                 |
-|             | setpoin |                 |
-|             | t,      |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | DHW     | VALUE           |
-| >\_dhw\_set | boiler  |                 |
-| point       | tempera |                 |
-|             | ture    |                 |
-|             | setpoin |                 |
-|             | t,      |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Current | VALUE           |
-| >\_active\_ | ly      |                 |
-| setpoint    | active  |                 |
-|             | boiler  |                 |
-|             | setpoin |                 |
-|             | t,      |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Boiler  | STATE           |
-| >\_lockout\ | Lockout |                 |
-| _code       | code,   |                 |
-|             | if any; |                 |
-|             | see     |                 |
-|             | Table 9 |                 |
-|             | in      |                 |
-|             | MODBUS  |                 |
-|             | manual. |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Indicat | STATE           |
-| >\_alarm\_r | es      |                 |
-| eason       | whether |                 |
-|             | the     |                 |
-|             | Alarm   |                 |
-|             | is a    |                 |
-|             | Lockout |                 |
-|             | or an   |                 |
-|             | Alert.  |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Indicat | STATE           |
-| >\_ch\_dema | es      |                 |
-| nd          | if      |                 |
-|             | there   |                 |
-|             | is a    |                 |
-|             | call    |                 |
-|             | for     |                 |
-|             | Space   |                 |
-|             | Heat.   |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Indicat | STATE           |
-| >\_dhw\_dem | es      |                 |
-| and         | if      |                 |
-|             | there   |                 |
-|             | is a    |                 |
-|             | call    |                 |
-|             | for DHW |                 |
-|             | heat.   |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Outdoor | VALUE           |
-| >\_outdoor\ | tempera |                 |
-| _temp       | ture,   |                 |
-|             | as read |                 |
-|             | by      |                 |
-|             | boiler  |                 |
-|             | outdoor |                 |
-|             | tempera |                 |
-|             | ture    |                 |
-|             | sensor, |                 |
-|             | degrees |                 |
-|             | F.      |                 |
-+-------------+---------+-----------------+
-| <LOGGER\_ID | Boiler  | STATE           |
-| >\_alarm\_c | alarm   |                 |
-| ode         | code,   |                 |
-|             | if any. |                 |
-+-------------+---------+-----------------+
++-----------------------------------+---------+-----------------+
+| Sensor ID                         | Value   | Reading Type    |
++===================================+=========+=================+
+| <LOGGER_ID>_alert_code            | Boiler  | STATE           |
+|                                   | alert   |                 |
+|                                   | code,   |                 |
+|                                   | if any; |                 |
+|                                   | see     |                 |
+|                                   | Table   |                 |
+|                                   | 11 in   |                 |
+|                                   | MODBUS  |                 |
+|                                   | manual. |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID>\_firing\_rate        | Boiler  | VALUE           |
+|                                   | firing  |                 |
+|                                   | rate in |                 |
+|                                   | % of    |                 |
+|                                   | maximum |                 |
+|                                   | .       |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID>\_limits              | Indicat | STATE           |
+|                                   | es      |                 |
+|                                   | when a  |                 |
+|                                   | Boiler  |                 |
+|                                   | Limit,  |                 |
+|                                   | such as |                 |
+|                                   | Outlet  |                 |
+|                                   | High    |                 |
+|                                   | Tempera |                 |
+|                                   | ture    |                 |
+|                                   | Limit,  |                 |
+|                                   | is      |                 |
+|                                   | reached |                 |
+|                                   | .       |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Source  | STATE           |
+| >\_demand\_                       | of      |                 |
+| source                            | demand  |                 |
+|                                   | that    |                 |
+|                                   | caused  |                 |
+|                                   | the     |                 |
+|                                   | boiler  |                 |
+|                                   | to      |                 |
+|                                   | fire,   |                 |
+|                                   | either  |                 |
+|                                   | Space   |                 |
+|                                   | Heat or |                 |
+|                                   | Domesti |                 |
+|                                   | c       |                 |
+|                                   | Hot     |                 |
+|                                   | Water   |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Boiler  | VALUE           |
+| >\_outlet\_                       | outlet  |                 |
+| temp                              | tempera |                 |
+|                                   | ture,   |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Flame   | VALUE           |
+| >\_flame\_s                       | signal, |                 |
+| ignal                             | Volts.  |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Boiler  | VALUE           |
+| >\_inlet\_t                       | return  |                 |
+| emp                               | water   |                 |
+|                                   | tempera |                 |
+|                                   | ture,   |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Boiler  | VALUE           |
+| >\_stack\_t                       | stack   |                 |
+| emp                               | tempera |                 |
+|                                   | ture,   |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Space   | VALUE           |
+| >\_ch\_setp                       | Heating |                 |
+| oint                              | boiler  |                 |
+|                                   | tempera |                 |
+|                                   | ture    |                 |
+|                                   | setpoin |                 |
+|                                   | t,      |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | DHW     | VALUE           |
+| >\_dhw\_set                       | boiler  |                 |
+| point                             | tempera |                 |
+|                                   | ture    |                 |
+|                                   | setpoin |                 |
+|                                   | t,      |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Current | VALUE           |
+| >\_active\_                       | ly      |                 |
+| setpoint                          | active  |                 |
+|                                   | boiler  |                 |
+|                                   | setpoin |                 |
+|                                   | t,      |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Boiler  | STATE           |
+| >\_lockout\                       | Lockout |                 |
+| _code                             | code,   |                 |
+|                                   | if any; |                 |
+|                                   | see     |                 |
+|                                   | Table 9 |                 |
+|                                   | in      |                 |
+|                                   | MODBUS  |                 |
+|                                   | manual. |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Indicat | STATE           |
+| >\_alarm\_r                       | es      |                 |
+| eason                             | whether |                 |
+|                                   | the     |                 |
+|                                   | Alarm   |                 |
+|                                   | is a    |                 |
+|                                   | Lockout |                 |
+|                                   | or an   |                 |
+|                                   | Alert.  |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Indicat | STATE           |
+| >\_ch\_dema                       | es      |                 |
+| nd                                | if      |                 |
+|                                   | there   |                 |
+|                                   | is a    |                 |
+|                                   | call    |                 |
+|                                   | for     |                 |
+|                                   | Space   |                 |
+|                                   | Heat.   |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Indicat | STATE           |
+| >\_dhw\_dem                       | es      |                 |
+| and                               | if      |                 |
+|                                   | there   |                 |
+|                                   | is a    |                 |
+|                                   | call    |                 |
+|                                   | for DHW |                 |
+|                                   | heat.   |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Outdoor | VALUE           |
+| >\_outdoor\                       | tempera |                 |
+| _temp                             | ture,   |                 |
+|                                   | as read |                 |
+|                                   | by      |                 |
+|                                   | boiler  |                 |
+|                                   | outdoor |                 |
+|                                   | tempera |                 |
+|                                   | ture    |                 |
+|                                   | sensor, |                 |
+|                                   | degrees |                 |
+|                                   | F.      |                 |
++-----------------------------------+---------+-----------------+
+| <LOGGER\_ID                       | Boiler  | STATE           |
+| >\_alarm\_c                       | alarm   |                 |
+| ode                               | code,   |                 |
+|                                   | if any. |                 |
++-----------------------------------+---------+-----------------+
 
 AERCO BMS II Boiler Manager
 ---------------------------

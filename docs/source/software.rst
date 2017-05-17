@@ -3,7 +3,7 @@
 Software
 ========
 
-This section of the Wiki explains how to install and configure the
+This section of the documentation explains how to install and configure the
 Mini-Monitor software on a Raspberry Pi computer. There are three steps
 to install and configure the software.
 
@@ -21,8 +21,8 @@ sections.
 Download and Install Mini-Monitor SD Card Image
 -----------------------------------------------
 
-The Raspberry Pi uses an SD card as a solid-state drive for storage of
-the operating system and all programs and user data. We have made a
+The Raspberry Pi uses an SD card as a solid-state drive for the storage of
+the operating system, programs, and user data. We have made a
 complete image of the SD card containing the Raspbian Linux Operating
 System and the entire Mini-Monitor software application. You can
 download a zipped version of this image from the link below. The file is
@@ -30,7 +30,7 @@ about 1 GB in size so will take some time to download.
 
 `Mini-Monitor SD Card Image (1.0 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2017-05-02.zip>`_
 
-First unzip the file to extract a '.img' file, which is the SD card image. Use the `instructions
+First unzip the file to extract an '.img' file, which is the SD card image. Use the `instructions
 here <https://www.raspberrypi.org/documentation/installation/installing-images/>`_
 under the "WRITING AN IMAGE TO THE SD CARD" heading to write the image
 to an 8 GB micro-SD card, if you are using a Raspberry Pi B+, 2 or 3; or
@@ -40,30 +40,29 @@ Setup Internet Access
 ---------------------
 
 The SD card has a partition that is readable on a Windows PC, Mac, or
-Linux computer. On a Windows PC it will show up as a drive labeled
-"boot". There are some configuration files on this partition that need
+Linux computer. On a Windows PC it will show up as a drive labeled ``boot``. There are some configuration files on this partition that need
 attention before running the Mini-Monitor.
 
 Although these files are useable on a Windows PC, they are text files
-that use the line-ending format used on Linux computers. It is important
+that use the line-ending format ("\n") used on Linux computers. It is important
 to preserve that type of line-ending when editing the files. The
 standard Notepad program that comes with the Windows Operating System
 does *not* preserve Linux line endings. Most text editors used for
-programming *do* preserve line endings, such as EditPlus or Notepad++.
+programming *do* preserve line endings, such as `EditPlus <https://www.editplus.com/>`_ or `Notepad++ <https://notepad-plus-plus.org/>`_.
 You need to use one of these editors when editing the files described in
 this section and the next.
 
 The first issue to address is setting up Internet Access. In the
 ``pi_logger/`` directory on the SD card is a shell script file called
 ``start_inet``. This file is executed when the Pi starts up, and its
-purpose is to start Internet access for methods of Internet access that
-do not start automatically. If the Internet access is being provided via
+purpose is to start Internet access for methods that
+do not start it automatically. If the Internet access is being provided via
 an Ethernet connection to the Pi, no special Internet startup command
-are needed; in this case ``start_inet`` should contain no commands. A
+is needed; in this case ``start_inet`` should contain no commands. A
 blank script file is available at
 ``pi_logger/inet_scripts/start_inet.NULL``, and this file can be copied
-onto ``pi_logger/start_inet``. This is also the appropriate set up for
-an Ethernet connection to a Cellular Router, See Option 2 in the :ref:`hardware` document.
+into ``pi_logger/start_inet``. This is also the appropriate set up for
+an Ethernet connection to a Cellular Router, `See Option 2 in the hardware document <hardware.html#part-cm1-usb-cell-modem>`.
 
 The same blank ``start_inet`` file can be used when Internet Access is
 being provided via WiFi (either the built-in WiFi adapter in the

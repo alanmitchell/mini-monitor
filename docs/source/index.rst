@@ -23,10 +23,10 @@ including:
    interface to the Mini-Monitor through the 1-Wire network.
 *  Utility meters (gas, electric, water) that transmit their meter readings using the Itron ERT radio format.
 *  `Burnham Alpine Boilers <http://www.usboiler.net/product/alpine-high-efficiency-condensing-gas-boiler.html>`_
-   utilizing the Sage controller. The Mini-Monitor interfaces to the boiler via the boiler's RS485 Modbus interface and extracts numerous
+   utilizing the Sage controller. The Mini-Monitor interfaces to the boiler via the boiler's RS-485 Modbus interface and extracts numerous
    sensor and state values from the boiler.
 *  The `AERCO BMS II Boiler controller <http://www.aerco.com/Products/Accessories/Controls/BMS-II-Model-5R5-384>`_,
-   which controls a set of AERCO boilers. The Raspberry Pi interfaces via a serial RS232 MODBUS interface.
+   which controls a set of AERCO boilers. The Raspberry Pi interfaces via a serial RS-232 MODBUS interface.
 *  Thermistors connected to a `Labjack U3 data acquisition board <http://labjack.com/u3>`_.
 *  Gauge air pressure measured by an `Energy Conservatory DG-700 Pressure Gauge <http://products.energyconservatory.com/dg-700-pressure-and-flow-gauge/>`_.
 *  Sensaphone's Infrastructure Monitoring System (`IMS-4000 <http://www.sensaphone.com/pdf/LIT-0064_IMS-4000_Manualv3.0_WEB.pdf>`_).
@@ -40,15 +40,15 @@ class written in Python must be created, and can then be combined with
 other Reader classes to create a customized data acquisition system.
 
 Here is a picture of a Mini-Monitor installed in a boiler room
-connecting to Burnham Alpine Boiler and a string of 1-Wire temperature
+connecting to a Burnham Alpine Boiler and a string of 1-Wire temperature
 and motor sensors:
 
 
 .. image:: /_static/mini-monitor-installed.jpg
 
-This Wiki holds the documentation for the software. The documentation is
+This site holds the documentation for the software. The documentation is
 divided into three main sections, described below and available on the
-sidebar menu on the righthand side of this screen.
+sidebar menu on the lefthand side of this screen.
 
 :ref:`Software <software>`
 -------------------------
@@ -67,7 +67,7 @@ required to create a Mini-Monitor system.
 
 This section provides documentation for developers who want to modify
 the code of the Mini-Monitor system. The source code of the project is
-internally documented with comments, but the documentation in this Wiki
+internally documented with comments, but the documentation in this section
 explains the overall structure of the application. The repository
 holding the source code is `located here <https://github.com/alanmitchell/mini-monitor/>`_.
 

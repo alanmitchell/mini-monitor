@@ -9,6 +9,7 @@ diagram below shows the main components of the Mini-Monitor system.
 
 .. image:: /_static/system_option1.png
 
+
 The Mini-Monitor system needs access to the Internet to post the data
 collected by the system. There are a number of options possible for
 Internet access including:

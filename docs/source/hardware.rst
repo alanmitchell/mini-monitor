@@ -7,7 +7,9 @@ This section of the Wiki gives details on the hardware components and
 interconnection required to build a Mini-Monitor system. The block
 diagram below shows the main components of the Mini-Monitor system.
 
-.. image:: /_static/sys_option1.png
+
+.. image:: /_static/system-option1.png
+
 
 The Mini-Monitor system needs access to the Internet to post the data
 collected by the system. There are a number of options possible for
@@ -47,7 +49,7 @@ under the section Part CR1, Cellular Router. Option 2 involving a
 cellular router does offer the advantage of providing a WiFi network for
 other WiFi-enabled devices such as smart thermostats.
 
-.. image:: /_static/system_option2.png
+.. image:: /_static/system-option2.png
 
 The picture below shows an assembled version of the Mini-Monitor with
 the Option 1 cellular Internet connection. Not all components present in

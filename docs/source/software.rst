@@ -62,7 +62,7 @@ is needed; in this case ``start_inet`` should contain no commands. A
 blank script file is available at
 ``pi_logger/inet_scripts/start_inet.NULL``, and this file can be copied
 into ``pi_logger/start_inet``. This is also the appropriate set up for
-an Ethernet connection to a Cellular Router, `See Option 2 in the hardware document <hardware.html#part-cm1-usb-cell-modem>`_.
+an Ethernet connection to a Cellular Router, See Option 2 in the :ref:`hardware` document.
 
 The same blank ``start_inet`` file can be used when Internet Access is
 being provided via WiFi (either the built-in WiFi adapter in the
@@ -82,7 +82,7 @@ different ``start_inet`` scripts in the ``pi_logger/inet_scripts/``
 directory for a few different types of Cellular modems. For the GCI
 network in Alaska, we recommend the Sierra Wireless 313U modem, and
 scripts are available in ``pi_logger/inet_scripts/`` for that modem.
-Copy the appropriate script on to ``pi_logger/start_inet``. If no script
+Copy the appropriate script to ``pi_logger/start_inet``. If no script
 is available for your cell modem, you will need to learn about
 configuration of the UMTSkeeper program; see `this page <http://mintakaconciencia.net/squares/umtskeeper/>`_, and create an
 appropriate ``start_inet`` script.
@@ -92,21 +92,21 @@ Configure Settings File for your Application
 
 The next step is to edit the special Mini-Monitor Settings file on the
 SD card to configure the software for your application. The settings
-file is found at ``pi_logger/settings.py``. (When actually running on
-the Pi, the path is ``/boot/pi_logger/settings.py``.)
+file is found at ``pi_logger/settings.py`` when accessed through the SD card, and 
+ ``/boot/pi_logger/settings.py`` when actually running on the Pi.
 
 Open this file in a text editor; see the discussion in the prior section
 regarding the use of a Text Editor that preserves Linux line endings.
 This file is essentially a `Python <https://www.python.org/>`_ code
 file, but the only types of statements in the file are comments (any
-text appearing after a "#" symbol) and variable assignment statements,
+text appearing after the "#" symbol at the beginning of a line) and variable assignment statements,
 like:
 
 .. code:: python
 
     LOGGER_ID = 'test'
 
-The rest of this section will explain they key variables that can be
+The rest of this section will explain the key variables that can be
 altered in this file. Excerpts from the file will be shown followed by
 an explanation of setting. After modifying values in the file, simply
 save it back to the SD card.
@@ -117,9 +117,9 @@ save it back to the SD card.
     # sensor IDs.
     LOGGER_ID = 'test'
 
-Each Mini-Monitor needs to be assigned an ID name that is unique across
+Each Mini-Monitor needs to be assigned an ID that is unique across
 all of the Mini-Monitors posting data to a particular BMON web site. The
-ID should be kept to 13 characters or less, and only use letters and
+ID should be kept to 13 characters or less, using only letters and
 numbers (no spaces). An example is 'Okla511', which was used for a
 building at 511 Oklahoma Street. As shown in the example above, the ID
 string must be enclosed in single or double quotes.
@@ -138,8 +138,8 @@ readings are summarized and posted to the BMON server. As you can see in
 the example above, a math expression can be used, such as ``10 * 60``. If
 ``READ_INTERVAL`` is set to 5 seconds and the ``LOG_INTERVAL`` is set to
 10\*60 or 10 minutes, sensors will be read 120 times before their data
-is posted to the BMON server. For analog sensors or readings, for
-example temperature, the 120 readings are averaged together before being
+is posted to the BMON server. For analog sensors or readings (ex. temperature)
+the 120 readings are averaged together before being
 posted to the BMON server. A post is timestamped in middle of the 10
 minute interval, since the posted value represents conditions occurring
 throughout the interval.
@@ -151,7 +151,7 @@ timestamped. The last state recorded in the interval is also posted,
 even if no change occurred in the interval.
 
 Note that these settings do *not* apply to separate processes that post
-sensor data directly to the Mini-Monitor MQTT broker; the settings apply
+sensor data directly to the Mini-Monitor `MQTT broker <http://mqtt.org/>`_; the settings apply
 only to the Sensor Reader Classes described in a following section. As
 an example, the Utility Meter Reader script is a separate process that
 posts directly to the MQTT broker; it has a separate interval setting
@@ -211,8 +211,8 @@ the line. In the example above, three sensor readers are enabled:
 Do not change anything else in this section other than adding or
 removing '#' symbols from the beginning of reader lines.
 
-More detail is provided on each reader type in the :ref:`available-sensor-readers` document. That document explains what values are read and
-reported by the various readers.
+More detail is provided on each reader type in the :ref:`available-sensor-readers` document. 
+That document explains what values are read and reported by the various readers.
 
 Settings related to Mini-Monitor Health
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -228,15 +228,15 @@ Settings related to Mini-Monitor Health
     # Reboots if Last Post was too long ago
     CHECK_LAST_POST = False
 
-The Mini-Monitor can be configured to automatically reboot itself every
-so often, which can add to the stability of the system when unforeseen
+The Mini-Monitor can be configured to automatically reboot itself on a schedule, 
+which can add to the stability of the system when unforeseen
 problems are occurring. The value of ``REBOOT_DAYS`` is expressed in
 days, and we have typically chosen to reboot every two days. If the
 setting is set to 0, the Mini-Monitor will never intentionally reboot.
 
 If ``CHECK_ERROR_CT`` is set to True, the Mini-Monitor will reboot if
 the number of errors occurring in the application are too high. If
-``CHECK_LAST_POST`` is True, a reboot will occur if the Mini-Monitor is
+``CHECK_LAST_POST`` is set to True, a reboot will occur if the Mini-Monitor is
 not successfully posting readings to the BMON server.
 
 Settings related to Logging Errors, Warnings, and Operational Information
@@ -253,7 +253,7 @@ Settings related to Logging Errors, Warnings, and Operational Information
 
 This setting controls how Error and Debug logging operates in the
 Mini-Monitor. The setting is not related to *sensor* logging, instead,
-is relates to logging of how the program code is operating. The
+it relates to logging how the program code is operating. The
 ``LOG_LEVEL`` setting determines how many events are recorded into the
 log file. We normally run this at the ``logging.INFO`` level, but when
 debugging a problem, more information will be logged with the
@@ -295,10 +295,10 @@ Settings related to Recording Transmissions from Utility Meters
     METER_POST_INTERVAL = 30  # minutes
 
 These settings are for the script that can receive meter reading
-transmissions from certain Utility meters. See the :ref:`hardware` document for the necessary Mini-Monitor hardware. Also, further
-discussion of the values posted by this script is in the :ref:`available-sensor-readers` document.
+transmissions from certain Utility meters. See the :ref:`hardware` document for the necessary Mini-Monitor hardware. Further
+discussion of the values posted by this script is available in the :ref:`available-sensor-readers` document.
 
-The ``ENABLE_METER_READER`` setting must be True to enable reading of
+The ``ENABLE_METER_READER`` setting must be set to True to enable reading of
 utility meter transmissions. ``METER_IDS`` is a Python list containing
 the Meter IDs of the meters you wish to record. You can generally find
 the Meter ID number on the meter nameplate, as shown in this picture:
@@ -307,8 +307,8 @@ the Meter ID number on the meter nameplate, as shown in this picture:
 
 ``METER_POST_INTERVAL`` is the minimum number of minutes between meter
 readings that are used to create a recorded/posted value. As explained
-in the :ref:`available-sensor-readers` document, the script posts the amount of
-the change in the utility meter value, so if this
+in the :ref:`available-sensor-readers` document, the script posts the amount 
+the utility meter value has changed, so if this
 ``METER_POST_INTERVAL`` is too short, a low resolution change value will
 be reported.
 
@@ -319,8 +319,8 @@ Once you have updated the Settings file on the SD card, the next step is
 to start the Raspberry Pi and upgrade the Mini-Monitor software to the
 newest version. Insert the SD card into the Raspberry Pi, connect an
 Ethernet cable with Internet access, and apply power. Then, log onto the
-Pi either through use of a console cable or an SSH connection (see
-Raspberry Pi documentation for details on these methods). The log on
+Pi either through use of a `console cable <https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/overview>`_ 
+or an `SSH connection <https://www.raspberrypi.org/documentation/remote-access/ssh/README.md>`_. The log on
 credentials are:
 
 ::

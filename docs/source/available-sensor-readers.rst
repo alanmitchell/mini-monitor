@@ -12,13 +12,12 @@ in the Mini-Monitor settings file.
 
 Starting with Version 1.7, Mini-Monitor has an additional method to
 acquire sensor data, separate from the Sensor Reader classes described
-in the prior paragraph. Scripts or programs can be written that publish
+in the prior paragraph. Scripts or programs can be written to publish
 data to the Mini-Monitor MQTT broker (for more about the MQTT broker,
 see the :ref:`Notes for Developers <developers>`. That sensor data is then
-posted directly to a BMON server, without the use of a Reader class.
-This technique is used to read data from Utility Meters, and that
-Utility Meter script is described below, in a section beyond the Reader
-descriptions.
+posted directly to a BMON server without the use of a Reader class.
+This technique is used to read data from Utility Meters, this script 
+is discussed later in this document.
 
 Sensor Reader Classes
 ---------------------
@@ -39,19 +38,20 @@ sensor, with the following three possibilities:
    possible values. For this Reading Type, the Mini-Monitor will average
    all of the sensor values that are read during a logging period and
    post that average value to the BMON web database.
-*  **STATE**: STATE values are discrete values that indicate that the
+*  **STATE**: Discrete values that indicate the
    sensor is in a particular mode or state. Examples include On/Off
    switch values, or alarm states for a particular device. During one
-   logging period, the Mini-Monitor will Post a reading to BMON for
-   every time the sensor state value changed. In addition, the
+   logging period, the Mini-Monitor will post a reading to BMON 
+   every time the sensor state value changes. In addition, the
    Mini-Monitor will always post the last state value read during the
    logging period.
-*  **COUNTER**: A sensor having a Reading Type of COUNTER is a one that
+*  **COUNTER**: A sensor having a Reading Type of counter is one that
    accumulates a count of some quantity, e.g. energy used or gallons of
-   flow. For COUNTER sensors, the Mini-Monitor will post the last
+   flow. For counter sensors, the Mini-Monitor will post the last
    counter value read during a logging period.
 
-Following are the currently available Sensor Readers.
+Currently Available Sensor Readers
+==================================
 
 1-Wire Sensor Reader
 --------------------
@@ -63,8 +63,8 @@ and sensors utilizing the `Maxim DS2406 1-Wire chip (Family Code 12) <http://www
 to sense the On/Off state of a device. `Analysis North <http://analysisnorth.com>`_ sells an easily-installed
 motor/pump/zone valve/gas valve sensor utilizing this chip that can interface to the Mini-Monitor through the 1-Wire network.
 
-The Mini-Monitor hardware components associated with Reader are the CV3
-and PS2 components described on the :ref:`hardware` document. The Reader
+The Mini-Monitor hardware components associated with this Reader are the CV3
+and PS2 components described in the :ref:`hardware` document. The Reader
 returns the current sensor readings for all of the compatible 1-Wire
 sensors on the network. The table below shows the information returned
 for each compatible type of 1-Wire sensor:

@@ -51,7 +51,7 @@ sensor, with the following three possibilities:
    counter value read during a logging period.
 
 Currently Available Sensor Readers
-==================================
+----------------------------------
 
 1-Wire Sensor Reader
 --------------------

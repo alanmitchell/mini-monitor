@@ -24,8 +24,7 @@ Internet access including:
    above.
 
 More detailed information on Internet access is provided in the `AHFC
-Building Monitoring System Design Guidelines
-Report <https://github.com/alanmitchell/bmon/wiki/reports/monitoring_system_design_guidelines.pdf>`_,
+Building Monitoring System Design Guidelines </_static/monitoring_system_design_guidelines.pdf>`_,
 Section 3.
 
 The components within the dashed box and labeled *Option 1* show the
@@ -129,8 +128,8 @@ modems and Dovado Tiny firmwares to be effective:
    timer <http://www.amazon.com/Woods-50007-Indoor-Digital-Settings/dp/B005WQIDHY/ref=pd_bxgy_60_img_y>`_
    to reboot the Dovado Tiny on a daily basis.
 
-As disucssed in the `Design Guidelines
-Report <https://github.com/alanmitchell/bmon/wiki/reports/monitoring_system_design_guidelines.pdf>`_,
+As disucssed in the `AHFC
+Building Monitoring System Design Guidelines </_static/monitoring_system_design_guidelines.pdf>`_,
 the `Option Cloudgate cellular
 router <http://www.option.com/#secondPage>`_ has proven to be more
 reliable than the Dovado Tiny router and has a cellular modem built in;
@@ -224,8 +223,8 @@ Option 2) for one minute and then back On at scheduled intervals.
 The reboot will generally bring the device out of lock-up. We have found that
 the following models will perform the task:
 
-`Woods 50007-50027 24-Hour Digital Timer <https://www.amazon.com/Woods-50007-24-Hour-Digital-Settings/dp/B005WQIDHY/ref=sr\_1\_1?s=hi&ie=UTF8&qid=1482365792&sr=1-1&keywords=woods+50007>`_
-`Woods 50008 7-Day Digital Timer <https://www.amazon.com/Woods-50008-Digital-Programmable-Settings/dp/B006LYHEEY/ref=pd\_sim\_60\_10?\_encoding=UTF8&psc=1&refRID=BXSRCQXK95HM7K3EB6AE>`_
+* `Woods 50007-50027 24-Hour Digital Timer <https://www.amazon.com/Woods-50007-24-Hour-Digital-Settings/dp/B005WQIDHY/ref=sr\_1\_1?s=hi&ie=UTF8&qid=1482365792&sr=1-1&keywords=woods+50007>`_
+* `Woods 50008 7-Day Digital Timer <https://www.amazon.com/Woods-50008-Digital-Programmable-Settings/dp/B006LYHEEY/ref=pd\_sim\_60\_10?\_encoding=UTF8&psc=1&refRID=BXSRCQXK95HM7K3EB6AE>`_
 
 Parts CV1 and J1, Burnham Alpine Boiler Interface 
 -------------------------------------------------
@@ -290,10 +289,8 @@ BMS II screw terminals.
 .. image:: /_static/aerco_cable.jpg
 
 For more information of the RS232 interface of the AERCO BMS II Boiler
-manager, see the `BMS II
-Manual <https://github.com/alanmitchell/mini-monitor/wiki/develop/manuals/aerco_bmsII_manual.pdf>`_. The default
-RS232 settings for the BMS II are appropriate for use with the
-Mini-Monitor.
+manager, see the `BMS II Boiler Manual </_static/aerco_bmsII_manual.pdf>`_. The default
+RS232 settings for the BMS II are appropriate for use with the Mini-Monitor.
 
 Parts CV3 and PS2, 1-Wire Sensor Interface 
 ------------------------------------------
@@ -301,7 +298,7 @@ Parts CV3 and PS2, 1-Wire Sensor Interface
 1-Wire DS18B20 Temperature sensors and `Analysis North 1-Wire Motor
 sensors <http://analysisnorth.com>`_ can be read by the Mini-Monitor.
 The Analysis North Motor Sensor attaches via high-temperature Velcro to
-an AC motor, an AC valve, or most any device that emits an AC
+an AC motor, an AC valve, or other devices that emit an AC
 electromagnetic field, and detects when the device turns On and Off. For
 more information on the 1-Wire Bus System, see this `Wikipedia
 Article <https://en.wikipedia.org/wiki/1-Wire>`_. To communicate with
@@ -311,10 +308,10 @@ reliable for this application was a converter based on the `HA7S - ASCII
 TTL 1-Wire Host Adapter
 SIP <http://www.embeddeddatasystems.com/HA7S--ASCII-TTL-1-Wire-Host-Adapter-SIP_p_23.html>`_.
 The schematic and assembly of this converter is :ref:`documented on this
-page <one-wire-masster-interface-circuit>`.
+page <one-wire-master-interface-circuit>`.
 
 If the sensor network includes any Analysis North 1-wire motor sensors,
-a power supply, PS2, must be connected to the CV3 USB-to-1-wire
+a power supply, part PS2, must be connected to the CV3 USB-to-1-wire
 converter. This power supply supplies power to the 1-wire sensor
 network; the DS18B20 temperature sensors do not need the power supply,
 but the Motor Sensors do. Note, for noise isolation, this power supply
@@ -323,12 +320,12 @@ Cellular Router. The power supply outputs 5 VDC with at least 100 mA of
 current supplying capacity, the power connector is a 2.1mm x 5.5mm
 barrel jack (center positive), and a suitable supply is the `CUI
 EPS050100-P5RP <http://www.digikey.com/product-detail/en/EPS050100-P5RP/T1038-P5RP-ND/2004025>`_.
-However, almost any *regulated* 5 VDC supply with correct connector
+However, almost any *regulated* 5 VDC supply with the correct connector
 should work.
 
 The 1-wire sensors are connected in a daisy chain configuration using
-CAT-5/6 patch cords and RJ45 splitters to form the network. See the
-:ref:`1-wire-sensors-and-cabling` page for more important detail on the
+CAT-5/6 patch cable and RJ45 splitters to form the network. See the
+:ref:`1-wire-sensors-and-cabling` page for important details on the
 sensors and their interconnection.
 
 Part CV4, SDR Radio for Utility Meter Reading 
@@ -338,7 +335,7 @@ The Mini-Monitor is able to read Utility meters (natural gas, electric,
 and water) that utilize the Itron ERT radio transmission format to
 broadcast their readings in the 900 MHz ISM band to meter readers
 driving through the neighborhood. The hardware required to receive these
-transmissions is shown as CV4 in the System Diagram at the top of this
+transmissions is shown as part CV4 in the System Diagram at the top of this
 document. This part is a Software Defined Radio utilizing a RTL2832U
 radio chip and a R820T2 Tuner chip, interfaced through the Mini-Monitor
 USB port. Examples of this radio device that have been tested with the
@@ -349,7 +346,7 @@ Mini-Monitor are:
 *  `NooElec NESCR SMArt PremiumcRTL-SDR <https://www.amazon.com/NooElec-NESDR-SMArt-Enclosure-R820T2-Based/dp/B01GDN1T4S/>`_
 
 To enable and configure the recording of utility meter readings, certain
-settings must be made in the :ref:`Mini-Monitor Settings file <software>`.
+settings must be included in the :ref:`Mini-Monitor Settings file <software>`.
 
 Surge Protector
 ---------------
@@ -357,11 +354,10 @@ Surge Protector
 For further protection from power quality issues, the two power
 supplies, PS1 and PS2, are plugged into a surge protector, typically
 mounted adjacent to the Mini-Monitor enclosure. Unless a third power
-supply is needed due to not sharing PS1 between the Raspberry Pi and the
+supply is needed due to not sharing a power supply (part PS1) between the Raspberry Pi and the
 Dovado cellular router, a two outlet surge protector is sufficient. We
-use the `Tripp Lite ISOBAR2-6 available from
-Amazon <http://www.amazon.com/Tripp-Lite-ISOBAR2-6-Outlet-Protector/dp/B0000510Z9/>`_.
-This model lineup also has a four outlet version, if needed.
+use the `Tripp Lite ISOBAR2-6 <http://www.amazon.com/Tripp-Lite-ISOBAR2-6-Outlet-Protector/dp/B0000510Z9/>`_ 
+available from Amazon. This model lineup also has a four outlet version available, if needed.
 
 Mini-Monitor Enclosure, Component Mounting, Wiring Channel
 ----------------------------------------------------------
@@ -370,7 +366,7 @@ Other than the power supplies and the surge protector, the Mini-Monitor
 components are mounted inside an enclosure with a hinged door. The
 enclosure we use is the `Arlington EB1212-1 available from
 Amazon <http://www.amazon.com/Arlington-EB1212-1-Electronic-Equipment-Non-Metallic/dp/B00AAU5D6Q/>`_.
-Some of the components comes with mounting tape (J1) or a hook and loop
+Some of the components come with mounting tape (part J1) or a hook and loop
 fastening pad (Dovado Tiny). For other components we have found `3M
 Command Brand Medium Picture Hanging
 Strips <http://www.amazon.com/Command-Medium-Picture-Hanging-Strips-6-Strip/dp/B000M3YGOQ/>`_

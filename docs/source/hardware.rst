@@ -35,7 +35,7 @@ described in the :ref:`software` document.
 Connection tracking software on the Pi combined with a reliable Cellular
 Modem make for a relatively robust Internet connection. For added
 reliability, the power to the Pi can be periodically cycled using the
-Timer Switch (SW1), which is described later.
+Timer Switch (part SW1), which is described later in this document.
 
 The diagram below shows an alternative method of providing a cellular
 Internet connection to the Raspberry Pi. A cellular router is used in
@@ -55,7 +55,7 @@ this configuration may be found below under the section Part CR1, Cellular Route
 The picture below shows an assembled version of the Mini-Monitor 
 using Option 1 with a cellular Internet connection. Not all components present in
 the block diagram are present in this particular setup. In
-particular, the CV2, which is used to read data from an AERCO boiler is
+particular part CV2 which is used to read data from an AERCO boiler is
 not present, because an AERCO boiler is not present in this building.
 Also, the some of the clamp-on ferrite cores, F1 - F4, are not present
 in picture. The two power supplies, PS1 and PS2, are outside of the 

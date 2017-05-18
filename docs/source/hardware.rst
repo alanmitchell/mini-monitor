@@ -8,6 +8,7 @@ interconnection required to build a Mini-Monitor system. The block
 diagram below shows the main components of the Mini-Monitor system.
 
 .. figure:: /_static/system-option1.jpg
+   
    Option 1
 
 The Mini-Monitor system needs access to the Internet to post the data
@@ -49,6 +50,7 @@ cellular router does offer the advantage of providing a WiFi network for
 other WiFi-enabled devices such as smart thermostats.
 
 .. figure:: /_static/system-option2.jpg
+   
    Option 2
 
 The picture below shows an assembled version of the Mini-Monitor with

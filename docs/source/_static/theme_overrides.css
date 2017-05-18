@@ -18,3 +18,10 @@ line-height: 18px !important;
 font-size: inherit !important;
 position: relative !important;
 }
+
+
+.rst-content div.figure p.caption {
+	text-transform: lowercase !important;
+	font-size: small !important;
+	font-style: normal !important;
+}

@@ -6,7 +6,7 @@ One Wire Master Interface Circuit
 Here is the schematic of the circuit that interfaces the one-wire
 sensors with the USB port on the Raspberry Pi.
 
-.. image:: /_static/1wire_schematic.jpg
+.. image:: /_static/1wire_schematic.png
 
 The circuit can be built in two different ways. *Option 1* is the
 circuit currently being used in Mini-Monitor installations. It utilizes

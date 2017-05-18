@@ -7,10 +7,10 @@ Configuring the Dovado Tiny Cellular Router
    that came with the router.
 #. The Wizard will pop up. Complete the selections, with the following
    notes.
-  	On the WLAN (Wireless LAN) page, Disable the Wireless LAN.
-  	On the Internet Page, if you are using the GCI cellular network, type
-	in ``web.gci`` as the Access Point Name; leave the PIN Code blank. If
-	using a different mobile wireless provider, enter their APN.
+  	* On the WLAN (Wireless LAN) page, Disable the Wireless LAN.
+  	* On the Internet Page, if you are using the GCI cellular network, type
+	  in ``web.gci`` as the Access Point Name; leave the PIN Code blank. If
+	  using a different mobile wireless provider, enter their APN.
 #. The Router will restart.
 #. Log back into the router with the new password.
 #. On the Home page screen, the Router firmware will be listed. Make

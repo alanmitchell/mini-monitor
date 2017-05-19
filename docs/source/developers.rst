@@ -4,11 +4,11 @@ Developers
 ===========
 
 
-This section of the Wiki is aimed at developers who wish to better
+This section of the documentation is aimed at developers who wish to better
 understand and perhaps modify the Mini-Monitor software. The code is
 thoroughly commented, but the documents described below are meant to
 provide higher level documentation for the application. It is
-recommended that the :ref:`Software Introduction <Software>` document be
+recommended that the :ref:`<software>` document be
 read as a prerequisite to this document.
 
 Mini-Monitor is a Python 2 application and is currently running with
@@ -34,9 +34,9 @@ As of version 1.7, there are two different processes that acquire sensor
 readings and publish them to the MQTT broker:
 
 *  ``pi_logger.py``: This script instantiates "Readers" that are enabled
-   in the :ref:`settings` file (more details in the next section), and these readers periodically read
-   their associated sensors. After passage of a logging interval of time
-   (as entered in the Settings file), ``pi_logger.py`` publishes reading
+   in the :ref:`settings` file, these readers periodically read
+   their associated sensors. After passage of a logging time interval 
+   (as specified in the Settings file), ``pi_logger.py`` publishes reading
    summaries to the MQTT broker (average values for analog sensors, or
    state changes for sensors that determine the state of a device).
 *  ``meter_reader.py``: The Mini-Monitor has the ability to listen to
@@ -77,7 +77,7 @@ received by ``mqtt_to_bmon.py`` and posted to the BMON server.
 Reader Files
 ------------
 
-The Mini-Monitor is designed so that is easy to mix different sensor
+The Mini-Monitor is designed so it is easy to mix different sensor
 types and data sources in the data acquisition process. As mentioned in
 the prior section, ``pi_logger.py`` utilizes Reader classes to read
 different types of sensors. Each Reader class knows how to gather data
@@ -96,14 +96,14 @@ returns a list of sensor readings.
 A number of equipment manuals are available that relate to the existing
 Reader classes. These are listed and are accessible from the :ref:`relevant-manuals` page.
 
-So, to add a new type of data source to the Mini-Monitor software, you
+To add a new data source to the Mini-Monitor software, you
 only need to write a new Reader class and put that class in the
 ``readers`` directory. Then, add the class to the ``READERS`` variable
 found in the Settings file, described in the next section.
 
 Alternatively, a separate script can be written, similar to
-``meter_reader.py``, that can acquire sensor readings and directly
-publish them to the MQTT broker.
+``meter_reader.py``, that can acquire sensor readings and 
+publish them directly to the MQTT broker.
 
 Settings File
 -------------
@@ -166,7 +166,7 @@ The Swap file was permanently removed using the following commands:
     sudo apt-get remove dphys-swapfile
     sudo rm /var/swap
 
-This reduces writes to the SD Card (although it rarely if ever was used)
+This reduces writes to the SD Card (although it rarely, if ever, was used)
 and it also frees up space on the SD card. More free space improves the
 life of the card because the write-leveling that occurs with the SD card
 has more storage to work with.

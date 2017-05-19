@@ -118,7 +118,7 @@ The table below shows the values that are read from the controller.
 Refer to MODBUS manual for more detail on the values. The ``Sensor ID``
 values all start with the ``<LOGGER_ID>``, which is the unique ID value
 that is entered into the Mini-Monitor settings file, as described in the
-:ref:`software` document. For example, if the ``LOGGER_ID`` for a paricular
+:ref:`software` document. For example, if the ``LOGGER_ID`` for a particular
 Mini-Monitor is ``Burton152``, the first sensor value in the table below
 will have the Sensor ID of ``Burton152_firing_rate``.
 
@@ -350,7 +350,7 @@ Sensaphone Reader
 
 This reader reads values from the Sensaphone Infrastructure Management
 System host unit (IMS-4000). The reader uses the `Simple Network
-Managmenet Protocol <https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol>`_
+Management Protocol <https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol>`_
 (SNMP) to access the IMS-4000 host, which in turn is connected to up to
 32 different remote sites. Each remote site can have up to 8
 environmental sensors. The manual for the IMS-4000 can be found

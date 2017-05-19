@@ -128,10 +128,10 @@ modems and Dovado Tiny firmwares to be effective:
    timer <http://www.amazon.com/Woods-50007-Indoor-Digital-Settings/dp/B005WQIDHY/ref=pd_bxgy_60_img_y>`_
    to reboot the Dovado Tiny on a daily basis.
 
-As disucssed in the `AHFC
+As discussed in the `AHFC
 Building Monitoring System Design Guidelines </_static/monitoring_system_design_guidelines.pdf>`_,
 the `Option Cloudgate cellular
-router <http://www.option.com/#secondPage>`_ has proven to be more
+router <http://www.option.com/#secondPage>`_ has proved to be more
 reliable than the Dovado Tiny router and has a cellular modem built in;
 however, it is physically larger and more expensive.
 

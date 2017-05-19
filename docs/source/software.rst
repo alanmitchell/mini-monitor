@@ -43,7 +43,7 @@ The SD card has a partition that is readable on a Windows PC, Mac, or
 Linux computer. On a Windows PC it will show up as a drive labeled ``boot``. There are some configuration files on this partition that need
 attention before running the Mini-Monitor.
 
-Although these files are useable on a Windows PC, they are text files
+Although these files are usable on a Windows PC, they are text files
 that use the line-ending format ("\n") used on Linux computers. It is important
 to preserve that type of line-ending when editing the files. The
 standard Notepad program that comes with the Windows Operating System
@@ -188,7 +188,7 @@ Sensor Reader Classes
     READERS = [
     'ha7s.HA7Sreader',             # 1-Wire Sensors
     'sage_boiler.Sage21Reader',    # Burnham Alpine Boilers w/ Sage 2.1 controller
-    #'aerco_boiler.BMS2reader',    # AERCO BMS II Boiler Mangager
+    #'aerco_boiler.BMS2reader',    # AERCO BMS II Boiler Manager
     #'dg700.DG700reader',          # Energy Conservatory DG-700 Pressure Gauge
     #'labjack.LabjackTempReader',  # Thermistors connected to Labjack U3
     #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000

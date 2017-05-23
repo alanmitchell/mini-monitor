@@ -81,10 +81,10 @@ available here.
 Contents
 ^^^^^^^^
 
-:ref:`software`
-:ref:`hardware`
-:ref:`developers`
-:ref:`contact-info`
+* :ref:`software`
+* :ref:`hardware`
+* :ref:`developers`
+* :ref:`contact-info`
 
 
 .. toctree::

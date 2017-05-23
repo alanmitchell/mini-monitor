@@ -78,17 +78,9 @@ Contact information for key Mini-Monitor personnel and developers is
 available here.
 
 
-Contents
-^^^^^^^^
-
-* :ref:`software`
-* :ref:`hardware`
-* :ref:`developers`
-* :ref:`contact-info`
-
-
 .. toctree::
    :maxdepth: 2
+   :hidden:
    :caption: Software
    
    software
@@ -96,6 +88,7 @@ Contents
    
 .. toctree::
    :maxdepth: 2
+   :hidden:
    :caption: Hardware
 
    hardware
@@ -106,12 +99,14 @@ Contents
    
 .. toctree::
    :maxdepth: 2
+   :hidden:
    :caption: Developers
    
    developers
 
 .. toctree::
    :maxdepth: 2
+   :hidden:
    :caption: Contact Info
 
    contact-info

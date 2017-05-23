@@ -31,3 +31,8 @@ position: relative !important;
 .rst-content .section ol p, .rst-content .section ul p {
     margin-bottom: 0px;
 }
+
+
+.caption-text {
+	color: white !important;
+}

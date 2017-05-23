@@ -10,5 +10,3 @@ Relevant Manuals
 :download:`AERCO Modbus Manual </_static/aerco_modbus.pdf>`
 
 :download:`Honeywell SOLA Controller Modbus Manual </_static/honeywell_sola_modbus.pdf>`. This is the Sage controller used on Burnham Alpine boilers.
-
-:download:`Grundfos Pump Modbus Manual </_static/grundfos_pump_modbus.pdf>`. The Magna3 pump and other Grundfos pumps support Modbus.

@@ -80,24 +80,38 @@ available here.
 
 Contents
 ^^^^^^^^
+
+:ref:`software`
+:ref:`hardware`
+:ref:`developers`
+:ref:`contact-info`
+
+
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   :caption: Software
    
    software
    available-sensor-readers
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: Hardware
+
    hardware
    configuring-the-dovado-tiny-cellular-router
    one-wire-master-interface-circuit
-   one-wire-sensors-and-cabling
-   developers
+   one-wire-sensors-and-cabling   
    relevant-manuals
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: Developers
+   
+   developers
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contact Info
+
    contact-info
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

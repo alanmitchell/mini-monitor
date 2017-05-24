@@ -19,8 +19,8 @@ The software design is flexible and allows for the easy addition of other data s
 
 Here is a picture of a Mini-Monitor installed in a boiler room connecting to Burnham Alpine Boiler and a string of 1-Wire temperature and motor sensors:
 
-![Mini-Monitor](../../wiki/images/mini-monitor-installed.jpg)
+![Mini-Monitor](docs/source/_static/mini-monitor-installed.jpg)
 
 For detailed information about this software: 
 
-### Please see the [Mini-Monitor Wiki](../../wiki)
+### Please see the [Mini-Monitor Dcoumentation](http://mini-monitor-documentation.readthedocs.io/en/latest/index.html)

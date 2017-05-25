@@ -13,3 +13,4 @@ obj/
 *.suo
 *.config
 *.sln
+docs/build/

@@ -3,7 +3,7 @@
 Relevant Manuals
 ================
 
-:download:`Manual for One-Wire Master module </_static/ha7s_one-wire_master.pdf>`, Embedded Data Systems HA7S
+:download:`Manual for 1-Wire Master module </_static/ha7s_one-wire_master.pdf>`, Embedded Data Systems HA7S
 
 :download:`AERCO BMS II Boiler Manual </_static/aerco_bmsII_manual.pdf>`
 

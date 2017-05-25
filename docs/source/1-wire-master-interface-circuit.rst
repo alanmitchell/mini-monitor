@@ -1,16 +1,16 @@
-.. _one-wire-master-interface-circuit:
+.. _1-wire-master-interface-circuit:
 
 1-Wire Master Interface Circuit
 ===============================
 
-Here is the schematic of the circuit that interfaces the one-wire
+Here is the schematic of the circuit that interfaces the 1-Wire
 sensors with the USB port on the Raspberry Pi.
 
 .. image:: /_static/1wire_schematic.jpg
 
 The circuit can be built in two different ways. *Option 1* is the
 circuit currently being used in Mini-Monitor installations. It utilizes
-the `HA7S 1-wire Module <http://www.embeddeddatasystems.com/HA7S--ASCII-TTL-1-Wire-Host-Adapter-SIP\_p\_23.html>`_,
+the `HA7S 1-Wire Module <http://www.embeddeddatasystems.com/HA7S--ASCII-TTL-1-Wire-Host-Adapter-SIP\_p\_23.html>`_,
 which is on its last production run. The correct Reader for this is ``ha7s.HA7Sreader``. When this
 module becomes unavailable, *Option 2* can be utilized,
 although a Reader file has not been finalized for this option; the

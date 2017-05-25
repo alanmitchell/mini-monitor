@@ -302,17 +302,17 @@ an AC motor, an AC valve, or other devices that emit an AC
 electromagnetic field, and detects when the device turns On and Off. For
 more information on the 1-Wire Bus System, see this `Wikipedia
 Article <https://en.wikipedia.org/wiki/1-Wire>`_. To communicate with
-the 1-wire sensor network, a USB-to-1-wire converter or "Master" is
+the 1-Wire sensor network, a USB-to-1-Wire converter or "Master" is
 required. Three different types were tried, and the most suitable and
 reliable for this application was a converter based on the `HA7S - ASCII
 TTL 1-Wire Host Adapter
 SIP <http://www.embeddeddatasystems.com/HA7S--ASCII-TTL-1-Wire-Host-Adapter-SIP_p_23.html>`_.
 The schematic and assembly of this converter is :ref:`documented on this
-page <one-wire-master-interface-circuit>`.
+page <1-wire-master-interface-circuit>`.
 
-If the sensor network includes any Analysis North 1-wire motor sensors,
-a power supply, part PS2, must be connected to the CV3 USB-to-1-wire
-converter. This power supply supplies power to the 1-wire sensor
+If the sensor network includes any Analysis North 1-Wire motor sensors,
+a power supply, part PS2, must be connected to the CV3 USB-to-1-Wire
+converter. This power supply supplies power to the 1-Wire sensor
 network; the DS18B20 temperature sensors do not need the power supply,
 but the Motor Sensors do. Note, for noise isolation, this power supply
 **must** be separate from the supply used by the Raspberry Pi and
@@ -323,7 +323,7 @@ EPS050100-P5RP <http://www.digikey.com/product-detail/en/EPS050100-P5RP/T1038-P5
 However, almost any *regulated* 5 VDC supply with the correct connector
 should work.
 
-The 1-wire sensors are connected in a daisy chain configuration using
+The 1-Wire sensors are connected in a daisy chain configuration using
 CAT-5/6 patch cable and RJ45 splitters to form the network. See the
 :ref:`1-wire-sensors-and-cabling` page for important details on the
 sensors and their interconnection.

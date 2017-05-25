@@ -1,6 +1,6 @@
-.. _one-wire-sensors-and-cabling:
+.. _1-wire-sensors-and-cabling:
 
-1 Wire Sensors and Cabling
+1-Wire Sensors and Cabling
 ==========================
 
 The diagram below shows the basic design of a 1-Wire sensor network used
@@ -12,7 +12,7 @@ CAT-5/6 patch cables are used to connect the Mini-Monitor to
 the first sensor, connect the first sensor to the second sensor, etc. At
 each sensor node an RJ45 Y splitter is used to split the trunk cable off to
 the sensor. Below is a picture of one node, showing the Green trunking
-cables and a 1-wire temperature sensor connected at the node. The
+cables and a 1-Wire temperature sensor connected at the node. The
 cabling from the splitter to the sensor should be kept relatively short,
 less than 10 feet. Trunk runs can be as long as needed to reach the next
 sensor.
@@ -65,7 +65,7 @@ available from `iButtonLink <http://www.ibuttonlink.com/products/tprobe>`_.
 
 Each DS18B20 temperature sensor chip has a unique ID. The Mini-Monitor
 system uses this ID as the Sensor ID it posts to the BMON online sensor
-database. Before installing a sensor, you should use a 1-wire
+database. Before installing a sensor, you should use a 1-Wire
 software program such as the `OneWireViewer <http://www.maximintegrated.com/en/products/ibutton/software/1wire/OneWireViewer.cfm>`_
 to read the ID from the sensor and so you can label the sensor with the ID.
 

@@ -93,8 +93,8 @@ available here.
 
    hardware
    configuring-the-dovado-tiny-cellular-router
-   one-wire-master-interface-circuit
-   one-wire-sensors-and-cabling   
+   1-wire-master-interface-circuit
+   1-wire-sensors-and-cabling   
    relevant-manuals
    
 .. toctree::

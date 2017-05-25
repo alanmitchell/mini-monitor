@@ -81,7 +81,7 @@ The Mini-Monitor is designed so it is easy to mix different sensor
 types and data sources in the data acquisition process. As mentioned in
 the prior section, ``pi_logger.py`` utilizes Reader classes to read
 different types of sensors. Each Reader class knows how to gather data
-from a particular data source, e.g. a 1-wire sensor network or a
+from a particular data source, e.g. a 1-Wire sensor network or a
 particular boiler type. The ``READERS`` setting in the :ref:`settings` file holds that
 list of classes. The list items for the ``READERS`` setting are in the
 format of ``<file>.<class name>``. All of these files are located in the

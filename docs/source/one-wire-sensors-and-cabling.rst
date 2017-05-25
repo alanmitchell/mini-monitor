@@ -6,7 +6,7 @@
 The diagram below shows the basic design of a 1-Wire sensor network used
 with the Mini-Monitor system.
 
-.. image:: /_static/1_wire_cabling.png
+.. image:: /_static/1_wire_cabling.jpg
 
 CAT-5/6 patch cables are used to connect the Mini-Monitor to
 the first sensor, connect the first sensor to the second sensor, etc. At

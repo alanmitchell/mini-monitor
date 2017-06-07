@@ -15,11 +15,13 @@ ENABLE_BMON_POST = True
 
 # BMON URL to post readings to, and required storage key
 # An example BMON URL is "https://bms.ahfc.us"
-# The Store Key can be any string with no spaces
+# The Store Key must match the Store Key in the settings file for
+# the BMON server.
 POST_URL = '[BMON URL goes here]/readingdb/reading/store/'
 POST_STORE_KEY = 'Store Key Goes Here'
 
-# A list of sensor reader classes goes here
+# A list of Sensor Reader classes goes here.
+# Comment out any Sensor Readers that are not being used.
 READERS = [
 'ha7s.HA7Sreader',                # 1-Wire Sensors
 #'sage_boiler.Sage21Reader',      # Burnham Alpine Boilers w/ Sage 2.1 controller

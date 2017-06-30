@@ -1,0 +1,6 @@
+#!/bin/bash
+sleep 10  # wait for modem switch
+    echo "Script wvdial crashed with exit code $?. Respawning.." >&2
+    sleep 3
+done
+

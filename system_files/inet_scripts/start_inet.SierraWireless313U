@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Starts the Sierra Wireless AirCard 313U cell modem using the
-# umtskeeper script.  See documentation of that script at:
-# http://mintakaconciencia.net/squares/umtskeeper/
-
-/home/pi/umtskeeper/umtskeeper --sakisoperators "USBINTERFACE='3' OTHER='USBMODEM' USBMODEM='1199:68aa' APN='CUSTOM_APN' CUSTOM_APN='web.gci' APN_USER='0' APN_PASS='0'" --sakisswitches "--sudo --console" --devicename 'Sierra' --statfilepath /var/log --nostats --log

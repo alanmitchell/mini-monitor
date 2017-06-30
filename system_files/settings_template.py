@@ -10,6 +10,16 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
+# Set following to True if you are using a USB Cellular modem
+# to connect to the Internet.  The standard Mini-Monitor configuration
+# is compatible with and tested with Huawei E173 and E3276 modems, and is
+# set up to work with the GCI (Alaska) carrier.
+# Other Huawei modems may be compatible.  To use other modems or carriers,
+# modifications to the wvdial.conf file, found in this directory, will
+# be required (/boot/pi_logger/wvdial.conf).  See documentation of the
+# Linux WvDial program for information on the configuration file.
+USE_CELL_MODEM = False
+
 # Set following to True to enable posting to a BMON server
 ENABLE_BMON_POST = True
 
@@ -23,7 +33,7 @@ POST_STORE_KEY = 'Store Key Goes Here'
 # A list of Sensor Reader classes goes here.
 # Comment out any Sensor Readers that are not being used.
 READERS = [
-'ha7s.HA7Sreader',                # 1-Wire Sensors
+#'ha7s.HA7Sreader',                # 1-Wire Sensors
 #'sage_boiler.Sage21Reader',      # Burnham Alpine Boilers w/ Sage 2.1 controller
 #'aerco_boiler.BMS2reader',       # AERCO BMS II Boiler Mangager
 #'dg700.DG700reader',             # Energy Conservatory DG-700 Pressure Gauge

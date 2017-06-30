@@ -26,7 +26,7 @@ touch /forcefsck
 # If a Cell Modem is being used, start it up.
 if /home/pi/pi_logger/scripts/test_setting.py USE_CELL_MODEM
 then
-	/home/pi/pi_logger/system_files/start_cell_modem &
+	/home/pi/pi_logger/scripts/start_cell_modem &
 fi
 
 # The Mosquitto MQTT broker is started as a service, see: 

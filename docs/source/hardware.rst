@@ -100,13 +100,16 @@ interface, part CM1 in the above diagrams. The cellular modem is the
 radio device that communicates with the mobile wireless network
 and provides a digital interface for that communication.
 
-For Option 1 in the diagrams above, the Sierra Wireless 313U modem has
-provided reliable operation with support for 4G (LTE), 3G, and 2G
-service from the GCI carrier in Alaska. As of mid 2017, these modems were
-available on Ebay for approximately $50.
+For Option 1 in the diagrams above, we have the following modems
+have been tested and work with the default software image for the
+Raspberry Pi connecting to the GCI carrier in Alaska:
 
-For the GCI mobile wireless network, which serves many rural Alaskan
-sites, the cellular modem needs to support the 850 MHz and 1900 MHz
+*  Huawei E173u-6 and E173s-65
+*  Huawei E3276s-500 and E3276s-505
+
+As of mid 2017, these modems were available on Ebay for prices ranging
+from $15 - $40.  Other Huawei modems are likely to work, but should
+support the 850 MHz and 1900 MHz
 frequency bands for 2G (EDGE, GPRS) and 3G (UMTS, HSPA) service. If the
 cellular modem supports 4G LTE, it needs to support the LTE AWS Band 4
 frequencies, as this is where GCI operates.

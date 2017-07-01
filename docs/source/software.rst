@@ -28,7 +28,7 @@ System and the entire Mini-Monitor software application. You can
 download a zipped version of this image from the link below. The file is
 about 1 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.0 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2017-05-02.zip>`_
+`Mini-Monitor SD Card Image (1.0 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2017-06-30.zip>`_
 
 First unzip the file to extract an '.img' file, which is the SD card image. Use the `instructions
 here <https://www.raspberrypi.org/documentation/installation/installing-images/>`_
@@ -40,7 +40,8 @@ Setup Internet Access
 ---------------------
 
 The SD card has a partition that is readable on a Windows PC, Mac, or
-Linux computer. On a Windows PC it will show up as a drive labeled ``boot``. There are some configuration files on this partition that need
+Linux computer. On a Windows PC it will show up as a drive labeled ``boot``.
+There are some configuration files on this partition that need
 attention before running the Mini-Monitor.
 
 Although these files are usable on a Windows PC, they are text files
@@ -48,44 +49,26 @@ that use the line-ending format ("\n") used on Linux computers. It is important
 to preserve that type of line-ending when editing the files. The
 standard Notepad program that comes with the Windows Operating System
 does *not* preserve Linux line endings. Most text editors used for
-programming *do* preserve line endings, such as `EditPlus <https://www.editplus.com/>`_ or `Notepad++ <https://notepad-plus-plus.org/>`_.
+programming *do* preserve line endings, such as
+`EditPlus <https://www.editplus.com/>`_ or `Notepad++ <https://notepad-plus-plus.org/>`_.
 You need to use one of these editors when editing the files described in
 this section and the next.
 
-The first issue to address is setting up Internet Access. In the
-``pi_logger/`` directory on the SD card is a shell script file called
-``start_inet``. This file is executed when the Pi starts up, and its
-purpose is to start Internet access for methods that
-do not start it automatically. If the Internet access is being provided via
-an Ethernet connection to the Pi, no special Internet startup command
-is needed; in this case ``start_inet`` should contain no commands. A
-blank script file is available at
-``pi_logger/inet_scripts/start_inet.NULL``, and this file can be copied
-into ``pi_logger/start_inet``. This is also the appropriate set up for
-an Ethernet connection to a Cellular Router, See Option 2 in the :ref:`hardware` document.
+The first issue to address is setting up Internet Access. Here are three possibilities:
 
-The same blank ``start_inet`` file can be used when Internet Access is
-being provided via WiFi (either the built-in WiFi adapter in the
-Raspberry Pi 3 or a WiFi USB dongle). This is because the Raspberry Pi
-will take care of establishing the WiFi Internet connection without a
-special startup script. For more details on setting up a WiFi connection
-for the Raspberry Pi, `click here <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>`_.
-
-The common scenario where a non-blank ``start_inet`` is required is when
-a Cellular Modem is directly connected to the Raspberry Pi via a USB
-port; this is Option 1 in the :ref:`hardware` document. In this
-scenario, the ``start_inet`` script runs the ``UMTSkeeper`` command,
-which establishes and maintains an Internet connection through the
-Cellular Modem. Each Cellular Modem requires different configuration
-parameters to be used by the UMTSkeeper script. There are a few
-different ``start_inet`` scripts in the ``pi_logger/inet_scripts/``
-directory for a few different types of Cellular modems. For the GCI
-network in Alaska, we recommend the Sierra Wireless 313U modem, and
-scripts are available in ``pi_logger/inet_scripts/`` for that modem.
-Copy the appropriate script to ``pi_logger/start_inet``. If no script
-is available for your cell modem, you will need to learn about
-configuration of the UMTSkeeper program; see `this page <http://mintakaconciencia.net/squares/umtskeeper/>`_, and create an
-appropriate ``start_inet`` script.
+*  Wired Ethernet Internet access through the RJ-45 port on the Raspberry Pi.  No
+   special software configuration is needed for this option.
+*  Wireless Internet access either through the built-in WiFi adapter present on the
+   Raspberry 3, or through a USB WiFi adapter plugged into a USB port. For more details
+   on setting up a WiFi connection for the Raspberry Pi,
+   `click here <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>`_.
+*  Internet access through a Cellular Modem connecting to a mobile data network.  For
+   certain Huawei cellular modems (models E173u-6, E173s-65, E3276s-500, and E3276s-505)
+   connecting to the GCI (Alaska) mobile data network, configuration just involves
+   setting the ``USE_CELL_MODEM`` parameter to ``True`` in the Settings file, as described
+   below.  For other modems and other carriers, appropriate modification of the
+   ``pi_logger/wvdial.conf`` file on the SD card will be required.  See
+   documentation of the WvDial program for further information.
 
 Configure Settings File for your Application
 --------------------------------------------
@@ -157,6 +140,23 @@ an example, the Utility Meter Reader script is a separate process that
 posts directly to the MQTT broker; it has a separate interval setting
 found near the bottom of the Settings file and described later in this
 document.
+
+.. code:: python
+
+    # Set following to True if you are using a USB Cellular modem
+    # to connect to the Internet.  The standard Mini-Monitor configuration
+    # is compatible with and tested with Huawei E173 and E3276 modems, and is
+    # set up to work with the GCI (Alaska) carrier.
+    # Other Huawei modems may be compatible.  To use other modems or carriers,
+    # modifications to the wvdial.conf file, found in this directory, will
+    # be required (/boot/pi_logger/wvdial.conf).  See documentation of the
+    # Linux WvDial program for information on the configuration file.
+    USE_CELL_MODEM = False
+
+``USE_CELL_MODEM`` should be set to ``True`` if a USB Cellular Modem is being
+used to provide Internet Access.  As described in the prior section, adjustments
+to the ``pi_logger/wvdial.conf`` file may be required for certain cellular
+modem models or carriers other than GCI (Alaska).
 
 Settings related to Posting to a BMON Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

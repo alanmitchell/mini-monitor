@@ -32,7 +32,7 @@ USE_CELL_MODEM = False
 # (see the Init3 configuration settings). This can be modified for other carriers.
 # See documentation of the Linux WvDial program for further information on
 # the configuration file.
-CELL_MODEM_MODEL = "E173"
+CELL_MODEM_MODEL = 'E173'
 
 # Set following to True to enable posting to a BMON server
 ENABLE_BMON_POST = True

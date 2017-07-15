@@ -11,14 +11,28 @@ READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
 # Set following to True if you are using a USB Cellular modem
-# to connect to the Internet.  The standard Mini-Monitor configuration
-# is compatible with and tested with Huawei E173 and E3276 modems, and is
-# set up to work with the GCI (Alaska) carrier.
-# Other Huawei modems may be compatible.  To use other modems or carriers,
-# modifications to the wvdial.conf file, found in this directory, will
-# be required (/boot/pi_logger/wvdial.conf).  See documentation of the
-# Linux WvDial program for information on the configuration file.
+# to connect to the Internet.
 USE_CELL_MODEM = False
+
+# If you are using a cell modem, set the following to a string indicating
+# the type of cell modem you are using.  This string must be one of the
+# "Dialer" sections in the wvdial.conf file found in the /boot/pi_logger
+# folder (the folder also containing the Mini-Monitor settings file.)
+# Currently, the following value are supported:
+#
+#     E173: Works with the Huawei E173 mdoem
+#     E3276: Works with the Huawei E3276 modem
+#     E1756C: Works with the Huawei E1756C modem
+#
+# Mini-Monitor uses the WvDial linux utility to connect the cell modem
+# to the Internet.  The /boot/pi_logger/wvdial.conf is the configuration
+# file for WvDial and can be edited to modify configuration settings and/or
+# enter new Dialer sections to support different models of modems.  Also,
+# The wvdial.conf file is set up with the APN of the GCI carrier in Alaska.
+# (see the Init3 configuration settings). This can be modified for other carriers.
+# See documentation of the Linux WvDial program for further information on
+# the configuration file.
+CELL_MODEM_MODEL = "E173"
 
 # Set following to True to enable posting to a BMON server
 ENABLE_BMON_POST = True

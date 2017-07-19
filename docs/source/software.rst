@@ -63,12 +63,14 @@ The first issue to address is setting up Internet Access. Here are three possibi
    on setting up a WiFi connection for the Raspberry Pi,
    `click here <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>`_.
 *  Internet access through a Cellular Modem connecting to a mobile data network.  For
-   certain Huawei cellular modems (models E173u-6, E173s-65, E3276s-500, and E3276s-505)
-   connecting to the GCI (Alaska) mobile data network, configuration just involves
-   setting the ``USE_CELL_MODEM`` parameter to ``True`` in the Settings file, as described
-   below.  For other modems and other carriers, appropriate modification of the
+   certain Huawei cellular modems (models E173u-6, E173s-65, E3276s-500, E3276s-505, and
+   E1756C) connecting to the GCI (Alaska) mobile data network, configuration just involves
+   setting the ``USE_CELL_MODEM`` parameter to ``True`` in the Settings file, and setting the
+   ``CELL_MODEM_MODEL`` parameter to the correct model type, as described below.
+   For other modems and other carriers, appropriate modification of the
    ``pi_logger/wvdial.conf`` file on the SD card will be required.  See
-   documentation of the WvDial program for further information.
+   documentation of the `WvDial program <https://linux.die.net/man/1/wvdial>`_
+   for further information.
 
 Configure Settings File for your Application
 --------------------------------------------
@@ -141,22 +143,50 @@ posts directly to the MQTT broker; it has a separate interval setting
 found near the bottom of the Settings file and described later in this
 document.
 
+Settings related to Using a Cellular Modem for Internet Access
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. code:: python
 
     # Set following to True if you are using a USB Cellular modem
-    # to connect to the Internet.  The standard Mini-Monitor configuration
-    # is compatible with and tested with Huawei E173 and E3276 modems, and is
-    # set up to work with the GCI (Alaska) carrier.
-    # Other Huawei modems may be compatible.  To use other modems or carriers,
-    # modifications to the wvdial.conf file, found in this directory, will
-    # be required (/boot/pi_logger/wvdial.conf).  See documentation of the
-    # Linux WvDial program for information on the configuration file.
+    # to connect to the Internet.
     USE_CELL_MODEM = False
 
 ``USE_CELL_MODEM`` should be set to ``True`` if a USB Cellular Modem is being
-used to provide Internet Access.  As described in the prior section, adjustments
-to the ``pi_logger/wvdial.conf`` file may be required for certain cellular
-modem models or carriers other than GCI (Alaska).
+used to provide Internet Access.
+
+.. code:: python
+
+    # If you are using a cell modem, set the following to a string indicating
+    # the type of cell modem you are using.  This string must be one of the
+    # "Dialer" sections in the wvdial.conf file found in the /boot/pi_logger
+    # folder (the folder also containing the Mini-Monitor settings file.)
+    # Currently, the following value are supported:
+    #
+    #     E173: Works with the Huawei E173 mdoem
+    #     E3276: Works with the Huawei E3276 modem
+    #     E1756C: Works with the Huawei E1756C modem
+    #
+    # Mini-Monitor uses the WvDial Linux utility to connect the cell modem
+    # to the Internet.  The /boot/pi_logger/wvdial.conf is the configuration
+    # file for WvDial and can be edited to modify configuration settings and/or
+    # enter new Dialer sections to support different models of modems.  Also,
+    # The wvdial.conf file is set up with the APN of the GCI carrier in Alaska.
+    # (see the Init3 configuration settings). This can be modified for other carriers.
+    # See documentation of the Linux WvDial program for further information on
+    # the configuration file.
+    # NOTE: some versions of the E1756C modem did not reliably connect using
+    # the current wvdial.conf settings.  Use the E173 or E3276 modems if possible.
+    CELL_MODEM_MODEL = 'E173'
+
+The ``CELL_MODEM_MODEL`` parameter must be set to one of the allowed string values
+to selet the type of cellular modem being used.  As described in the comments above
+for this parameter, adjustments can be made to the ``wvdial.conf`` file to
+use other types of cellular modems or use carriers other than GCI (Alaska).
+See documentation of the
+`WvDial program <https://linux.die.net/man/1/wvdial>`_ and the
+`wvdialconf program <https://linux.die.net/man/1/wvdialconf>`_ for information on
+making those adjustments.
 
 Settings related to Posting to a BMON Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

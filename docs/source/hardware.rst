@@ -106,6 +106,8 @@ Raspberry Pi connecting to the GCI carrier in Alaska:
 
 *  Huawei E173u-6 and E173s-65
 *  Huawei E3276s-500 and E3276s-505
+*  Huawei E1756C (although some versions of this modem did not reliably
+   connect to the cellular network)
 
 As of mid 2017, these modems were available on Ebay for prices ranging
 from $15 - $40.  Other Huawei modems are likely to work, but should

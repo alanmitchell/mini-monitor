@@ -10,6 +10,7 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
+# ----------- Cellular Modem Related -------------
 # Set following to True if you are using a USB Cellular modem
 # to connect to the Internet.
 USE_CELL_MODEM = False
@@ -24,7 +25,7 @@ USE_CELL_MODEM = False
 #     E3276: Works with the Huawei E3276 modem
 #     E1756C: Works with the Huawei E1756C modem
 #
-# Mini-Monitor uses the WvDial linux utility to connect the cell modem
+# Mini-Monitor uses the WvDial Linux utility to connect the cell modem
 # to the Internet.  The /boot/pi_logger/wvdial.conf is the configuration
 # file for WvDial and can be edited to modify configuration settings and/or
 # enter new Dialer sections to support different models of modems.  Also,
@@ -32,7 +33,11 @@ USE_CELL_MODEM = False
 # (see the Init3 configuration settings). This can be modified for other carriers.
 # See documentation of the Linux WvDial program for further information on
 # the configuration file.
+# NOTE: some versions of the E1756C modem did not reliably connect using
+# the current wvdial.conf settings.  Use the E173 or E3276 modems if possible.
 CELL_MODEM_MODEL = 'E173'
+
+# ----------------------------------------------------
 
 # Set following to True to enable posting to a BMON server
 ENABLE_BMON_POST = True

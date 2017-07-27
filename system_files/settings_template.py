@@ -67,7 +67,7 @@ READERS = [
 # timer that forces a power-cycle every so often.
 
 # Number of days of uptime between forced reboots.  Set to 0 to never reboot.
-REBOOT_DAYS = 0
+REBOOT_DAYS = 2
 
 # Reboots if Error Count is too high
 CHECK_ERROR_CT = False

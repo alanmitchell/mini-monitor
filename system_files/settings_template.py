@@ -104,6 +104,11 @@ METER_IDS = [1234, 6523, 1894]
 # will be low.
 METER_POST_INTERVAL = 30  # minutes
 
+# This multiplier is applied to the rate of change calculated from
+# sequential meter readings.  It can be used to convert that
+# rate of change into engineering units, such as BTU/hour.
+METER_MULT = 1.0
+
 # --- Pulse Counter script ---
 # See pi-energy-sensors GitHub project
 

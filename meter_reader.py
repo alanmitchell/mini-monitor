@@ -100,7 +100,7 @@ while True:
         if ts_cur > ts_last + settings.METER_POST_INTERVAL * 60.0:
             # enough time has elapsed to make a post.  calculate the
             # rate of meter reading change per hour.
-            rate = (read_cur - read_last) * 3600.0 * settings.METER_MULT / (ts_cur - ts_last)
+            rate = (read_cur - read_last) * 3600.0 * getattr(settings, 'METER_MULT', 1.0) / (ts_cur - ts_last)
             
             # time stamp in the middle of the reading period
             ts_post = (ts_cur + ts_last) / 2.0

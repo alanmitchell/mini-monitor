@@ -324,6 +324,11 @@ Settings related to Recording Transmissions from Utility Meters
     # will be low.
     METER_POST_INTERVAL = 30  # minutes
 
+    # This multiplier is applied to the rate of change calculated from
+    # sequential meter readings.  It can be used to convert that
+    # rate of change into engineering units, such as BTU/hour.
+    METER_MULT = 1.0
+
 These settings are for the script that can receive meter reading
 transmissions from certain Utility meters. See the :ref:`hardware` document for the necessary Mini-Monitor hardware. Further
 discussion of the values posted by this script is available in the :ref:`available-sensor-readers` document.
@@ -340,7 +345,13 @@ readings that are used to create a recorded/posted value. As explained
 in the :ref:`available-sensor-readers` document, the script posts the amount 
 the utility meter value has changed, so if this
 ``METER_POST_INTERVAL`` is too short, a low resolution change value will
-be reported.
+be reported.  Finally the ``METER_MULT`` setting is a multiplier that
+is applied to the rate of change value determined by the meter reader
+before it is sent to be stored or posted.  The meter reader normally
+calculates a rate of change per hour;  for a natural gas meter that
+value usually has the units of cubic feet per hour.  Setting ``METER_MULT``
+to 1000.0 then converts the value to BTU/hour, since there are
+approximately 1,000 BTUs per cubic foot of natural gas.
 
 Upgrade Mini-Monitor Software to Newest Release
 -----------------------------------------------

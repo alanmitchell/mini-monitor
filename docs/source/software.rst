@@ -330,8 +330,10 @@ Settings related to Recording Transmissions from Utility Meters
     METER_MULT = 1.0
 
 These settings are for the script that can receive meter reading
-transmissions from certain Utility meters. See the :ref:`hardware` document for the necessary Mini-Monitor hardware. Further
-discussion of the values posted by this script is available in the :ref:`available-sensor-readers` document.
+transmissions from certain Utility meters. See the :ref:`hardware`
+document for the necessary Mini-Monitor hardware. Further
+discussion of the values posted by this script is available in the
+:ref:`available-sensor-readers` document.
 
 The ``ENABLE_METER_READER`` setting must be set to True to enable reading of
 utility meter transmissions. ``METER_IDS`` is a Python list containing

@@ -17,6 +17,8 @@ This script has a number of relevant values in the Mini-Monitor settings file:
     ENABLE_METER_READER = True or False, determining whether this script runs.
     METER_IDS = A Python list indicating those meter IDs to record and post.
     METER_POST_INTERVAL = Minutes between posting of the meter reading change.
+    METER_MULT = A multiplier to apply to the meter change rate before posting
+        to the MQTT broker.
 '''
 import subprocess
 import signal

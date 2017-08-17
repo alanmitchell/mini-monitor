@@ -42,7 +42,9 @@ fi
 # Start up the datalogger if there are any readers enabled
 if /home/pi/pi_logger/scripts/test_setting.py "len(READERS)>0"
 then
-	/home/pi/pi_logger/scripts/run_pi_logger &
+    # delay start for 1 minute to wait for time to stabilize
+    # from the NTP daemon.
+	echo "/home/pi/pi_logger/scripts/run_pi_logger &" | at now + 1 minutes
 fi
 
 # Start the programs for Utility Meter reading, if requested in the settings

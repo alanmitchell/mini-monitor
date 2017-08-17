@@ -14,3 +14,4 @@ obj/
 *.config
 *.sln
 docs/build/
+config_util/pi_logger/

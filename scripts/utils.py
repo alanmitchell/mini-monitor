@@ -29,6 +29,13 @@ def reboot():
     # backup log and Post database files before rebooting
     backup_files()
 
+    # Update the fake hardware clock to that the time is close to right
+    # after the reboot.
+    subprocess.call('/sbin/fake-hwclock save', shell=True)
+
+    # wait 5 seconds, as it seems to take this long to take effect
+    time.sleep(5)
+
     # rtlamr is stubborn to kill, so force a reboot with the -f flag
     subprocess.call('/sbin/reboot -f now', shell=True)
 

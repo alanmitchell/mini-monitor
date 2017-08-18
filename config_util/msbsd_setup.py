@@ -8,7 +8,7 @@ from distutils.util import strtobool
 import io
 import setup_utils
 
-logger_id = raw_input('Enter a short (< 15 character) name for this site (spaces will be removed): ')
+logger_id = raw_input('Enter a short (15 char max) name for this site (no spaces): ')
 logger_id = logger_id.replace(' ', '')
 
 # read settings file so it can be modified

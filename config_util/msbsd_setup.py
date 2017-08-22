@@ -6,20 +6,35 @@ Mat-Su School District.
 
 from distutils.util import strtobool
 import io
+import os
+import re
 import setup_utils
+
+THIS_DIR = os.path.dirname(__file__)
 
 logger_id = raw_input('Enter a short (15 char max) name for this site (no spaces): ')
 logger_id = logger_id.replace(' ', '')
 
 # read settings file so it can be modified
-file_contents = open('pi_logger/settings.py').read()
-file_contents = setup_utils.replace_setting(file_contents, 'LOGGER_ID', '"%s"' % logger_id)
+settings_fn = os.path.join(THIS_DIR, 'pi_logger/settings.py')
+file_contents = open(settings_fn).read()
+file_contents = setup_utils.replace_line(file_contents, r'LOGGER_ID\s*=', 'LOGGER_ID = "%s"' % logger_id)
 
 meter_ids = raw_input('Enter Gas Meter ID or multiple IDs separated by commas: ')
-file_contents = setup_utils.replace_setting(file_contents, 'METER_IDS', '[%s]' % meter_ids)
+file_contents = setup_utils.replace_line(file_contents, r'METER_IDS\s*=', 'METER_IDS = [%s]' % meter_ids)
+
+# loop through the common file containing other settings and
+# substitute.
+common_fn = os.path.join(THIS_DIR, 'common_settings_sample.txt')
+for line in open(common_fn):
+    if re.search(r'^\s*#', line) is None:
+        flds = line.split('\t')
+        if len(flds)==2:
+            print flds
+            file_contents = setup_utils.replace_line(file_contents, flds[0].strip(), flds[1].strip())
 
 # Write the revised settings file.
-with io.open('pi_logger/settings.py', 'w', newline='\n') as f:
+with io.open(settings_fn, 'w', newline='\n') as f:
     f.write(unicode(file_contents))
 
 # Configure WiFi, if requested.

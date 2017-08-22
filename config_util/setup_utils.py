@@ -2,6 +2,8 @@
 settings file.
 '''
 
+import re
+
 def wpa_sup_file(ssid=None, psk=None):
     """Returns the contents of a wpa_supplicant.conf file
     setup to connect to the WiFi network with an SSID of
@@ -29,27 +31,27 @@ update_config=1
 
     return header + (wifi_info % (ssid, psk))
 
-def replace_setting(file_contents, setting, new_value):
-    """Replaces a setting in a Python settings file
-    with a new value.
+def replace_line(file_contents, match_expr, new_line):
+    """Replaces a line in a file with a new line. Finds the target
+    line with a RegEx expression.
+
     PARAMETERS
     ----------
-    'file_contents': The string contents of the settings file to alter.
-    'setting': The name of the setting in the file to alter.
-    'new_value': The new value for the setting, expressed as a string.
+    'file_contents': The string contents of the file to alter.
+    'match_expr': A RegEx expression that will match the line to replace
+    'new_line': The new line, w/o any line endings.
     RETURNS
     -------
-    The altered contents of the settings file.  Uses Linux line endings.
+    The altered contents of the file.  Uses Linux line endings.
     If the setting is not found in the contents, the contents are not
     altered.
     """
 
     lines = file_contents.splitlines()
-    test_str = setting + '='
     new_lines = []
     for line in lines:
-        if line.replace(' ', '').startswith(test_str):
-            new_lines.append('%s = %s' % (setting, new_value))
+        if re.search(match_expr, line):
+            new_lines.append(new_line)
         else:
             new_lines.append(line)
 

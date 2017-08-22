@@ -1,0 +1,10 @@
+# The file that identifies lines to change in the
+# settings.py file for the mini-monitor.
+
+POST_URL\s*=	POST_URL = 'https://bmon.analysisnorth.com/readingdb/reading/store/'
+POST_STORE_KEY\s*=	POST_STORE_KEY = 'junk'
+
+['"]sys_info.SysInfo['"]	'sys_info.SysInfo',               # System uptime, CPU temperature, software version
+ENABLE_METER_READER\s*=	ENABLE_METER_READER = True
+METER_POST_INTERVAL\s*=	METER_POST_INTERVAL = 30  # minutes
+METER_MULT\s*=	METER_MULT = 1000.0

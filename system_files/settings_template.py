@@ -35,6 +35,7 @@ USE_CELL_MODEM = False
 # the configuration file.
 # NOTE: some versions of the E1756C modem did not reliably connect using
 # the current wvdial.conf settings.  Use the E173 or E3276 modems if possible.
+# *** This value must be in single or double quotes ***
 CELL_MODEM_MODEL = 'E173'
 
 # ----------------------------------------------------

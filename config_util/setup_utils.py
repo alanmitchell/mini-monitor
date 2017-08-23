@@ -31,15 +31,17 @@ update_config=1
 
     return header + (wifi_info % (ssid, psk))
 
-def replace_line(file_contents, match_expr, new_line):
-    """Replaces a line in a file with a new line. Finds the target
-    line with a RegEx expression.
+def replace_line(file_contents, replacements):
+    """Replaces lines in a file with a new line, based on search
+    expressions.
 
     PARAMETERS
     ----------
     'file_contents': The string contents of the file to alter.
-    'match_expr': A RegEx expression that will match the line to replace
-    'new_line': The new line, w/o any line endings.
+    'replacements': A list of two-tuples describing the replacements.
+        The first item in the tuple is a RegEx search expression identifying
+        a line to be replaced; the second tuple item is the the new line to
+        substitute.
     RETURNS
     -------
     The altered contents of the file.  Uses Linux line endings.
@@ -50,9 +52,13 @@ def replace_line(file_contents, match_expr, new_line):
     lines = file_contents.splitlines()
     new_lines = []
     for line in lines:
-        if re.search(match_expr, line):
-            new_lines.append(new_line)
-        else:
+        sub_made = False
+        for match_expr, new_line in replacements:
+            if re.search(match_expr, line):
+                new_lines.append(new_line)
+                sub_made = True
+                break
+        if not sub_made:
             new_lines.append(line)
 
     return chr(10).join(new_lines)

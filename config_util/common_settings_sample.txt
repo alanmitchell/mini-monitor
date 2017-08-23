@@ -1,0 +1,12 @@
+# A sample Other Settings file.  This file identifies
+# lines to change in the settings.py file for the mini-monitor.
+# Each substitution is described in one line in this file.
+# There are two elements on the line, separated by a Tab character;
+# the first element is the RegEx expression that will match the line
+# to replace.  The second element (after the Tab) is the new line
+# that should be substituted.
+
+POST_URL\s*=	POST_URL = 'https://bmon.analysisnorth.com/readingdb/reading/store/'
+POST_STORE_KEY\s*=	POST_STORE_KEY = 'junk'
+
+['"]sys_info.SysInfo['"]	'sys_info.SysInfo',               # System uptime, CPU temperature, software version

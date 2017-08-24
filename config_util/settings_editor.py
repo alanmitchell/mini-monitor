@@ -10,6 +10,7 @@ import tkFileDialog
 import tkFont
 import io
 import os
+import sys
 import re
 import setup_utils
 
@@ -73,8 +74,16 @@ def store_settings():
                     if len(flds) == 2:
                         substitutions.append(flds)
 
-        # read settings file and perform the substitutions
-        THIS_DIR = os.path.dirname(__file__)
+        # read settings file and perform the substitutions.
+        # First need to identify the directory where this program
+        # is located.  The method used to find it depends on whether
+        # this is running as a script or as a pyinstaller frozen
+        # executable.  See https://pythonhosted.org/PyInstaller/runtime-information.html.
+        if getattr(sys, 'frozen', False):
+            THIS_DIR = os.path.dirname(sys.executable)
+        else:
+            THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
         settings_fn = os.path.join(THIS_DIR, 'pi_logger/settings.py')
         with open(settings_fn) as f:
             file_contents = f.read()
@@ -93,8 +102,7 @@ def store_settings():
         with io.open(sup_fn, 'w', newline='\n') as f:
             f.write(unicode(file_contents))
 
-        msg = '''The Settings were Successfully Stored!  You can now close 
-the application or modify settings and Store again.'''
+        msg = 'The Settings were Successfully Stored!  You can now close the application or modify settings and Store again.'
         tkMessageBox.showinfo('Success', msg)
         return 0
 

@@ -25,7 +25,8 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
-# Version 1.8:  2017-11-08. Meter Reader and Cellular modem changes.
+# Version 1.9:  2017-08-24. GUI utility for editing Settings File.
+# Version 1.8:  2017-08-11. Meter Reader and Cellular modem changes.
 # Version 1.7:  Implmented MQTT Broker and restructured app to use it.
 #               Add the Utility Meter reader script.
 # Version 1.6:  Requirements file. Control over Reboot tests. Removed
@@ -33,7 +34,7 @@ import settings
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 1.8
+settings.VERSION = 1.9
 #***********************************************************************
 
 # Create the object to control the reading and logging process

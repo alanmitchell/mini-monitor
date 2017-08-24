@@ -5,7 +5,8 @@ Internet access if requested.
 
 from Tkinter import *
 import ttk
-from tkinter import filedialog, messagebox
+import tkMessageBox
+import tkFileDialog
 import tkFont
 import io
 import os
@@ -31,15 +32,15 @@ def store_settings():
 
         # Do a few input checks
         if len(logger_id.strip())==0:
-            messagebox.showerror('No Site Name', 'You must enter a Site Name.')
+            tkMessageBox.showerror('No Site Name', 'You must enter a Site Name.')
             return -1
 
         if internet_type=='wifi':
             if len(w_ssid.strip())==0:
-                messagebox.showerror('No WiFi Name', 'You must enter a WiFi Network Name.')
+                tkMessageBox.showerror('No WiFi Name', 'You must enter a WiFi Network Name.')
                 return -1
             if len(w_pass.strip())==0:
-                messagebox.showerror('No WiFi Password', 'You must enter a WiFi Password.')
+                tkMessageBox.showerror('No WiFi Password', 'You must enter a WiFi Password.')
                 return -1
 
         substitutions = [
@@ -94,11 +95,11 @@ def store_settings():
 
         msg = '''The Settings were Successfully Stored!  You can now close 
 the application or modify settings and Store again.'''
-        messagebox.showinfo('Success', msg)
+        tkMessageBox.showinfo('Success', msg)
         return 0
 
     except Exception as e:
-        messagebox.showerror('Error Occurred', 'An Error occurred while attempting to store settings:\n%s' % str(e))
+        tkMessageBox.showerror('Error Occurred', 'An Error occurred while attempting to store settings:\n%s' % str(e))
         return -1
 
 def inet_visibility():
@@ -127,7 +128,7 @@ def gas_id_visibility():
 
 def select_other_setting():
     global other_settings_fn
-    other_settings_fn = filedialog.askopenfilename()
+    other_settings_fn = tkFileDialog.askopenfilename()
     other_settings_var.set(SETTINGS_FILE_TMPL % other_settings_fn)
 
 root = Tk()

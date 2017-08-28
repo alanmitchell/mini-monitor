@@ -25,7 +25,7 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
-# Version 1.9:  2017-08-24. GUI utility for editing Settings File.
+# Version 1.9:  2017-08-28. GUI utility for editing Settings File.
 # Version 1.8:  2017-08-11. Meter Reader and Cellular modem changes.
 # Version 1.7:  Implmented MQTT Broker and restructured app to use it.
 #               Add the Utility Meter reader script.

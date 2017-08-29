@@ -62,6 +62,10 @@ The first issue to address is setting up Internet Access. Here are three possibi
    Raspberry 3, or through a USB WiFi adapter plugged into a USB port. For more details
    on setting up a WiFi connection for the Raspberry Pi,
    `click here <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>`_.
+   Note that the ``wpa_supplicant.conf`` file discussed in the document is available in
+   the same directory as the Settings file discussed in the next section, i.e.
+   ``pi_logger/wpa_supplicant.conf``.  It can be edited directly from the PC that
+   wrote the image onto the SD card.
 *  Internet access through a Cellular Modem connecting to a mobile data network.  For
    certain Huawei cellular modems (models E173u-6, E173s-65, E3276s-500, E3276s-505, and
    E1756C) connecting to the GCI (Alaska) mobile data network, configuration just involves
@@ -71,6 +75,12 @@ The first issue to address is setting up Internet Access. Here are three possibi
    ``pi_logger/wvdial.conf`` file on the SD card will be required.  See
    documentation of the `WvDial program <https://linux.die.net/man/1/wvdial>`_
    for further information.
+
+There is a now a GUI-based setup utility available that can easily configure Internet access
+and a few other key settings.  This utility is found in the root directory on the SD
+card, and can be run from the Windows PC or the Mac PC that created the card.  The file
+name of the utility is ``settings_editor_win.exe`` for use on a Windows PC, and
+``settings_editor_mac`` for use on a Mac PC.
 
 Configure Settings File for your Application
 --------------------------------------------

@@ -93,7 +93,7 @@ while True:
         ts_cur = time.time()
         read_cur = float(flds[7])
 
-        commod_type = int(flds[5])    # Commodity type: 12 for Itron 100G Gas Meter messages
+        commod_type = int(flds[4])    # Commodity type: 12 for Itron 100G Gas Meter messages
         logging.debug('%s %s %s %s' % (ts_cur, meter_id, read_cur, commod_type))
 
         ts_last, read_last = get_last(meter_id)

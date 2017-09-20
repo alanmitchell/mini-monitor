@@ -49,7 +49,6 @@ def store_settings():
             substitutions += [
                 (r'ENABLE_METER_READER\s*=', 'ENABLE_METER_READER = True'),
                 (r'METER_IDS\s*=', 'METER_IDS = [%s]' % meter_ids),
-                (r'METER_MULT\s*=', 'METER_MULT = 1000.0'),
             ]
         else:
             substitutions += [

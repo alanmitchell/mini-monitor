@@ -17,8 +17,11 @@ This script has a number of relevant values in the Mini-Monitor settings file:
     ENABLE_METER_READER = True or False, determining whether this script runs.
     METER_IDS = A Python list indicating those meter IDs to record and post.
     METER_POST_INTERVAL = Minutes between posting of the meter reading change.
-    METER_MULT = A multiplier to apply to the meter change rate before posting
-        to the MQTT broker.
+    Multipliers applied to the meter change rate before posting to the MQTT
+    Broker
+    METER_MULT_GAS = Gas Meter Multiplier
+    METER_MULT_ELEC = Electric Meter Multiplier
+    METER_MULT_WATER = Water Meter Multiplier
 '''
 import subprocess
 import signal
@@ -75,6 +78,27 @@ rtlamr = subprocess.Popen(['/home/pi/gocode/bin/rtlamr',
     '-gainbyindex=24',   # index 24 was found to be the most sensitive
     '-format=csv'], stdout=subprocess.PIPE)
 
+# Get the Meter multipliers from the Settings file and put
+# them into a dictionary.
+meter_mult = {
+    'Gas': getattr(settings, 'METER_MULT_GAS', 1000.0),
+    'Elec': getattr(settings, 'METER_MULT_ELEC', 1.0),
+    'Water': getattr(settings, 'METER_MULT_WATER', 1.0),
+}
+
+# Map of Commodity IDs to Meter Type
+commod_map = {
+    2: 'Gas',
+    4: 'Elec',
+    5: 'Elec',
+    7: 'Elec',
+    8: 'Elec',
+    9: 'Gas',
+    11: 'Water',
+    12: 'Gas',
+    13: 'Water',
+}
+
 while True:
 
     try:
@@ -93,8 +117,17 @@ while True:
         ts_cur = time.time()
         read_cur = float(flds[7])
 
-        commod_type = int(flds[4])    # Commodity type: 12 for Itron 100G Gas Meter messages
+        # Determine the type of meter and the multiplier from the Commodity
+        # Type in the message.
+        commod_type = int(flds[4])    # Commodity type number
+        commod = commod_map.get(commod_type, 'Elec')
+        multiplier = meter_mult[commod]
+
         logging.debug('%s %s %s %s' % (ts_cur, meter_id, read_cur, commod_type))
+
+        # if the multiplier for this commodity is zero, then skip the reading
+        if multiplier == 0.0:
+            continue
 
         ts_last, read_last = get_last(meter_id)
         if ts_last is None:
@@ -104,12 +137,15 @@ while True:
         if ts_cur > ts_last + settings.METER_POST_INTERVAL * 60.0:
             # enough time has elapsed to make a post.  calculate the
             # rate of meter reading change per hour.
-            rate = (read_cur - read_last) * 3600.0 * getattr(settings, 'METER_MULT', 1.0) / (ts_cur - ts_last)
+            rate = (read_cur - read_last) * 3600.0 * multiplier / (ts_cur - ts_last)
             
             # time stamp in the middle of the reading period
             ts_post = (ts_cur + ts_last) / 2.0
 
-            mqtt.publish('readings/final/meter_reader', '%s\t%s_%s\t%s' % (int(ts_post), settings.LOGGER_ID, meter_id, rate) )
+            mqtt.publish(
+                'readings/final/meter_reader',
+                '%s\t%s_%02d_%s\t%s' % (int(ts_post), settings.LOGGER_ID, commod_type, meter_id, rate)
+            )
             set_last(meter_id, ts_cur, read_cur)
 
     except:

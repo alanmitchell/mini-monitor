@@ -98,6 +98,7 @@ SENSAPHONE_HOST_IP = '10.30.5.77'
 ENABLE_METER_READER = False
 
 # A Python list of the Meter IDs you wish to capture and post.
+# Use empty brackets to read all meters, i.e.:  []
 METER_IDS = [1234, 6523, 1894]
 
 # The minimum number of minutes between postings. If you set
@@ -105,10 +106,15 @@ METER_IDS = [1234, 6523, 1894]
 # will be low.
 METER_POST_INTERVAL = 30  # minutes
 
-# This multiplier is applied to the rate of change calculated from
-# sequential meter readings.  It can be used to convert that
+# The multipliers below are applied to the rate of change calculated from
+# sequential meter readings.  They can be used to convert that
 # rate of change into engineering units, such as BTU/hour.
-METER_MULT = 1.0
+# There is a separate multiplier for Gas Meters, Electric Meters and Water Meters.
+# *** NOTE: If you set a multiplier to 0, that type of Meter (gas, electric, water)
+# will not be recorded by the Mini Monitor.
+METER_MULT_GAS = 1000.0       # Converts Cubic Feet/hour to Btu/hour
+METER_MULT_ELEC = 1.0         # Electric Meter Multiplier
+METER_MULT_WATER = 1.0        # Water Meter Multiplier
 
 # --- Pulse Counter script ---
 # See pi-energy-sensors GitHub project

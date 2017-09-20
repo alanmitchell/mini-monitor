@@ -327,6 +327,7 @@ Settings related to Recording Transmissions from Utility Meters
     ENABLE_METER_READER = False
 
     # A Python list of the Meter IDs you wish to capture and post.
+    # Use empty brackets to read all meters, i.e.:  []
     METER_IDS = [1234, 6523, 1894]
 
     # The minimum number of minutes between postings. If you set
@@ -334,10 +335,15 @@ Settings related to Recording Transmissions from Utility Meters
     # will be low.
     METER_POST_INTERVAL = 30  # minutes
 
-    # This multiplier is applied to the rate of change calculated from
-    # sequential meter readings.  It can be used to convert that
+    # The multipliers below are applied to the rate of change calculated from
+    # sequential meter readings.  They can be used to convert that
     # rate of change into engineering units, such as BTU/hour.
-    METER_MULT = 1.0
+    # There is a separate multiplier for Gas Meters, Electric Meters and Water Meters.
+    # *** NOTE: If you set a multiplier to 0, that type of Meter (gas, electric, water)
+    # will not be recorded by the Mini Monitor.
+    METER_MULT_GAS = 1000.0       # Converts Cubic Feet/hour to Btu/hour
+    METER_MULT_ELEC = 1.0         # Electric Meter Multiplier
+    METER_MULT_WATER = 1.0        # Water Meter Multiplier
 
 These settings are for the script that can receive meter reading
 transmissions from certain Utility meters. See the :ref:`hardware`
@@ -352,18 +358,26 @@ the Meter ID number on the meter nameplate, as shown in this picture:
 
 .. image:: /_static/meter_id.jpg
 
+You can also use a ``METER_IDS`` setting of empty brackets, ``[]`` to
+record all meters received by the Mini Monitor.
+
 ``METER_POST_INTERVAL`` is the minimum number of minutes between meter
 readings that are used to create a recorded/posted value. As explained
 in the :ref:`available-sensor-readers` document, the script posts the amount 
 the utility meter value has changed, so if this
 ``METER_POST_INTERVAL`` is too short, a low resolution change value will
-be reported.  Finally the ``METER_MULT`` setting is a multiplier that
-is applied to the rate of change value determined by the meter reader
+be reported.
+
+Finally the various ``METER_MULT_`` settings give multipliers that
+are applied to the rate of change value determined by the meter reader
 before it is sent to be stored or posted.  The meter reader normally
 calculates a rate of change per hour;  for a natural gas meter that
-value usually has the units of cubic feet per hour.  Setting ``METER_MULT``
+value usually has the units of cubic feet per hour.  Setting ``METER_MULT_GAS``
 to 1000.0 then converts the value to BTU/hour, since there are
 approximately 1,000 BTUs per cubic foot of natural gas.
+
+If any of the ``METER_MULT_`` settings are set to 0, that type of meter will
+be ignored and not recorded.
 
 Upgrade Mini-Monitor Software to Newest Release
 -----------------------------------------------

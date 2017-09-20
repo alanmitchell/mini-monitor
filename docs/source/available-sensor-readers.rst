@@ -436,18 +436,30 @@ hour. For example, if a natural gas meter reads 10,123 cubic feet at
 Noon and then reads 10,145 cubic feet at 12:30 pm, the change in reading
 was 22 cubic feet and it occurred over a half hour period. The script
 will report a value of 44 cubic feet per hour, since this is the rate of
-change expressed using an hourly time base. The BMON server software can
-utilize a Transform function to translate that value into BTU/hour, if
-desired (the Transform function would be: val \* 1000.0, if the gas
-contains 1,000 BTUs/cubic foot).
+change expressed using an hourly time base. Multipliers are available in the
+Settings file to translate these values to other units (such as Btu/hour), if
+desired.
 
 Here is the summary table showing the fields reported by the script. An
 example of a Sensor ID for an installation with a ``LOGGER_ID`` of
-``123main`` would be ``123main_32707556``. The ``32707556`` is the ID of
-the meter, which is generally found on the nameplate of the meter.
+``123main`` would be ``123main_12_32707556``. The ``12`` is the Commodity
+Type transmitted by the meter and ``32707556`` is the ID of
+the meter. The Commodity Type and the Meter ID are generally found on the
+nameplate of the meter.
 
-+------------------------+---------------------------------+----------------+
-| Sensor ID              | Value                           | Reading Type   |
-+========================+=================================+================+
-| <LOGGER_ID>_<METER_ID> | Meter Reading Change per Hour   | VALUE          |
-+------------------------+---------------------------------+----------------+
++-----------------------------------------+---------------------------------+----------------+
+| Sensor ID                               | Value                           | Reading Type   |
++=========================================+=================================+================+
+| <LOGGER_ID>_<COMMODITY_TYPE>_<METER_ID> | Meter Reading Change per Hour   | VALUE          |
++-----------------------------------------+---------------------------------+----------------+
+
+Here is a table showing how Commodity Type numbers translate into actual
+metered commodities:
+
++--------------+------------------------+
+| Commodity    | Commodity Type Numbers |
++==============+========================+
+| Electric     | 04, 05, 07, 08         |
+| Gas          | 02, 09, 12             |
+| Water        | 11, 13                 |
++--------------+------------------------+

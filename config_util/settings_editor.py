@@ -40,9 +40,6 @@ def store_settings():
             if len(w_ssid.strip())==0:
                 tkMessageBox.showerror('No WiFi Name', 'You must enter a WiFi Network Name.')
                 return -1
-            if len(w_pass.strip())==0:
-                tkMessageBox.showerror('No WiFi Password', 'You must enter a WiFi Password.')
-                return -1
 
         substitutions = [
             (r'LOGGER_ID\s*=', "LOGGER_ID = '%s'" % logger_id)
@@ -163,12 +160,12 @@ site_entry.grid(column=0, row=1, sticky=W)
 # Gas Meter Reader related
 enable_gas = StringVar()
 enable_gas_check = ttk.Checkbutton(mainframe,
-                                   text='Enable Gas Meter Reader',
+                                   text='Enable Meter Reader',
                                    variable=enable_gas,
                                    command=gas_id_visibility)
 enable_gas.set('1')
 enable_gas_check.grid(column=0, row=3, sticky=W)
-meter_ids_label = ttk.Label(mainframe, text='Enter Gas Meter ID. If more than one, separate with commas.')
+meter_ids_label = ttk.Label(mainframe, text='Enter Meter ID. Separate Multiple IDs with commas. Leave Blank to read All meters.')
 meter_ids_label.grid(column=0, row=4, sticky=W)
 meter_ids_entry = ttk.Entry(mainframe, width=50)
 meter_ids_entry.grid(column=0, row=5, sticky=W)
@@ -190,7 +187,7 @@ wifi_frame.grid(column=0, row=7, sticky=W)
 ttk.Label(wifi_frame, text='WiFi Network Name:').grid(column=0, row=0, sticky=E)
 wifi_ssid_entry = ttk.Entry(wifi_frame, width=30)
 wifi_ssid_entry.grid(column=1, row=0)
-ttk.Label(wifi_frame, text='WiFi Password:').grid(column=0, row=1, sticky=E)
+ttk.Label(wifi_frame, text='WiFi Password (leave blank if Open network):').grid(column=0, row=1, sticky=E)
 wifi_pass_entry = ttk.Entry(wifi_frame, width=30)
 wifi_pass_entry.grid(column=1, row=1, sticky=W)
 for child in wifi_frame.winfo_children():

@@ -25,11 +25,23 @@ update_config=1
     psk="%s"
 }
 '''
+    # Open WiFi connection version
+    wifi_open_info = '''network={
+    ssid="%s"
+    scan_ssid=1
+    key_mgmt=NONE
+}
+'''
 
     if ssid is None:
+        # Not a WiFi connection
         return header
-
-    return header + (wifi_info % (ssid, psk))
+    elif psk.strip():
+        # Secure WiFi
+        return header + (wifi_info % (ssid, psk))
+    else:
+        # Open WiFi
+        return header + (wifi_open_info % ssid)
 
 def replace_line(file_contents, replacements):
     """Replaces lines in a file with a new line, based on search

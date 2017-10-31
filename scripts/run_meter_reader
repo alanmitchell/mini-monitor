@@ -1,5 +1,9 @@
 #!/bin/bash
 # This scripts starts and restarts, if necessary, the meter_reader.py program.
+
+# Sleep for a minute, as rtlamr seems to need that time to run successfully.
+sleep 60
+
 until /home/pi/pi_logger/meter_reader.py; do
     echo "Server 'meter_reader.py' crashed with exit code $?.  Respawning.." >&2
     sleep 2

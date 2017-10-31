@@ -52,10 +52,7 @@ fi
 if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
 then
 	/home/pi/pi_logger/scripts/run_rtl_tcp &
-
-	# For some reason, I need to delay start of meter_reader.py, which
-	# starts rtlamr.  The 'at' command does this.
-	echo "/home/pi/pi_logger/scripts/run_meter_reader &" | at now + 2 minutes
+	/home/pi/pi_logger/scripts/run_meter_reader &
 fi
 
 # Turn off he HDMI interface to save power

@@ -39,8 +39,16 @@ try:
     if settings.REBOOT_DAYS>0 and uptime > settings.REBOOT_DAYS * 3600 * 24:
         logger.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
         utils.reboot()
-    
-    # Count the number of logged errors that occurred in the last 5 minutes and 
+
+    # if WiFi is being used (as evidenced by an SSID in the wpa_supplicant file)
+    # try to ping Google and if no response, cycle the WiFi interface.
+    if 'ssid' in open('/etc/wpa_supplicant/wpa_supplicant.conf').read():
+        subprocess.call(
+            '/bin/ping -q -c2 8.8.8.8 || (/sbin/ifdown --force wlan0;/sbin/ifup wlan0)',
+            shell=True
+        )
+
+    # Count the number of logged errors that occurred in the last 5 minutes and
     # reboot if an excessive count.
     # Log file timestamps are in UTC.
     fname = '/var/log/pi_log.log'

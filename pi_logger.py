@@ -25,6 +25,7 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
+# Version 2.1:  2017-11-02: Improved meter reader start up & WiFi reliability
 # Version 2.0:  Added Commodity ID to Sensor ID for Meter Reader
 # Version 1.9:  2017-08-28. GUI utility for editing Settings File.
 # Version 1.8:  2017-08-11. Meter Reader and Cellular modem changes.
@@ -35,7 +36,7 @@ import settings
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 2.0
+settings.VERSION = 2.1
 #***********************************************************************
 
 # Create the object to control the reading and logging process

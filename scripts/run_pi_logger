@@ -1,5 +1,7 @@
 #!/bin/bash
 # This scripts starts and restarts, if necessary, the main pi_logger.py program.
+# Delay 30 seconds before starting so NTP can set time
+sleep 30
 until /home/pi/pi_logger/pi_logger.py; do
     echo "Server 'pi_logger.py' crashed with exit code $?.  Respawning.." >&2
     sleep 2

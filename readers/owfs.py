@@ -22,7 +22,7 @@ class OWFSreader(base_reader.Reader):
             if dev.startswith('/28.'):
                 try:
                     val = subprocess.check_output(['owread', '/uncached%s/temperature' % dev])
-                    val = float(val)
+                    val = float(val)*1.8 + 32.0    # convert to deg F
                     readings.append(
                         [ts, '%s_%s' % (self._settings.LOGGER_ID, dev[1:]), val, base_reader.VALUE]
                     )

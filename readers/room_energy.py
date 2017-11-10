@@ -1,6 +1,6 @@
 #!/usr/bin/python
-"""Module used with classes to read the DG-700 pressure gauge.
-Use the DG700reader class.
+"""Module used with classes to read the sensors on the Room Energy
+Add-on board: temperature, humidity, light and CO2.
 """
 from __future__ import division   # do floating point div even with integers
 import time

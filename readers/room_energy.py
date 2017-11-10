@@ -6,7 +6,7 @@ from __future__ import division   # do floating point div even with integers
 import time
 import smbus
 import base_reader
-
+import lib.tsl2591
 
 class RoomEnergyReader(base_reader.Reader):
     """Class to read values from the Room Energy Monitor.
@@ -36,10 +36,15 @@ class RoomEnergyReader(base_reader.Reader):
         temp_F = -49 + (315 * temp / 65535.0)
         humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
 
+        tsl = lib.tsl2591.Tsl2591()
+        full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and ir spectrum)
+        lux = tsl.calculate_lux(full, ir)  # convert raw values to lux
+
         ts = time.time()
 
         return [ (ts, '%s_rm_temp' % self._settings.LOGGER_ID, temp_F, base_reader.VALUE),
-                 (ts, '%s_rm_humid' % self._settings.LOGGER_ID, humidity, base_reader.VALUE)]
+                 (ts, '%s_rm_humid' % self._settings.LOGGER_ID, humidity, base_reader.VALUE),
+                 (ts, '%s_rm_light' % self._settings.LOGGER_ID, lux, base_reader.VALUE)]
 
 if __name__=='__main__':
     from pprint import pprint    

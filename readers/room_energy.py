@@ -13,7 +13,8 @@ class RoomEnergyReader(base_reader.Reader):
     """
 
     def read(self):
-        """Read values from the DG-700 and return as a list.
+        """Read values from the Room Energy Monitor board and
+        return as a list.
         """
 
         # Get I2C bus

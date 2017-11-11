@@ -1,6 +1,7 @@
 #!/usr/bin/python
 """Module used to read Maxim 1-Wire sensors using the OWFS software.
 OWFS must be installed and configured, as shown here and in other tutorials:
+https://www.packtpub.com/books/content/raspberry-pi-and-1-wire
 http://www.sheepwalkelectronics.co.uk/RPI2_software.php
 """
 from __future__ import division   # do floating point div even with integers

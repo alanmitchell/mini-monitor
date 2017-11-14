@@ -28,7 +28,7 @@ System and the entire Mini-Monitor software application. You can
 download a zipped version of this image from the link below. The file is
 about 1 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.2 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2017-11-02.zip>`_
+`Mini-Monitor SD Card Image (1.2 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2017-11-13.zip>`_
 
 First unzip the file to extract an '.img' file, which is the SD card image. Use the `instructions
 here <https://www.raspberrypi.org/documentation/installation/installing-images/>`_
@@ -81,6 +81,12 @@ and a few other key settings.  This utility is found in the root directory on th
 card, and can be run from the Windows PC or the Mac PC that created the card.  The file
 name of the utility is ``settings_editor_win.exe`` for use on a Windows PC, and
 ``settings_editor_mac`` for use on a Mac PC.
+
+If you need to set up a static IP address for the Raspberry Pi, the ``pi_logger/dhcpcd.conf``
+is available for that purpose.  See
+`this article <https://raspberrypi.stackexchange.com/questions/37920/how-do-i-set-up-networking-wifi-static-ip-address/74428#74428>`_ .
+The appropriate settings lines are at the bottom of the ``dhcpcd.conf`` file, but are commented
+out by default.
 
 Configure Settings File for your Application
 --------------------------------------------

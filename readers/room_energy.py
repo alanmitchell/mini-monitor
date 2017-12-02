@@ -8,6 +8,14 @@ import smbus
 import base_reader
 import lib.tsl2591
 
+def co2(i2c_bus):
+    i2c_bus.write_i2c_block_data(0x15, 0x04, [0x13, 0x8B, 0x00, 0x01])
+    time.sleep(2)
+    data = i2c_bus.read_i2c_block_data(0x15, 0x00, 4)
+    msb = data[2]
+    lsb = data[3]
+    return (((msb & 0x3F) << 8) | lsb)
+
 class RoomEnergyReader(base_reader.Reader):
     """Class to read values from the Room Energy Monitor.
     """
@@ -37,15 +45,20 @@ class RoomEnergyReader(base_reader.Reader):
         temp_F = -49 + (315 * temp / 65535.0)
         humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
 
-        tsl = lib.tsl2591.Tsl2591()
-        full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and ir spectrum)
-        lux = tsl.calculate_lux(full, ir)  # convert raw values to lux
+        #tsl = lib.tsl2591.Tsl2591()
+        #full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and ir spectrum)
+        #lux = tsl.calculate_lux(full, ir)  # convert raw values to lux
+
+        # Read the CO2
+        co2_ppm = co2(bus)
 
         ts = time.time()
 
         return [ (ts, '%s_rm_temp' % self._settings.LOGGER_ID, temp_F, base_reader.VALUE),
                  (ts, '%s_rm_humid' % self._settings.LOGGER_ID, humidity, base_reader.VALUE),
-                 (ts, '%s_rm_light' % self._settings.LOGGER_ID, lux, base_reader.VALUE)]
+                 #(ts, '%s_rm_light' % self._settings.LOGGER_ID, lux, base_reader.VALUE),
+                 (ts, '%s_rm_co2' % self._settings.LOGGER_ID, co2_ppm, base_reader.VALUE),
+        ]
 
 if __name__=='__main__':
     from pprint import pprint    

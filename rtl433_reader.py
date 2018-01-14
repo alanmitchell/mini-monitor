@@ -128,6 +128,11 @@ while True:
                 '%s\t%s\t%s' % (ts_avg, reading_id, val_avg)
 
             )
+
+        # clear out readings to prep for next logging period
+        final_read_data = {}
+
+        # Post the summarized readings
         if len(lines_to_post):
             mqtt.publish(
                 'readings/final/rtl433_reader',

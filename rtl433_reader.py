@@ -95,6 +95,12 @@ while True:
         val_list = readings.get(k, [])
         val_list.append( (flds['temperature_C'] * 1.8 + 32.0, flds['humidity']) )
         readings[k] = val_list
+
+    except KeyboardInterrupt:
+        # Allows Ctrl-C to stop program.
+        rtl433.kill()
+        sys.exit(0)
+
     except:
         logging.exception('Error processing a sensor reading: %s' % lin)
 

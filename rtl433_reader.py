@@ -7,6 +7,7 @@ import signal
 import sys
 import logging
 import threading
+import Queue
 import numpy as np
 import mqtt_poster
 import config_logging
@@ -29,7 +30,7 @@ class RTLreceiver(threading.Thread):
         # If only thing left running are daemon threads, Python will exit.
         self.daemon = True
         self._rtl433 = subprocess.Popen(['/usr/local/bin/rtl_433', '-R40', '-Fjson', '-U'], stdout=subprocess.PIPE)
-        self._lines = self.Queue()
+        self._lines = Queue.Queue()
         self._stop_thread = False
 
     def run(self):

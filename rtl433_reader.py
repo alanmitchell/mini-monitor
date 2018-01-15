@@ -6,6 +6,7 @@ import calendar
 import signal
 import sys
 import logging
+import threading
 import numpy as np
 import mqtt_poster
 import config_logging
@@ -20,17 +21,53 @@ logging.warning('rtl433_reader has restarted')
 sys.path.insert(0, '/boot/pi_logger')
 import settings
 
+class RTLreceiver(threading.Thread):
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+        # If only thing left running are daemon threads, Python will exit.
+        self.daemon = True
+        self._rtl433 = subprocess.Popen(['/usr/local/bin/rtl_433', '-R40', '-Fjson', '-U'], stdout=subprocess.PIPE)
+        self._lines = self.Queue()
+        self._stop_thread = False
+
+    def run(self):
+        while True:
+            lin = self._rtl433.stdout.readline().strip()
+            self._lines.put(lin)
+            if self._stop_thread:
+                break
+
+    def readings_available(self):
+        return (self._lines.qsize() > 0)
+
+    def get_reading(self):
+        a_line = self._lines.get()
+        self._lines.task_done()
+        return a_line
+
+    def kill(self):
+        self._stop_thread = True
+        self._rtl433.kill()
+
 def shutdown(signum, frame):
     '''Kills the external processes that were started by this script
     '''
-    rtl433.kill()
+    rtl_receiver.kill()
     sys.exit(0)
 
 # If process is being killed, go through shutdown process
 signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
 
+# Main Script body here
+
 try:
+    # Start the RTL_433 receiver
+    rtl_receiver = RTLreceiver()
+    rtl_receiver.start()
+
     # Start up the object that will post the final readings to the MQTT
     # broker.
     mqtt = mqtt_poster.MQTTposter()
@@ -41,13 +78,6 @@ try:
 
     # get the base Logger ID from the settings file
     logger_id = settings.LOGGER_ID
-
-    # start the RTL 433 reading command line program
-    # Could put the reading of subprocess in a separate thread, and the
-    # new lines could be put in a Queue accessed by this thread.  That would
-    # allow consistent checking of when the logging interval is done, without
-    # having to wait for a new sensor reading to come in before checking.
-    rtl433 = subprocess.Popen(['/usr/local/bin/rtl_433', '-R40', '-Fjson', '-U'], stdout=subprocess.PIPE)
 
 except:
     logging.exception('Error initializing the script.')
@@ -89,79 +119,81 @@ readings = {}
 
 while True:
     try:
-        lin = rtl433.stdout.readline().strip()
-        flds = eval(lin)
-        k = (flds['time'], flds['id'])
-        val_list = readings.get(k, [])
-        val_list.append( (flds['temperature_C'] * 1.8 + 32.0, flds['humidity']) )
-        readings[k] = val_list
+        time.sleep(1)
+        try:
+            if rtl_receiver.readings_available():
+                lin = rtl_receiver.get_reading()
+                flds = eval(lin)
+                k = (flds['time'], flds['id'])
+                val_list = readings.get(k, [])
+                val_list.append( (flds['temperature_C'] * 1.8 + 32.0, flds['humidity']) )
+                readings[k] = val_list
+
+        except:
+            logging.exception('Error processing a sensor reading: %s' % lin)
+
+        # process any items in the reading list that have 3 values or are older than 3 seconds ago
+        for ky, vals in readings.items():
+            try:
+                ts_str, id = ky
+                ts = time.strptime(ts_str, '%Y-%m-%d %H:%M:%S')
+                ts = calendar.timegm(ts)
+                if len(vals) == 3 or (time.time() - ts >= 3.0):
+                    del readings[ky]
+
+                    # only process if there are at least two readings
+                    if len(vals) >= 2:
+                        # sort the readings
+                        vals = sorted(vals)
+                        # try to find two matching readings
+                        if vals[0] == vals[1]:
+                            add_readings(ts, id, vals[0])
+                            print ts_str, id, vals[0], len(vals)
+                        elif vals[-1] == vals[-2]:
+                            add_readings(ts, id, vals[-1])
+                            print ts_str, id, vals[-1], len(vals)
+            except:
+                logging.exception('Error processing %s: %s' % (ky, vals))
+
+        # see if it is time to post summarized readings
+        if time.time() > next_log_time:
+            next_log_time += settings.LOG_INTERVAL
+
+            lines_to_post = []
+            for reading_id, reading_list in final_read_data.items():
+                try:
+                    # make a separate numpy array of values and time stamps
+                    rd_arr = np.array(reading_list)
+                    ts_arr = rd_arr[:, 0]  # first column
+                    val_arr = rd_arr[:, 1]  # second column
+                    # calculate the average value to log
+                    val_avg = val_arr.mean()
+                    # limit this value to 5 significant figures
+                    val_avg = float('%.5g' % val_avg)
+                    # calculate the average timestamp to log and convert to
+                    # integer seconds
+                    ts_avg = int(ts_arr.mean())
+                    lines_to_post.append(
+                        '%s\t%s\t%s' % (ts_avg, reading_id, val_avg)
+
+                    )
+                except:
+                    logging.exception('Error preparing to post: %s' % reading_id)
+
+            # clear out readings to prep for next logging period
+            final_read_data = {}
+
+            # Post the summarized readings
+            try:
+                if len(lines_to_post):
+                    mqtt.publish(
+                        'readings/final/rtl433_reader',
+                        '\n'.join(lines_to_post)
+                    )
+                    logging.info('%d readings posted.' % len(lines_to_post))
+            except:
+                logging.exception('Error posting: %s' % lines_to_post)
 
     except KeyboardInterrupt:
-        # Allows Ctrl-C to stop program.
-        rtl433.kill()
+        rtl_receiver.kill()
         sys.exit(0)
-
-    except:
-        logging.exception('Error processing a sensor reading: %s' % lin)
-
-    # process any items in the reading list that have 3 values or are older than 3 seconds ago
-    for ky, vals in readings.items():
-        try:
-            ts_str, id = ky
-            ts = time.strptime(ts_str, '%Y-%m-%d %H:%M:%S')
-            ts = calendar.timegm(ts)
-            if len(vals) == 3 or (time.time() - ts >= 3.0):
-                del readings[ky]
-
-                # only process if there are at least two readings
-                if len(vals) >= 2:
-                    # sort the readings
-                    vals = sorted(vals)
-                    # try to find two matching readings
-                    if vals[0] == vals[1]:
-                        add_readings(ts, id, vals[0])
-                        print ts_str, id, vals[0], len(vals)
-                    elif vals[-1] == vals[-2]:
-                        add_readings(ts, id, vals[-1])
-                        print ts_str, id, vals[-1], len(vals)
-        except:
-            logging.exception('Error processing %s: %s' % (ky, vals))
-
-    # see if it is time to post summarized readings
-    if time.time() > next_log_time:
-        next_log_time += settings.LOG_INTERVAL
-
-        lines_to_post = []
-        for reading_id, reading_list in final_read_data.items():
-            try:
-                # make a separate numpy array of values and time stamps
-                rd_arr = np.array(reading_list)
-                ts_arr = rd_arr[:, 0]  # first column
-                val_arr = rd_arr[:, 1]  # second column
-                # calculate the average value to log
-                val_avg = val_arr.mean()
-                # limit this value to 5 significant figures
-                val_avg = float('%.5g' % val_avg)
-                # calculate the average timestamp to log and convert to
-                # integer seconds
-                ts_avg = int(ts_arr.mean())
-                lines_to_post.append(
-                    '%s\t%s\t%s' % (ts_avg, reading_id, val_avg)
-
-                )
-            except:
-                logging.exception('Error preparing to post: %s' % reading_id)
-
-        # clear out readings to prep for next logging period
-        final_read_data = {}
-
-        # Post the summarized readings
-        try:
-            if len(lines_to_post):
-                mqtt.publish(
-                    'readings/final/rtl433_reader',
-                    '\n'.join(lines_to_post)
-                )
-                logging.info('%d readings posted.' % len(lines_to_post))
-        except:
-            logging.exception('Error posting: %s' % lines_to_post)

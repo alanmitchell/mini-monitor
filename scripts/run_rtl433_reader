@@ -1,0 +1,9 @@
+#!/bin/bash
+# This scripts starts and restarts, if necessary, the rtl433_reader.py program.
+# Sleep for a minute, as rtlamr seems to need that time to run successfully.
+sleep 60
+
+until /home/pi/pi_logger/rtl433_reader.py; do
+    echo "Server 'rtl433_reader.py' crashed with exit code $?.  Respawning.." >&2
+    sleep 2
+done

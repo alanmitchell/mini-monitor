@@ -39,7 +39,7 @@ def reboot():
     # shut off the power to the USB ports to essentially force a hardware
     # reboot of all of those devices.  Power will automatically restore
     # during reboot.
-    subprocess.call('/usr/local/bin/hub-ctrl -h 0 -P 2 p 0', shell=True)
+    subprocess.call('/usr/local/bin/hub-ctrl -h 0 -P 2 p 0')
 
     # rtlamr is stubborn to kill, so force a reboot with the -f flag
     subprocess.call('/sbin/reboot -f now', shell=True)

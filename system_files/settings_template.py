@@ -59,7 +59,8 @@ READERS = [
 #'dg700.DG700reader',             # Energy Conservatory DG-700 Pressure Gauge
 #'labjack.LabjackTempReader',     # Thermistors connected to Labjack U3
 #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000
-'sys_info.SysInfo',               # System uptime, CPU temperature, software version
+#'outage_monitor.OutageMonitor',  # Detects Power Outages through state of GPIO pin
+'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]
 
 # -------- Flags and Variables that control application health checks

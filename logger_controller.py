@@ -39,6 +39,9 @@ class LoggerController:
         self.poster = mqtt_poster.MQTTposter()
         self.poster.start()
 
+        # track whether a call has been make to log readings before.
+        self.first_log_call = True
+
 
     def add_reader(self, reader):
         """Adds an object to the list of sensor readers.  Each reader object must have a 
@@ -83,11 +86,19 @@ class LoggerController:
                     elif reading_type == readers.base_reader.STATE:
                         # create a summarized reading for every state change, and 
                         # also for the last reading even if it is not a state
-                        # change.
+                        # change.  If this is the first logging event after reboot,
+                        # then also record the first reading
+
+                        # make list of the timestamps of the special readings to record (always the
+                        # last reading, and the first reading if a reboot just occurred.
+                        special_ts = [ts_arr[-1]]    # last reading
+                        if self.first_log_call:
+                            # on first logging call, record the initial reading also
+                            special_ts.append(ts_arr[0])
+
                         last_state = val_arr[0]
-                        ts_of_last_reading = ts_arr[-1]
-                        for ts, val in reading_list[1:]:
-                            if (val != last_state) or (ts==ts_of_last_reading):
+                        for ts, val in reading_list:
+                            if (val != last_state) or (ts in special_ts):
                                 summarized_readings.append( (int(ts), reading_id, val) )
                                 last_state = val
                         # need to save the last state for the next logging interval
@@ -106,6 +117,8 @@ class LoggerController:
         # Reset the reading data structure. The 'new_read_data' includes the 
         # last readings from the STATE type sensors.
         self.read_data = new_read_data
+
+        self.first_log_call = False   # a call has now been made to this routine
         
         # Post summarized readings to the MQTT broker, if there
         # are any summarized readings

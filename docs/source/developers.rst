@@ -179,7 +179,6 @@ via the following lines in the ``/etc/fstab`` file.
     tmpfs  /tmp      tmpfs  defaults,noatime,nosuid,size=100m            0 0
     tmpfs  /var/tmp  tmpfs  defaults,noatime,nosuid,size=30m             0 0
     tmpfs  /var/log  tmpfs  defaults,noatime,nosuid,mode=0755,size=100m  0 0
-    tmpfs  /var/run  tmpfs  defaults,noatime,nosuid,mode=0755,size=2m    0 0
 
 These directories, particularly the ``/var/log`` directory experience
 numerous write operations, and mounting these on a RAM disk eliminates

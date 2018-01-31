@@ -62,41 +62,6 @@ def backup_files():
         # operation.
         pass
 
-    try:
-        # Copy the reading post queue from the RAM disk to non-volatile
-        # storage.
-        # Before copying the database file, need to force a lock on it so that no
-        # write operations occur during the copying process
-
-        fname = '/var/run/postQ.sqlite'
-        fname_bak = '/var/local/postQ.sqlite'   # non-volatile
-        conn = sqlite3.connect(fname)
-        cursor = conn.cursor()
-
-        # create a dummy table to write into.
-        try:
-            cursor.execute('CREATE TABLE _junk (x integer)')
-        except:
-            # table already existed
-            pass
-
-        # write a value into the table to create a lock on the database
-        cursor.execute('INSERT INTO _junk VALUES (1)')
-
-        # now copy database
-        shutil.copy(fname, fname_bak)
-
-        # Rollback the Insert as we don't really need it.
-        conn.rollback()
-        conn.close()
-
-        logger.info('Backed up Post database.')
-
-    except:
-        # continue on if there is a problem with this non-essential
-        # operation.
-        pass
-
 def ip_addrs():
     """Returns a list of IP addresses assigned to network interfaces on this
     system, ignoring the loopback interface.  Returns an empty list if an

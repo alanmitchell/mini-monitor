@@ -44,7 +44,11 @@ import settings
 def shutdown(signum, frame):
     '''Kills the external processes that were started by this script
     '''
-    rtlamr.kill()
+    # Hard kill these processes and I have found them difficult to kill with SIGTERM
+    subprocess.call('/usr/bin/pkill -9 rtlamr', shell=True)
+    subprocess.call('/usr/bin/pkill -9 rtl_tcp', shell=True)
+    # Also found that I need to hard kill this process as well (suicide)
+    subprocess.call('/usr/bin/pkill -9 meter_reader', shell=True)
     sys.exit(0)
 
 # If process is being killed, go through shutdown process

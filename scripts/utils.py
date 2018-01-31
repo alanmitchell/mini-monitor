@@ -36,8 +36,9 @@ def reboot():
     # wait 5 seconds, as it seems to take this long to take effect
     time.sleep(5)
 
-    # rtlamr is stubborn to kill, so force a reboot with the -f flag
-    subprocess.call('/sbin/reboot -f now', shell=True)
+    # reboot now.  Have reworked code to that all Mini-Monitor processes
+    # will kill with simple SIGTERM instead of SIGKILL.
+    subprocess.call('/sbin/reboot now', shell=True)
 
     # wait until reboot actually occurs
     while True:

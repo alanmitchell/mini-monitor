@@ -86,7 +86,7 @@ if cur_min > 20 and cur_min < 40:
 
             # but don't do the test if the system has not been up that long
             if uptime > post_max:
-                last_post_time = float(open('/var/local/last_post_time').read())
+                last_post_time = float(open('/var/run/last_post_time').read())
                 if (time.time() - last_post_time) > post_max:
                     logger.error('Rebooting due to last successful post being too long ago.')
                     utils.reboot()

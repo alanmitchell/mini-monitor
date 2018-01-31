@@ -26,14 +26,21 @@ sys.path.insert(0, '/boot/pi_logger')
 import settings
 
 # ---- Create the object that will post the readings to the HTTP server.
+# First copy over the saved copy of the database, since this DB is
+# created on RAM disk and is lost every reboot.
+db_fname = '/var/run/postQ.sqlite'       # working, RAM disk version
+db_fname_nv = '/var/local/postQ.sqlite'  # non-volatile backup
+if exists(db_fname_nv):
+    shutil.copyfile(db_fname_nv, db_fname)
+    logging.debug('Restored Post queue.')
 
 # try twice to create Posting queue
 for i in range(2):
     try:
         poster = httpPoster2.HttpPoster(settings.POST_URL,
                                         reading_converter=httpPoster2.BMSreadConverter(settings.POST_STORE_KEY),
-                                        post_q_filename='/var/local/postQ.sqlite',
-                                        post_time_file='/var/local/last_post_time')
+                                        post_q_filename=db_fname,
+                                        post_time_file='/var/run/last_post_time')
         logging.debug('Created HttpPoster.')
         break
     except:

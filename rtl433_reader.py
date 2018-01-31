@@ -168,10 +168,8 @@ if __name__=="__main__":
                         # try to find two matching readings
                         if vals[0] == vals[1]:
                             add_readings(ts, id, vals[0])
-                            print ts_str, id, vals[0], len(vals)
                         elif vals[-1] == vals[-2]:
                             add_readings(ts, id, vals[-1])
-                            print ts_str, id, vals[-1], len(vals)
             except:
                 logging.exception('Error processing %s: %s' % (ky, vals))
 

@@ -121,8 +121,21 @@ METER_MULT_GAS = 1000.0       # Converts Cubic Feet/hour to Btu/hour
 METER_MULT_ELEC = 1.0         # Electric Meter Multiplier
 METER_MULT_WATER = 1.0        # Water Meter Multiplier
 
-# --- Pulse Counter script ---
-# See pi-energy-sensors GitHub project
+# --- RTL-SDR 433 MHz Wireless Sensor Reader ---
+# Set to True to enable this reader
+ENABLE_RTL433_READER = False
+
+# --- Multi-Channel Pulse Counter script ---
+# See pi-energy-sensors GitHub project for the scripts configured here.
+
+# Enables the multi-channel pulse counter script.  The old single-channel
+# counter is no longer needed, as the multi-channel can be configured to
+# read one channel as well.
+ENABLE_PULSE_COUNTER_MULTI_CH = False
+
+# List the Pin numbers to count within the brackets below (Python list)
+# Use BCM pin numbering to specify the pins on the Pi.
+PULSE_INPUT_PINS = [16, 17]
 
 # Interval between logging events in seconds
 PULSE_LOG_INTERVAL = 10 * 60    # seconds
@@ -132,7 +145,10 @@ PULSE_LOG_INTERVAL = 10 * 60    # seconds
 PULSE_BOTH_EDGES = False
 
 # --- BTU Meter script ----
-# See pi-energy-sensors GitHub project
+# See pi-energy-sensors GitHub project for the scripts configured here.
+
+# Set to True to enable the BTU meter script
+ENABLE_BTU_METER = False
 
 # Interval between logging events in seconds
 BTU_LOG_INTERVAL = 10 * 60    # seconds

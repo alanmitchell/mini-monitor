@@ -53,6 +53,26 @@ then
 	/home/pi/pi_logger/scripts/run_meter_reader &
 fi
 
+# Start the programs for reading 433 MHz wireless sensors, if requested in
+# the settings file.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_RTL433_READER
+then
+	/home/pi/pi_logger/scripts/run_rtl433_reader &
+fi
+
+# Start the multi-channel pulse counter script, if requested in
+# the settings file.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_PULSE_COUNTER_MULTI_CH
+then
+	/home/pi/pi-energy-sensors/run_pulse_counter_multi_ch &
+fi
+
+# Start the BTU meter script, if requested in the settings file.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_BTU_METER
+then
+	/home/pi/pi-energy-sensors/run_btu_meter &
+fi
+
 # Turn off he HDMI interface to save power
 /usr/bin/tvservice -o
 

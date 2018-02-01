@@ -70,29 +70,38 @@ except:
     logger.exception('Error performing health checks. Rebooting.')
     utils.reboot()
 
+# Check to see if last successful post was too long ago
+# If so, reboot.
+try:
+    if settings.CHECK_LAST_POST:
+        # If the Settings file has the LAST_POST_REBOOT_DELAY setting
+        # use it to determine how long of wait needs to occur before
+        # rebooting.
+        if hasattr(settings, 'LAST_POST_REBOOT_DELAY'):
+            post_max = settings.LAST_POST_REBOOT_DELAY * 3600  # convert to seconds
+        else:
+            # No LAST_POST_REBOOT_DELAY setting in the Settings file.  So,
+            # use this formula for the delay:
+            # trigger reboot if no post in last hour or 1.2 x post interval,
+            # whichever is greater.
+            post_max = max(3600, 1.2 * settings.LOG_INTERVAL)
+
+        # but don't do the test if the system has not been up that long
+        if uptime > post_max:
+            last_post_time = float(open('/var/run/last_post_time').read())
+            if (time.time() - last_post_time) > post_max:
+                logger.error('Rebooting due to last successful post being too long ago.')
+                utils.reboot()
+except:
+    # could get an error from missing last_post_time file, but it should be
+    # there as we don't execute this test until enough time has passed for a
+    # post to occur.
+    logger.exception('Error checking last post time. Rebooting.')
+    utils.reboot()
+
 # only run these tasks once per hour (at the 30 minute time point)
 if cur_min > 20 and cur_min < 40:
 
     # backup log and Post database files to non-volatile storage
     utils.backup_files()
 
-    # Check to see if last successful post was too long ago
-    # If so, reboot.
-    try:
-        if settings.CHECK_LAST_POST:
-            # trigger reboot if no post in last hour or 1.2 x post interval,
-            # whichever is greater.
-            post_max = max(3600, 1.2 * settings.LOG_INTERVAL)
-
-            # but don't do the test if the system has not been up that long
-            if uptime > post_max:
-                last_post_time = float(open('/var/run/last_post_time').read())
-                if (time.time() - last_post_time) > post_max:
-                    logger.error('Rebooting due to last successful post being too long ago.')
-                    utils.reboot()
-    except:
-        # could get an error from missing last_post_time file, but it should be
-        # there as we don't execute this test until enough time has passed for a
-        # post to occur.
-        logger.exception('Error checking last post time. Rebooting.')
-        utils.reboot()

@@ -74,8 +74,11 @@ REBOOT_DAYS = 2
 # Reboots if Error Count is too high
 CHECK_ERROR_CT = False
 
-# Reboots if Last Post was too long ago
+# Reboots if Last Post was too long ago.
 CHECK_LAST_POST = False
+# If CHECK_LAST_POST is TRUE then a reboot will occur if the last
+# post occurred more than LAST_POST_REBOOT_DELAY hours ago.
+LAST_POST_REBOOT_DELAY = 4.0    # hours
 
 # This controls what messages will actually get logged in the system log
 # 'Logging' here does *not* refer to sensor logging; this is error and debug

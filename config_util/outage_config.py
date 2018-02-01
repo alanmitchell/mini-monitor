@@ -1,8 +1,8 @@
 '''This is a small GUI utility that helps to configure the Mini-Monitor
-by modifying values in the settings.py file and by setting up WiFi
-Internet access if requested.
+to use it as an Power Outage monitor.  This script modifies
+values in the settings.py file and sets up Internet Access
 
-Normally, this setup utility is compiled into a Windows and Mac executable
+Normally, this setup utility is compiled into a Windows and/or Mac executable
 and put on the /boot partition of the Mini-Monitor SD card.
 PyInstaller, http://www.pyinstaller.org/documentation.html is used compile
 the Python script into an executable file.  To create a Windows executable,
@@ -11,12 +11,12 @@ it must be run on a Mac machine.
 
 Here is the syntax to create a one-file Windows executable:
 
-    pyinstaller -F settings_editor.py
+    pyinstaller -F outage_config.py
 
-which creates 'settings_editor.exe' (Windows) in the subdirectory 'dist'.
-This is usually renamed to settings_editor_win.exe and put on the '/boot'
+which creates 'outage_config.exe' (Windows) in the subdirectory 'dist'.
+This is usually renamed to outage_config_win.exe and put on the '/boot'
 partition of the Mini-Monitor SD card.  If pyinstaller is run on a Mac,
-'settings_editor' is created, which is typically renamed to 'settings_editor_mac'
+'outage_config' is created, which is typically renamed to 'outage_config_mac'
 and placed on the boot partition.
 '''
 
@@ -40,8 +40,6 @@ def store_settings():
 
         # gather the data from the interface
         logger_id = site_entry.get().replace(' ', '')
-        use_gas = True if enable_gas.get()=='1' else False
-        meter_ids = meter_ids_entry.get()
         internet_type = inet_type.get()
         w_ssid = wifi_ssid_entry.get()
         w_pass = wifi_pass_entry.get()
@@ -59,22 +57,11 @@ def store_settings():
                 return -1
 
         substitutions = [
-            (r'LOGGER_ID\s*=', "LOGGER_ID = '%s'" % logger_id)
-        ]
-
-        if use_gas:
-            substitutions += [
-                (r'ENABLE_METER_READER\s*=', 'ENABLE_METER_READER = True'),
-                (r'METER_IDS\s*=', 'METER_IDS = [%s]' % meter_ids),
-            ]
-        else:
-            substitutions += [
-                (r'ENABLE_METER_READER\s*=', 'ENABLE_METER_READER = False'),
-            ]
-
-        substitutions += [
+            (r'LOGGER_ID\s*=', "LOGGER_ID = '%s'" % logger_id),
             (r'USE_CELL_MODEM\s*=', 'USE_CELL_MODEM = %s' % ('True' if internet_type=='cellular' else 'False')),
             (r'CELL_MODEM_MODEL\s*=', "CELL_MODEM_MODEL = '%s'" % modem_type),
+            (r'outage_monitor.OutageMonitor', "'outage_monitor.OutageMonitor',   # Detects Power Outages through state of GPIO pin"),
+            (r'sys_info.SysInfo', "'sys_info.SysInfo',               # System uptime, CPU temperature, software version"),
         ]
 
         # loop through the file containing other settings and
@@ -136,17 +123,6 @@ def inet_visibility():
     elif i_type=='cellular':
         cell_frame.grid()
 
-def gas_id_visibility():
-    """Manage visibility of Gas Meter ID widgets.
-    """
-    if enable_gas.get()=='1':
-        meter_ids_label.grid()
-        meter_ids_entry.grid()
-    else:
-        meter_ids_label.grid_remove()
-        meter_ids_entry.grid_remove()
-
-
 def select_other_setting():
     global other_settings_fn
     other_settings_fn = tkFileDialog.askopenfilename()
@@ -173,19 +149,6 @@ ttk.Label(mainframe, text='Enter Short Name for this Site (20 character max, no 
 site_entry = ttk.Entry(mainframe, width=20)
 site_entry.grid(column=0, row=1, sticky=W)
 
-# Gas Meter Reader related
-enable_gas = StringVar()
-enable_gas_check = ttk.Checkbutton(mainframe,
-                                   text='Enable Meter Reader',
-                                   variable=enable_gas,
-                                   command=gas_id_visibility)
-enable_gas.set('1')
-enable_gas_check.grid(column=0, row=3, sticky=W)
-meter_ids_label = ttk.Label(mainframe, text='Enter Meter ID. Separate Multiple IDs with commas. Leave Blank to read All meters.')
-meter_ids_label.grid(column=0, row=4, sticky=W)
-meter_ids_entry = ttk.Entry(mainframe, width=50)
-meter_ids_entry.grid(column=0, row=5, sticky=W)
-
 #---- Internet Access
 inet_frame = ttk.LabelFrame(mainframe, text='Internet Access Type')
 inet_frame.grid(column=0, row=6, sticky=W)
@@ -193,7 +156,7 @@ inet_type = StringVar()
 ttk.Radiobutton(inet_frame, text='WiFi', variable=inet_type, value='wifi', command=inet_visibility).grid(column=0, row=0)
 ttk.Radiobutton(inet_frame, text='Ethernet', variable=inet_type, value='ethernet', command=inet_visibility).grid(column=1, row=0)
 ttk.Radiobutton(inet_frame, text='Cellular (requires modem)', variable=inet_type, value='cellular', command=inet_visibility).grid(column=2, row=0)
-inet_type.set('wifi')
+inet_type.set('ethernet')
 for child in inet_frame.winfo_children():
     child.grid_configure(padx=10, pady=5)
 

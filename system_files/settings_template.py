@@ -76,6 +76,7 @@ CHECK_ERROR_CT = False
 
 # Reboots if Last Post was too long ago.
 CHECK_LAST_POST = False
+
 # If CHECK_LAST_POST is TRUE then a reboot will occur if the last
 # post occurred more than LAST_POST_REBOOT_DELAY hours ago.
 LAST_POST_REBOOT_DELAY = 4.0    # hours

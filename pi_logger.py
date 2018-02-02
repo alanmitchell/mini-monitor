@@ -90,9 +90,10 @@ try:
 except:
     logging.exception('Error posting initial readings to Debug URL.')
 
-try:
-    # start the reading/logging
-    controller.run()
-except:
-    logging.exception('Error occurred in the run() method of the logging controller.')
-
+# If there are any readers active then run the controller.  Otherwise exit.
+if len(controller.readers):
+    try:
+        # start the reading/logging
+        controller.run()
+    except:
+        logging.exception('Error occurred in the run() method of the logging controller.')

@@ -85,6 +85,7 @@ for i in range(30):
 try:
     # first, add the IP addresses assigned to this system to the readings
     init_readings += scripts.utils.ip_addrs()
+    init_readings.append('Logger ID: %s' % settings.LOGGER_ID)
     requests.post('http://api.analysisnorth.com/debug_store', data=json.dumps(init_readings), headers={'content-type': 'application/json'})
     logging.debug('Successfully posted First Readings.')
 except:

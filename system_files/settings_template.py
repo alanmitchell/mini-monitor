@@ -12,7 +12,10 @@ LOG_INTERVAL = 10*60  # seconds between logging data
 
 # ----------- Cellular Modem Related -------------
 # Set following to True if you are using a USB Cellular modem
-# to connect to the Internet.
+# to connect to the Internet, **except** that some types of
+# modems such as the ZTE MF197 appear as an Ethernet port on the
+# Pi.  With these modems, leave the "USE_CELL_MODEM" parameter 
+# set to  False.
 USE_CELL_MODEM = False
 
 # If you are using a cell modem, set the following to a string indicating

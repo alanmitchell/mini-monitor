@@ -28,7 +28,7 @@ System and the entire Mini-Monitor software application. You can
 download a zipped version of this image from the link below. The file is
 about 1 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.2 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2017-11-13.zip>`_
+`Mini-Monitor SD Card Image (1.2 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2018-02-06.zip>`_
 
 First unzip the file to extract an '.img' file, which is the SD card image. Use the `instructions
 here <https://www.raspberrypi.org/documentation/installation/installing-images/>`_

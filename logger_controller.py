@@ -80,7 +80,7 @@ class LoggerController:
                         val_avg = float('%.5g' % val_avg)
                         # calculate the average timestamp to log and convert to
                         # integer seconds
-                        ts_avg = int(ts_arr.mean())
+                        ts_avg = round(ts_arr.mean(), 2)
                         summarized_readings.append( (ts_avg, reading_id, val_avg) )
                         
                     elif reading_type == readers.base_reader.STATE:
@@ -99,7 +99,7 @@ class LoggerController:
                         last_state = val_arr[0]
                         for ts, val in reading_list:
                             if (val != last_state) or (ts in special_ts):
-                                summarized_readings.append( (int(ts), reading_id, val) )
+                                summarized_readings.append( (round(ts, 2), reading_id, val) )
                                 last_state = val
                         # need to save the last state for the next logging interval
                         # so that the first state change can be detected.
@@ -109,7 +109,7 @@ class LoggerController:
                         # with counter type readings, just take the last reading
                         # in the logging interval.
                         ts, val = reading_list[-1]
-                        summarized_readings.append( (int(ts), reading_id, val) )
+                        summarized_readings.append( (round(ts, 2), reading_id, val) )
                         
                 except:
                     logging.exception('Error summarizing readings for logging.')
@@ -173,5 +173,5 @@ class LoggerController:
                     
             # wait until the next reading time
             while time.time() < next_read_time:
-                time.sleep(0.2)
+                time.sleep(0.1)
                 

@@ -75,7 +75,7 @@ def on_message(client, userdata, msg):
             continue
         try:
             ts, sensor_id, val = line.split('\t')
-            reads.append( (int(float(ts)), sensor_id, float(val)) )
+            reads.append( (float(ts), sensor_id, float(val)) )
         except:
             logging.exception('Bad reading: %s' % line)
             # continue with the next reading

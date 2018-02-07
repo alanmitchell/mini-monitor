@@ -403,6 +403,29 @@ values reported:
 |                      | number.      |                 |
 +----------------------+--------------+-----------------+
 
+Power Outage Monitor Reader
+---------------------------
+
+**Class Name:** ``outage_monitor.OutageMonitor``
+
+This reader was designed to sense the presence or absence of AC Mains Power.  A power
+sensor is used to put a 3.3V signal on the Raspberry Pi pin 16 (BCM numbering) when AC power
+is present and a 0V signal on the pin when power is absent.  This reader will report
+the state of the pin:
+
++----------------------+--------------+-----------------+
+| Sensor ID            | Value        | Reading Type    |
++======================+==============+=================+
+| <LOGGER_ID>_state    | 1 = Pin 16   | STATE           |
+|                      | in High      |                 |
+|                      | state, 3.3V; |                 |
+|                      | 0 = Pin 16   |                 |
+|                      | in Low state |                 |
+|                      | 0 V.         |                 |
++----------------------+--------------+-----------------+
+
+This reader could be used for any sort of digital input on Pin 16.
+
 Other Sensor Readers
 --------------------
 

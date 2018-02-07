@@ -92,6 +92,19 @@ and suitable. The model B+ Pi takes a micro-SD card, and the
 Mini-Monitor SD card images are meant to fit on an **8 GB micro-SD
 Card**. We have typically used cards made by SanDisk.
 
+GPIO Pins used on the Raspberry Pi
+----------------------------------
+
+Some of the GPIO pins on the Raspberry Pi have special uses and are not
+shown on the above diagrams.  Pin 16 (BCM numbering) is used by the
+Power Outage Monitor Reader, (see :ref:`available-sensor-readers`), as
+a digital input to sense the presence or absence of AC Power.  Pin 12 (BCM
+numbering) can be wired through a resistor to an LED to show the general status
+of the Mini-Monitor's Internet connection.  The LED will be lit when Internet
+is available and will be off when Internet is not available.  Internet status
+is checked at boot-up and every 10 minutes thereafter by the ``scripts/set_health_led.py``
+script, which is run by a Cron job.
+
 Part CM1, USB Cell Modem
 ------------------------
 

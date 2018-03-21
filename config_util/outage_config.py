@@ -179,8 +179,8 @@ ttk.Label(cell_frame, text='Cellular Modem Model:').grid(column=0, row=0, sticky
 cell_modem = StringVar()
 cell_modem_combo = ttk.Combobox(cell_frame, textvariable=cell_modem)
 cell_modem_combo.grid(column=1, row=0, padx=5, pady=5)
-modem_text = ('Huawei E173', 'Huawei E3276', 'Huawei E1756C')
-modem_values = ('E173', 'E3276', 'E1756C')
+modem_text = ('Huawei E173', 'Huawei E3276', 'Huawei E1756C', 'ZTE MF197 Serial')
+modem_values = ('E173', 'E3276', 'E1756C', 'MF197')
 cell_modem_combo['values'] = modem_text
 cell_modem_combo.state(['readonly'])
 cell_modem_combo.current(0)

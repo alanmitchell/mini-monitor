@@ -27,6 +27,10 @@ USE_CELL_MODEM = False
 #     E173: Works with the Huawei E173 mdoem
 #     E3276: Works with the Huawei E3276 modem
 #     E1756C: Works with the Huawei E1756C modem
+#     MF197: Works with the ZTE MF197 modem when operating in serial mode
+#        Note that this modem sometimes ships with firmware that makes it
+#        appear as a USB-to-Ethernet converter.  For that firmware, set
+#        USE_CELL_MODEM to False.
 #
 # Mini-Monitor uses the WvDial Linux utility to connect the cell modem
 # to the Internet.  The /boot/pi_logger/wvdial.conf is the configuration

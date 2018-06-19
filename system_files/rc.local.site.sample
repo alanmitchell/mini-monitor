@@ -9,6 +9,3 @@
 # (this may already be the case, since I removed the "-e" option from
 # the shebang line above).
 set +e
-
-# /home/pi/pi-energy-sensors/run_pulse_counter_multi_ch &
-# /home/pi/pi_logger/scripts/run_rtl433_reader &

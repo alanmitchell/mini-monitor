@@ -16,6 +16,12 @@
 # the shebang line above).
 set +e
 
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+
 # Below I create a "forcefsck" file in /, which
 # causes fsck to run on every boot (which then removes the forcefsck file). I 
 # also have set FSCKFIX=yes in the/etc/default/rcS file, which will cause fsck

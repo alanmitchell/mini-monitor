@@ -24,9 +24,10 @@ Download and Install Mini-Monitor SD Card Image
 The Raspberry Pi uses an SD card as a solid-state drive for the storage of
 the operating system, programs, and user data. We have made a
 complete image of the SD card containing the Raspbian Linux Operating
-System and the entire Mini-Monitor software application. You can
-download a zipped version of this image from the link below. The file is
-about 1 GB in size so will take some time to download.
+System and the entire Mini-Monitor software application. This image is based
+on the Raspbian Stretch Lite image so is compatible with the Raspberry Pi 3 Model B+ 
+hardware. You can download a zipped version of this image from the link below. 
+The file is about 1 GB in size so will take some time to download.
 
 `Mini-Monitor SD Card Image (1.2 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2018-06-19.zip>`_
 

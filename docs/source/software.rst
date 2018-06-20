@@ -29,7 +29,7 @@ on the Raspbian Stretch Lite image so is compatible with the Raspberry Pi 3 Mode
 hardware. You can download a zipped version of this image from the link below. 
 The file is about 1 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.2 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2018-06-19.zip>`_
+`Mini-Monitor SD Card Image (0.8 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2018-06-19.zip>`_
 
 First unzip the file to extract an '.img' file, which is the SD card image. Use the `instructions
 here <https://www.raspberrypi.org/documentation/installation/installing-images/>`_

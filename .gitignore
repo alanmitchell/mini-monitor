@@ -7,6 +7,8 @@ last_post_time
 *.gz
 *.bak
 .idea
+.vscode/
+_build/
 bin/
 obj/
 *.pyproj

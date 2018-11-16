@@ -138,6 +138,7 @@ while True:
         ts_last, read_last = get_last(meter_id)
         if ts_last is None:
             set_last(meter_id, ts_cur, read_cur)
+            logging.info('First read for Meter # %s: %s' % (meter_id, read_cur))
             try:
                 # Post the first reading to the Debug site.
                 first_read = {

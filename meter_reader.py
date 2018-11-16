@@ -28,6 +28,8 @@ import signal
 import sys
 import time
 import logging
+import json
+import requests
 import mqtt_poster
 import config_logging
 
@@ -136,6 +138,21 @@ while True:
         ts_last, read_last = get_last(meter_id)
         if ts_last is None:
             set_last(meter_id, ts_cur, read_cur)
+            try:
+                # Post the first reading to the Debug site.
+                first_read = {
+                    'Logger ID': settings.LOGGER_ID,
+                    'Meter Number': meter_id,
+                    'Meter Type': commod_type,
+                    'Value': read_cur,
+                }
+                requests.post(
+                    'http://api.analysisnorth.com/debug_store', 
+                    data=json.dumps(first_read), 
+                    headers={'content-type': 'application/json'},
+                )
+            except:
+                logging.warning('Error posting first meter reading from %s to Debug site.' % meter_id)
             continue
 
         if ts_cur > ts_last + settings.METER_POST_INTERVAL * 60.0:

@@ -12,7 +12,7 @@ import base_reader
 # The name of the digitemp Program being used.
 # This depends on the 1-wire master being used, and choices are:
 # digitemp_DS2490, digitemp_DS9097, and digitemp_DS9097U
-DIGITEMP_CMD = 'digitemp_DS9097U'
+DIGITEMP_CMD = 'digitemp_DS9097'
 
 # The serial port being used by the 1-wire adapter
 SERIAL_PORT = '/dev/ttyUSB0'

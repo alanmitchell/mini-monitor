@@ -67,6 +67,7 @@ READERS = [
 #'labjack.LabjackTempReader',     # Thermistors connected to Labjack U3
 #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000
 #'outage_monitor.OutageMonitor',  # Detects Power Outages through state of GPIO pin
+#'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor on a USB 1-wire master
 'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]
 

@@ -8,16 +8,18 @@ import mqtt_poster
 
 class LoggerController:
 
-    def __init__(self, read_interval=5, log_interval=600):
+    def __init__(self, read_interval=5, log_interval=600, logger_id='test'):
         """Constructs the PeriodicReader object:
         'read_interval': the time interval between calls to the 'reader'
             read() method in seconds.
         'log_interval': the time interval between points when the readings
             are summarized and logged to the logging handlers in seconds.
+        'logger_id': the ID of this logger from the settings file.
         """
 
         self.read_interval = read_interval
         self.log_interval = log_interval
+        self.logger_id = logger_id
 
         # create a list of reader objects that read sensors.
         self.readers = []

@@ -42,8 +42,10 @@ settings.VERSION = 2.3
 #***********************************************************************
 
 # Create the object to control the reading and logging process
-controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 
-                                    log_interval=settings.LOG_INTERVAL)
+controller = logger_controller.LoggerController(
+    read_interval=settings.READ_INTERVAL, 
+    log_interval=settings.LOG_INTERVAL,
+)
 logging.debug('Created logging controller.')
 
 # Add the sensor readers listed in the settings file to the controller
@@ -92,10 +94,10 @@ try:
 except:
     logging.exception('Error posting initial readings to Debug URL.')
 
-# If there are any readers active then run the controller.  Otherwise exit.
-if len(controller.readers):
-    try:
-        # start the reading/logging
-        controller.run()
-    except:
-        logging.exception('Error occurred in the run() method of the logging controller.')
+# Run the controller even if there are no readers present, as the controller directly
+# accesses some readings.
+try:
+    # start the reading/logging
+    controller.run()
+except:
+    logging.exception('Error occurred in the run() method of the logging controller.')

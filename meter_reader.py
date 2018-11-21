@@ -123,28 +123,25 @@ while True:
         ts_cur = time.time()
         read_cur = float(flds[7])
 
-        # Determine the type of meter and the multiplier from the Commodity
-        # Type in the message.
-        commod_type = int(flds[4])    # Commodity type number
-        commod = commod_map.get(commod_type, 'Elec')
-        multiplier = meter_mult[commod]
-
-        logging.debug('%s %s %s %s' % (ts_cur, meter_id, read_cur, commod_type))
-
-        # if the multiplier for this commodity is zero, then skip the reading
-        if multiplier == 0.0:
-            continue
+        # Store this reading in a file so it is accessible to other
+        # processes
+        with open('/var/run/last_gas', 'w') as read_file:
+            read_file.write(str(read_cur))
+        
+        # REMOVE ME
+        with open('/home/pi/gas_raw.txt', 'a') as log_file:
+            log_file.write('%s\t%s\n' % (ts_cur, read_cur))
+        
+        logging.debug('%s %s %s' % (ts_cur, meter_id, read_cur))
 
         ts_last, read_last = get_last(meter_id)
         if ts_last is None:
-            set_last(meter_id, ts_cur, read_cur)
             logging.info('First read for Meter # %s: %s' % (meter_id, read_cur))
             try:
                 # Post the first reading to the Debug site.
                 first_read = {
                     'Logger ID': settings.LOGGER_ID,
                     'Meter Number': meter_id,
-                    'Meter Type': commod_type,
                     'Value': read_cur,
                 }
                 requests.post(
@@ -156,19 +153,7 @@ while True:
                 logging.warning('Error posting first meter reading from %s to Debug site.' % meter_id)
             continue
 
-        if ts_cur > ts_last + settings.METER_POST_INTERVAL * 60.0:
-            # enough time has elapsed to make a post.  calculate the
-            # rate of meter reading change per hour.
-            rate = (read_cur - read_last) * 3600.0 * multiplier / (ts_cur - ts_last)
-            
-            # time stamp in the middle of the reading period
-            ts_post = (ts_cur + ts_last) / 2.0
-
-            mqtt.publish(
-                'readings/final/meter_reader',
-                '%s\t%s_%02d_%s\t%s' % (int(ts_post), settings.LOGGER_ID, commod_type, meter_id, rate)
-            )
-            set_last(meter_id, ts_cur, read_cur)
+        set_last(meter_id, ts_cur, read_cur)
 
     except:
         logging.exception('Error processing reading %s' % flds)

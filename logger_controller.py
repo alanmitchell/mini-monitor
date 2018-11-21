@@ -2,8 +2,10 @@
 sets of the readings to an MQTT broker on localhost.
 """
 import logging, time
+import os
 import numpy as np
 import readers.base_reader
+import readers.usb_temp1
 import mqtt_poster
 
 class LoggerController:
@@ -43,6 +45,10 @@ class LoggerController:
 
         # track whether a call has been make to log readings before.
         self.first_log_call = True
+
+        # Create the object that reads temperature from the attached USB
+        # temperature sensor.
+        self.temp_reader = readers.usb_temp1.USBtemperature1()
 
 
     def add_reader(self, reader):
@@ -134,18 +140,53 @@ class LoggerController:
                 logging.exception('Error posting readings to MQTT broker.')
 
     def run(self):
-        """Called to starting the reading and logging process.  Infinite loop 
+        """Called for starting the reading and logging process.  Infinite loop 
         and does not return.
         """
 
         # determine the time at which readings should be read and logged.
-        next_read_time = time.time()     # read right away
-        next_log_time = time.time() + self.log_interval
+        next_read_time = cur_time = time.time()     # read right away
+        # Synchronize the log time with the top of the hour if the logging
+        # interval is evenly divisible in to 60 minutes.
+        next_log_time = cur_time - (cur_time % self.log_interval) + self.log_interval
 
         while True:
 
             # check to see if it's time to log readings.
             if time.time() > next_log_time:
+
+                # Log the gas and temperature readings for Marco's project, giving
+                # them a timestamp of exactly the log time, so that timestamps are
+                # synchronized with the top of the hour.
+                readings = []
+                
+                # Get the latest gas meter reading, if available
+                gas_file = '/var/run/last_gas'
+                if os.path.isfile(gas_file):
+                    try:
+                        gas_val = int(open(gas_file).read())
+                        readings.append((next_log_time, '%s_gas' % self.logger_id, gas_val))
+                    except:
+                        # File is not present or error occurred. Do not include
+                        # the gas reading.
+                        pass
+
+                # Get the temperature reading
+                try:
+                    _, _, temp_val = self.temp_reader.read()
+                    readings.append((next_log_time, '%s_temperature' % self.logger_id, temp_val))
+                except:
+                    pass
+
+                if len(readings):
+                    # convert readings into a string, one reading per line with
+                    # tab-delimited fields
+                    post_str = '\n'.join([ '%s\t%s\t%s' % (ts, sensor_id, val) for ts, sensor_id, val in readings])
+                    try:
+                        self.poster.publish('readings/final/pi_logger', post_str)
+                    except:
+                        logging.exception('Error posting readings to MQTT broker.')
+
                 next_log_time += self.log_interval
                 # when the clock is being sped up by ntpd, the new log time
                 # may be prior to the current time. If so, adjust it.

@@ -43,8 +43,9 @@ settings.VERSION = 2.3
 
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(
-    read_interval=settings.READ_INTERVAL, 
+    read_interval=settings.READ_INTERVAL,
     log_interval=settings.LOG_INTERVAL,
+    logger_id=settings.LOGGER_ID,
 )
 logging.debug('Created logging controller.')
 

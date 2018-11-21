@@ -162,9 +162,9 @@ class LoggerController:
                 
                 # Get the latest gas meter reading, if available
                 gas_file = '/var/run/last_gas'
-                if os.path.isfile(gas_file):
+                if os.path.exists(gas_file):
                     try:
-                        gas_val = int(open(gas_file).read())
+                        gas_val = float(open(gas_file).read())
                         readings.append((next_log_time, '%s_gas' % self.logger_id, gas_val))
                     except:
                         # File is not present or error occurred. Do not include
@@ -174,7 +174,7 @@ class LoggerController:
 
                 # Get the temperature reading
                 try:
-                    _, _, temp_val = self.temp_reader.read()
+                    _, _, temp_val = self.temp_reader.read()[0]
                     readings.append((next_log_time, '%s_temperature' % self.logger_id, temp_val))
 
                     # REMOVE ME
@@ -199,6 +199,7 @@ class LoggerController:
                 # may be prior to the current time. If so, adjust it.
                 if next_log_time < time.time():
                     next_log_time = time.time() + self.log_interval
+
                 try:
                     self.log_readings()
                 except:

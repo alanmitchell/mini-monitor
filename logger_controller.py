@@ -175,6 +175,11 @@ class LoggerController:
                 try:
                     _, _, temp_val = self.temp_reader.read()
                     readings.append((next_log_time, '%s_temperature' % self.logger_id, temp_val))
+                    
+                    # REMOVE ME
+                    with open('/home/pi/temp.txt', 'a') as log_file:
+                        log_file.write('%s\t%s\n' % (next_log_time, temp_val))
+
                 except:
                     pass
 

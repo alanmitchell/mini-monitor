@@ -151,7 +151,6 @@ while True:
                 )
             except:
                 logging.warning('Error posting first meter reading from %s to Debug site.' % meter_id)
-            continue
 
         set_last(meter_id, ts_cur, read_cur)
 

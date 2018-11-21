@@ -174,7 +174,7 @@ class LoggerController:
 
                 # Get the temperature reading
                 try:
-                    _, _, temp_val = self.temp_reader.read()[0]
+                    _, _, temp_val, _ = self.temp_reader.read()[0]
                     readings.append((next_log_time, '%s_temperature' % self.logger_id, temp_val))
 
                     # REMOVE ME

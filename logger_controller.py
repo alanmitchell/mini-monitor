@@ -177,9 +177,10 @@ class LoggerController:
                     _, _, temp_val, _ = self.temp_reader.read()[0]
                     readings.append((next_log_time, '%s_temperature' % self.logger_id, temp_val))
 
-                    # REMOVE ME
-                    with open('/home/pi/temp.txt', 'a') as log_file:
-                        log_file.write('%s\t%s\n' % (next_log_time, temp_val))
+                    # Log Temperature Readings if logging level is DEBUG
+                    if logging.root.getEffectiveLevel() == logging.DEBUG:
+                        with open('/home/pi/temp.txt', 'a') as log_file:
+                            log_file.write('%s\t%s\n' % (next_log_time, temp_val))
 
                 except:
                     logging.exception('Error reading Temperature.')

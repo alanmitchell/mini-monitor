@@ -128,9 +128,10 @@ while True:
         with open('/var/run/last_gas', 'w') as read_file:
             read_file.write(str(read_cur))
         
-        # REMOVE ME
-        with open('/home/pi/gas_raw.txt', 'a') as log_file:
-            log_file.write('%s\t%s\n' % (ts_cur, read_cur))
+        # Log all raw gas readings if Debug is set
+        if logging.root.getEffectiveLevel() == logging.DEBUG:
+            with open('/home/pi/gas_raw.txt', 'a') as log_file:
+                log_file.write('%s\t%s\n' % (ts_cur, read_cur))
         
         logging.debug('%s %s %s' % (ts_cur, meter_id, read_cur))
 

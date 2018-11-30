@@ -25,6 +25,7 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
+# Version 2.31: Special version for Marco Castillo Enstar Project
 # Version 2.3:  Added MF197 Cellular Modem in serial mode
 # Version 2.2:  Added Outage Monitor reader.
 # Version 2.1:  2017-11-02: Improved meter reader start up & WiFi reliability
@@ -38,7 +39,7 @@ import settings
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 2.3
+settings.VERSION = 2.31
 #***********************************************************************
 
 # Create the object to control the reading and logging process

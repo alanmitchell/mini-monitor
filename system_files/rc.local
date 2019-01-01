@@ -63,6 +63,13 @@ then
 	/home/pi/pi_logger/scripts/run_rtl433_reader &
 fi
 
+# Start the program for reading the PZEM-016 power sensor, if requested in
+# the settings file.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_POWER_MONITOR
+then
+	/home/pi/pi_logger/scripts/run_power_monitor &
+fi
+
 # Start the multi-channel pulse counter script, if requested in
 # the settings file.
 if /home/pi/pi_logger/scripts/test_setting.py ENABLE_PULSE_COUNTER_MULTI_CH

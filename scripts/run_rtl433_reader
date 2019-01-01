@@ -1,6 +1,6 @@
 #!/bin/bash
 # This scripts starts and restarts, if necessary, the rtl433_reader.py program.
-# Sleep for a minute, as rtlamr seems to need that time to run successfully.
+# Sleep for a minute, as some rtl-sdr programs need that time to run successfully.
 sleep 60
 
 until /home/pi/pi_logger/rtl433_reader.py; do

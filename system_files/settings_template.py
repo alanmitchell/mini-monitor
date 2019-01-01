@@ -105,7 +105,7 @@ LOG_LEVEL = logging.INFO
 # to set the IP address of the Host Sensaphone unit below
 SENSAPHONE_HOST_IP = '10.30.5.77'
 
-# --- Utility Meter Reader script
+# ------------ Utility Meter Reader script --------------
 
 # Set to True to enable the meter reader
 ENABLE_METER_READER = False
@@ -129,11 +129,39 @@ METER_MULT_GAS = 1000.0       # Converts Cubic Feet/hour to Btu/hour
 METER_MULT_ELEC = 1.0         # Electric Meter Multiplier
 METER_MULT_WATER = 1.0        # Water Meter Multiplier
 
-# --- RTL-SDR 433 MHz Wireless Sensor Reader ---
+# -------- RTL-SDR 433 MHz Wireless Sensor Reader --------
 # Set to True to enable this reader
 ENABLE_RTL433_READER = False
 
-# --- Multi-Channel Pulse Counter script ---
+# -------------------- Power Monitor Script -----------------------
+# See power_monitor.py, script to read PZEM-016 electric power sensor.
+
+# Set to True to enable the Power Monitor program
+ENABLE_POWER_MONITOR = False
+
+# Path to the Serial Port used by the RS-485 adapter
+PWR_PORT = '/dev/ttyUSB0'
+
+# Number of Wraps through the current transformer.  This will be used 
+# to divide Power and Current readings.  The PZEM-016 CT is a 100 Amp CT,
+#  so generally I wrap 5 turns through the CT to reduce the range to
+# 0 - 20 Amps.
+PWR_CT_WRAPS = 5
+
+# Change Thresholds for each of the measrement types.  These determine
+# whether a new point is registered.
+PWR_THRESHOLD_PWR = 5.0   # Watts, resolution is 0.1 W / PWR_CT_WRAPS
+PWR_THRESHOLD_VOLT = 0.3   # Volts, resolution of sensor is 0.1 Volt
+PWR_THRESHOLD_FREQ = 0.1   # Hz, resolution of sensor is 0.1 Hz
+PWR_THRESHOLD_PF = 0.02    # Power factor, resolution is 0.01
+
+# Maximum number of reads of the sensor before a new point will be 
+# recorded, even if sufficient change has not occurred.  Reads of 
+# the sensor occur roughly every second, so a value of 60 here means
+# a reading will be posted at least every 60 seconds.
+PWR_MAX_INTERVAL = 60    # seconds, approximately
+
+# --------------- Multi-Channel Pulse Counter script ------------
 # See pi-energy-sensors GitHub project for the scripts configured here.
 
 # Enables the multi-channel pulse counter script.  The old single-channel
@@ -152,7 +180,7 @@ PULSE_LOG_INTERVAL = 10 * 60    # seconds
 # or just the falling edge.
 PULSE_BOTH_EDGES = False
 
-# --- BTU Meter script ----
+# ---------------------- BTU Meter script -----------------------
 # See pi-energy-sensors GitHub project for the scripts configured here.
 
 # Set to True to enable the BTU meter script

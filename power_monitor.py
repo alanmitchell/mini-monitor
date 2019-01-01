@@ -14,7 +14,7 @@ import numpy as np
 import minimalmodbus
 import mqtt_poster
 import config_logging
-from tools import change_detect
+from loglib import change_detect
 
 try:
     # Configure logging and log a restart of the app

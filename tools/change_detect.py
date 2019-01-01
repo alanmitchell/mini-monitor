@@ -1,4 +1,5 @@
-"""General utility functions.
+"""Functions related to detecting and posting changes in 
+a set of sensor readings.
 """
 
 def find_changes(vals, threshold=None, change_pct=0.02, max_interval=None):
@@ -46,3 +47,18 @@ def find_changes(vals, threshold=None, change_pct=0.02, max_interval=None):
             last_ix = ix
     
     return final_ixs
+
+def make_post_lines(sensor_id, time_stamps, values, change_threshold, max_interval):
+    """Returns an array of lines to post to the MQTT broker.  Only posts changes in 
+    values.
+    'sensor_id': sensor ID to use for each line
+    'time_stamps': numpy array of time stamps associated with the values
+    'values': numpy array of values to scan for changes and post accordingly
+    'change_threshold': amount of change that needs to occur before inclusion
+    'max_interval': maximum number of points to separate posts.  Will post w/o a change to meet this.
+    """
+    # find the indexes to include in the post lines
+    ixs = find_changes(values, change_threshold, max_interval=max_interval)
+    ts_incl = time_stamps[ixs]
+    val_incl = values[ixs]
+    return ['%s\t%s\t%s' % (ts, sensor_id, val) for ts, val in zip(ts_incl, val_incl)]

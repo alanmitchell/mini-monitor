@@ -72,6 +72,7 @@ if __name__=="__main__":
     tstamps = []
     powers = []
     volts = []
+    amps = []
     freqs = []
     pfs = []
 
@@ -89,6 +90,7 @@ if __name__=="__main__":
         if data:
             tstamps.append(ts)
             volts.append(data[0]*0.1)
+            amps.append((data[1] + data[2]*65536) * 0.001 / settings.PWR_CT_WRAPS)
             powers.append((data[3] + data[4]*65536) * 0.1 / settings.PWR_CT_WRAPS)
             freqs.append(data[7]*0.1)
             pfs.append(data[8]*0.01)
@@ -104,44 +106,37 @@ if __name__=="__main__":
                     # Convert arrays into numpy arrays
                     tstamps = np.array(tstamps)
                     volts = np.array(volts)
+                    amps = np.array(amps)
                     powers = np.array(powers)
                     freqs = np.array(freqs)
                     pfs = np.array(pfs)
 
-                    # first include the average power
-                    ts_avg = tstamps.mean()
-                    pwr_avg = powers.mean()
-                    lines_to_post = ['%s\t%s\t%s' % (ts_avg, logger_id + '_pwr_avg', pwr_avg)]
+                    # gathers lines to post to MQTT
+                    lines_to_post = []
 
-                    # Now add detail points for each of the measurements
-                    lines_to_post += make_post_lines(
-                        logger_id + '_pwr',
-                        tstamps,
-                        powers,
-                        settings.PWR_THRESHOLD_PWR,
-                        settings.PWR_MAX_INTERVAL
-                    )
-                    lines_to_post += make_post_lines(
-                        logger_id + '_volt',
-                        tstamps,
-                        volts,
-                        settings.PWR_THRESHOLD_VOLT,
-                        settings.PWR_MAX_INTERVAL
-                    )
-                    lines_to_post += make_post_lines(
-                        logger_id + '_freq',
-                        tstamps,
-                        freqs,
-                        settings.PWR_THRESHOLD_FREQ,
-                        settings.PWR_MAX_INTERVAL
-                    )
-                    lines_to_post += make_post_lines(
-                        logger_id + '_pf',
-                        tstamps,
-                        pfs,
-                        settings.PWR_THRESHOLD_PF,
-                        settings.PWR_MAX_INTERVAL
-                    )
+                    # first include the average power if requested
+                    if settings.PWR_INCL_PWR_AVG:
+                        ts_avg = tstamps.mean()
+                        pwr_avg = powers.mean()
+                        lines_to_post.append('%s\t%s\t%s' % (ts_avg, logger_id + '_pwr_avg', pwr_avg))
+
+                    # Now add detail points for each of the requested measurements
+                    measures = [
+                        ('pwr', powers),
+                        ('volt', volts),
+                        ('amp', amps),
+                        ('freq', freqs),
+                        ('pf', pfs)
+                    ]
+                    for lbl, val_array in measures:
+                        if getattr(settings, 'PWR_INCL_' + lbl.upper()):
+                            lines_to_post += make_post_lines(
+                                '%s_%s' % (logger_id, lbl),
+                                tstamps,
+                                val_array,
+                                getattr(settings, 'PWR_THRESHOLD_' + lbl.upper()),
+                                settings.PWR_MAX_INTERVAL
+                            )
 
                 except:
                     logging.exception('Error summarizing readings.')
@@ -156,3 +151,11 @@ if __name__=="__main__":
                         logging.info('%d readings posted.' % len(lines_to_post))
                 except:
                     logging.exception('Error posting: %s' % lines_to_post)
+
+                tstamps.clear()
+                powers.clear()
+                volts.clear()
+                amps.clear()
+                freqs.clear()
+                pfs.clear()
+                

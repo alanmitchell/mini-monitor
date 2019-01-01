@@ -148,10 +148,19 @@ PWR_PORT = '/dev/ttyUSB0'
 # 0 - 20 Amps.
 PWR_CT_WRAPS = 5
 
+# Determines what values will be posted from Power Monitor
+PWR_INCL_PWR_AVG = True      # Average power in interval
+PWR_INCL_PWR = True          # Detailed power curve
+PWR_INCL_VOLT = True         # Detailed Voltage
+PWR_INCL_AMP = True          # Detailed Current
+PWR_INCL_FREQ = True         # Detailed Frequency
+PWR_INCL_PF = True           # Detailed Power Factor
+
 # Change Thresholds for each of the measrement types.  These determine
 # whether a new point is registered.
-PWR_THRESHOLD_PWR = 5.0   # Watts, resolution is 0.1 W / PWR_CT_WRAPS
+PWR_THRESHOLD_PWR = 5.0    # Watts, resolution is 0.1 W / PWR_CT_WRAPS
 PWR_THRESHOLD_VOLT = 0.3   # Volts, resolution of sensor is 0.1 Volt
+PWR_THRESHOLD_AMP = 0.05   # Amps, resolution is 0.001 A / PWR_CT_WRAPS
 PWR_THRESHOLD_FREQ = 0.1   # Hz, resolution of sensor is 0.1 Hz
 PWR_THRESHOLD_PF = 0.02    # Power factor, resolution is 0.01
 

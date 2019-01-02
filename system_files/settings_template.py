@@ -158,9 +158,9 @@ PWR_INCL_PF = True           # Detailed Power Factor
 
 # Change Thresholds for each of the measrement types.  These determine
 # whether a new point is registered.
-PWR_THRESHOLD_PWR = 5.0    # Watts, resolution is 0.1 W / PWR_CT_WRAPS
+PWR_THRESHOLD_PWR = 3.0    # Watts, resolution is 0.1 W / PWR_CT_WRAPS
 PWR_THRESHOLD_VOLT = 0.3   # Volts, resolution of sensor is 0.1 Volt
-PWR_THRESHOLD_AMP = 0.05   # Amps, resolution is 0.001 A / PWR_CT_WRAPS
+PWR_THRESHOLD_AMP = 0.03   # Amps, resolution is 0.001 A / PWR_CT_WRAPS
 PWR_THRESHOLD_FREQ = 0.1   # Hz, resolution of sensor is 0.1 Hz
 PWR_THRESHOLD_PF = 0.02    # Power factor, resolution is 0.01
 
@@ -170,7 +170,7 @@ PWR_THRESHOLD_PF = 0.02    # Power factor, resolution is 0.01
 # a reading will be posted at least every 60 seconds.
 # Set this to None to allow any interval between change  values, remembering
 # that the first reading of a logging interval will always be posted.
-PWR_MAX_INTERVAL = 60    # seconds, approximately
+PWR_MAX_INTERVAL = 180    # seconds, approximately
 
 # --------------- Multi-Channel Pulse Counter script ------------
 # See pi-energy-sensors GitHub project for the scripts configured here.

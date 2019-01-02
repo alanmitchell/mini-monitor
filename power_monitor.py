@@ -133,10 +133,10 @@ while True:
             except:
                 logging.exception('Error posting: %s' % lines_to_post)
 
-            tstamps.clear()
-            powers.clear()
-            volts.clear()
-            amps.clear()
-            freqs.clear()
-            pfs.clear()
+            tstamps = []
+            powers = []
+            volts = []
+            amps = []
+            freqs = []
+            pfs = []
             

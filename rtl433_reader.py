@@ -175,7 +175,8 @@ if __name__=="__main__":
 
         # see if it is time to post summarized readings
         if time.time() > next_log_time:
-            next_log_time += settings.LOG_INTERVAL
+            # Deal with clock catch-up when the Pi has been off.
+            next_log_time = max(next_log_time + settings.LOG_INTERVAL, time.time() + settings.LOG_INTERVAL - 2.0)
 
             lines_to_post = []
             for reading_id, reading_list in final_read_data.items():

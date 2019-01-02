@@ -78,7 +78,9 @@ while True:
 
     # see if it is time to post summarized readings
     if time.time() > next_log_time:
-        next_log_time += settings.LOG_INTERVAL
+        # Deal with clock catch-up when the Pi has been off.
+        next_log_time = max(next_log_time + settings.LOG_INTERVAL, time.time() + settings.LOG_INTERVAL - 2.0)
+        
 
         # If there is any data, process into desired form and post it
         if len(tstamps):

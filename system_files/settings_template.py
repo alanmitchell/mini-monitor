@@ -168,6 +168,8 @@ PWR_THRESHOLD_PF = 0.02    # Power factor, resolution is 0.01
 # recorded, even if sufficient change has not occurred.  Reads of 
 # the sensor occur roughly every second, so a value of 60 here means
 # a reading will be posted at least every 60 seconds.
+# Set this to None to allow any interval between change  values, remembering
+# that the first reading of a logging interval will always be posted.
 PWR_MAX_INTERVAL = 60    # seconds, approximately
 
 # --------------- Multi-Channel Pulse Counter script ------------

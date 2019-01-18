@@ -33,6 +33,13 @@ import requests
 import mqtt_poster
 import config_logging
 
+# Delay to make sure that rtltcp has found the RTL-SDR dongle.  Just
+# to be cautious, break into a number delays in case time.sleep() might
+# be affected by ntpd changes to system clock.
+# 18 loops x 5 seconds = 90 second delay
+for i in range(18):
+    time.sleep(5)
+
 # Configure logging and log a restart of the app
 config_logging.configure_logging(logging, '/var/log/meter_reader.log')
 logging.warning('meter_reader has restarted')

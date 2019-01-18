@@ -20,10 +20,10 @@ except:
     logger.exception('Error determining uptime. Rebooting.')
     utils.reboot()
 
-# don't do these tests if the system has not been up for 20 minutes
+# don't do these tests if the system has not been up for 15 minutes
 # sys.exit() throws an exception so need to do this outside the above try
 # block.
-if uptime < 20 * 60:
+if uptime < 15 * 60:
     sys.exit()
 
 try:
@@ -33,6 +33,21 @@ try:
     # import the settings file
     sys.path.insert(0, '/boot/pi_logger')
     import settings
+
+    # If the meter reader is running and there hasn't been a gas reading
+    # in the last 15 minutes, reboot.
+    if settings.ENABLE_METER_READER:
+        # the file that holds the last gas reading
+        gas_file = '/var/run/last_gas'
+        if not os.path.exists(gas_file):
+            # No gas reading at all has occurred
+            utils.reboot()
+        else:
+            # Get the time the file was last modified, indicating the 
+            # last valid reading.  If not modified in the last
+            # 15 minutes, reboot.
+            if time.time() - os.path.getmtime(gas_file) > 15 * 60:
+                utils.reboot()
 
     # if the system has been up for more than settings.REBOOT_DAYS, force
     # a reboot.  Never reboot if REBOOT_DAYS=0.

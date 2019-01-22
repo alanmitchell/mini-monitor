@@ -163,14 +163,16 @@ class LoggerController:
                 # Get the latest gas meter reading, if available
                 gas_file = '/var/run/last_gas'
                 if os.path.exists(gas_file):
-                    try:
-                        gas_val = float(open(gas_file).read())
-                        readings.append((next_log_time, '%s_gas' % self.logger_id, gas_val))
-                    except:
-                        # File is not present or error occurred. Do not include
-                        # the gas reading.
-                        logging.exception('Error reading Gas Meter reading.')
-                        pass
+                    # Only post gas reading if it is newer than 5.5 minutes
+                    if time.time() - os.path.getmtime(gas_file) < 5.5 * 60:
+                        try:
+                            gas_val = float(open(gas_file).read())
+                            readings.append((next_log_time, '%s_gas' % self.logger_id, gas_val))
+                        except:
+                            # File is not present or error occurred. Do not include
+                            # the gas reading.
+                            logging.exception('Error reading Gas Meter reading.')
+                            pass
 
                 # Get the temperature reading
                 try:

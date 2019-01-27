@@ -14,10 +14,13 @@ import signal
 import sys
 import time
 import logging
-import json
-import requests
-import mqtt_poster
+import threading
 import config_logging
+
+# Constants for the Program
+ERROR_LOG_FILE = '/var/log/meter_mobile.log'  # error log file
+RTLAMR_PATH = '/home/pi/gocode/bin/rtlamr'    # path to rtlamr program
+METER_ID_FILE = '/boot/meters.txt'   # has list of meter IDs, one per line
 
 def display(text):
     """Displays 'text' on the USB connected display; lines are delimited
@@ -36,7 +39,7 @@ for i in range(18):
     time.sleep(5)
 display('Waiting for\nFirst Reading')
 # Configure logging and log a restart of the app
-config_logging.configure_logging(logging, '/var/log/meter_mobile.log')
+config_logging.configure_logging(logging, ERROR_LOG_FILE)
 logging.warning('meter_mobile has restarted')
 
 def shutdown(signum, frame):
@@ -55,35 +58,62 @@ signal.signal(signal.SIGINT, shutdown)
 
 # Read in the list of meter IDs to store and put in set.
 try:
-    meter_ids = set([int(x) for x in open('/boot/meters.txt').readlines() if len(x.strip())])
+    meter_ids = set([int(x) for x in open(METER_ID_FILE).readlines() if len(x.strip())])
 except:
     display('Error: No\nMeter ID List')
     logging.exception('Error reading Meter ID List.')
     time.sleep(3)
     sys.exit(1)
 
-# start the rtlamr program.
-rtlamr = subprocess.Popen(['/home/pi/gocode/bin/rtlamr', 
-    '-gainbyindex=24',   # index 24 was found to be the most sensitive
-    '-format=csv'], stdout=subprocess.PIPE)
+class MeterReader(threading.Thread):
 
-while True:
+    def __init__(self, meter_ids, log_files=[]):
+        # save set of meter ids.
+        self._meter_ids = meter_ids
 
-    try:
-        flds = rtlamr.stdout.readline().strip().split(',')
+        # Save the list of file paths to log the readings to
+        self._log_files = log_files
 
-        if len(flds) != 9:
-            # valid readings have nine fields
-            continue
+        # start meter reading process
+        self._rtlamr = subprocess.Popen([RTLAMR_PATH, 
+            '-gainbyindex=24',   # index 24 was found to be the most sensitive
+            '-format=csv'], stdout=subprocess.PIPE)
 
-        # If the list of Meter IDs to record is not empty, make sure this ID
-        # is in the list of IDs to record.
-        meter_id = int(flds[3])
+        # meter ids of the last 3 readings that were in the meter list
+        # First one in list is the oldest 
+        self.last_ids = [''] * 3    # start all blank
 
-        ts_cur = time.time()
-        read_cur = int(flds[7])
+        # Number of total readings (including those that don't match the meter list)
+        self.total_readings = 0
+
+    def run(self):
         
+        # listen for meter readings indefinitely
+        while True:
 
-    except:
-        logging.exception('Error processing reading %s' % flds)
-        time.sleep(2)
+            try:
+                flds = self._rtlamr.stdout.readline().strip().split(',')
+
+                if len(flds) != 9:
+                    # valid readings have nine fields
+                    continue
+
+                self.total_readings += 1
+
+                # If the list of Meter IDs to record is not empty, make sure this ID
+                # is in the list of IDs to record.
+                # Get the time, the meter ID and the reading
+                ts_cur = time.time()
+                meter_id = int(flds[3])
+                read_cur = int(flds[7])
+
+                # if meter is in the list, update the list of last IDs received
+                # and log the data to the file list.
+                if meter_id in self._meter_ids:
+                    # add the new ID at the end, and bump the oldest one off
+                    self.last_ids = self.last_ids[1:] + [meter_id]
+                
+
+            except:
+                logging.exception('Error processing reading %s' % flds)
+                time.sleep(2)

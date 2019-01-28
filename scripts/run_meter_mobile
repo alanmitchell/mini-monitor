@@ -1,0 +1,11 @@
+#!/bin/bash
+# This scripts starts and restarts, if necessary, the meter_mobile.py program.
+
+# rtltcp needs time to find the RTL-SDR dongle, but I put that delay
+# in the meter_mobile.py script, because I think the Python time.sleep()
+# is not affected by changes in the system clock.
+
+until /home/pi/pi_logger/meter_mobile.py; do
+    echo "Server 'meter_mobile.py' crashed with exit code $?.  Respawning.." >&2
+    sleep 2
+done

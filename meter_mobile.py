@@ -12,6 +12,7 @@ it within this script, but it then captured keystrokes such as Ctrl-C.).
 import subprocess
 import signal
 import sys
+import os
 import time
 import logging
 import threading
@@ -20,7 +21,9 @@ import config_logging
 # Constants for the Program
 ERROR_LOG_FILE = '/var/log/meter_mobile.log'  # error log file
 RTLAMR_PATH = '/home/pi/gocode/bin/rtlamr'    # path to rtlamr program
-METER_ID_FILE = '/boot/meters.txt'   # has list of meter IDs, one per line
+METER_ID_FILE = '/boot/meter_mobile/meters.txt'   # has list of meter IDs, one per line
+# files to write the readings into
+READING_FILES = ['/boot/meter_mobile/readings.txt', '/home/pi/readings.txt']
 
 def display(text):
     """Displays 'text' on the USB connected display; lines are delimited
@@ -28,19 +31,6 @@ def display(text):
     the new message.
     """
     print(text)
-
-# Delay to make sure that rtltcp has found the RTL-SDR dongle.  Just
-# to be cautious, break into a number delays in case time.sleep() might
-# be affected by ntpd changes to system clock.
-# 18 loops x 5 seconds = 90 second delay
-for i in range(18):
-    remaining = 90 - i*5
-    display('Warming Up\n{remaining} secs remaining')
-    time.sleep(5)
-display('Waiting for\nFirst Reading')
-# Configure logging and log a restart of the app
-config_logging.configure_logging(logging, ERROR_LOG_FILE)
-logging.warning('meter_mobile has restarted')
 
 def shutdown(signum, frame):
     '''Kills the external processes that were started by this script
@@ -52,27 +42,15 @@ def shutdown(signum, frame):
     subprocess.call('/usr/bin/pkill -9 meter_mobile', shell=True)
     sys.exit(0)
 
-# If process is being killed, go through shutdown process
-signal.signal(signal.SIGTERM, shutdown)
-signal.signal(signal.SIGINT, shutdown)
-
-# Read in the list of meter IDs to store and put in set.
-try:
-    meter_ids = set([int(x) for x in open(METER_ID_FILE).readlines() if len(x.strip())])
-except:
-    display('Error: No\nMeter ID List')
-    logging.exception('Error reading Meter ID List.')
-    time.sleep(3)
-    sys.exit(1)
 
 class MeterReader(threading.Thread):
 
-    def __init__(self, meter_ids, log_files=[]):
+    def __init__(self, meter_ids, reading_files=[]):
         # save set of meter ids.
         self._meter_ids = meter_ids
 
         # Save the list of file paths to log the readings to
-        self._log_files = log_files
+        self._reading_files = reading_files
 
         # start meter reading process
         self._rtlamr = subprocess.Popen([RTLAMR_PATH, 
@@ -87,7 +65,7 @@ class MeterReader(threading.Thread):
         self.total_readings = 0
 
     def run(self):
-        
+
         # listen for meter readings indefinitely
         while True:
 
@@ -103,7 +81,7 @@ class MeterReader(threading.Thread):
                 # If the list of Meter IDs to record is not empty, make sure this ID
                 # is in the list of IDs to record.
                 # Get the time, the meter ID and the reading
-                ts_cur = time.time()
+                ts_cur = int(time.time())
                 meter_id = int(flds[3])
                 read_cur = int(flds[7])
 
@@ -112,8 +90,58 @@ class MeterReader(threading.Thread):
                 if meter_id in self._meter_ids:
                     # add the new ID at the end, and bump the oldest one off
                     self.last_ids = self.last_ids[1:] + [meter_id]
-                
+
+                    # log the reading to all of the log files
+                    for fn in self._reading_files:
+                        with open(fn, 'a', 0) as fout:   # append to file, unbuffered
+                            fout.write('%s\t%s\t%s\n' % (ts_cur, meter_id, read_cur))
+                            os.fsync(fout)    # just to make sure it is written
 
             except:
                 logging.exception('Error processing reading %s' % flds)
                 time.sleep(2)
+
+
+# Delay to make sure that rtltcp has found the RTL-SDR dongle.  Just
+# to be cautious, break into a number delays in case time.sleep() might
+# be affected by ntpd changes to system clock.
+# 18 loops x 5 seconds = 90 second delay
+for i in range(18):
+    remaining = 90 - i*5
+    display('Warming Up\n{remaining} secs remaining')
+    time.sleep(5)
+
+# Configure logging and log a restart of the app
+config_logging.configure_logging(logging, ERROR_LOG_FILE)
+logging.warning('meter_mobile has restarted')
+
+# If process is being killed, go through shutdown process
+signal.signal(signal.SIGTERM, shutdown)
+signal.signal(signal.SIGINT, shutdown)
+
+# Read in the list of meter IDs to store and put in set.
+try:
+    meter_ids = set([int(x) for x in open(METER_ID_FILE).readlines() if len(x.strip())])
+except:
+    display('Error: No\nMeter ID List')
+    logging.exception('Error reading Meter ID List.')
+    time.sleep(3)
+    sys.exit(1)
+
+# start the meter reader
+reader = MeterReader(meter_ids, READING_FILES)
+reader.start()
+
+while True:
+    try:
+        time.sleep(2)
+        ids = reader.last_ids
+        msg = '%s  %s\n%s    %s' % (
+            ids[0],
+            ids[1],
+            ids[2],
+            reader.total_readings % 100    # last two digits
+        )
+        display(msg)
+    except:
+        logging.exception('Error processing meter readings')

@@ -29,59 +29,10 @@ fi
 # errors but requires human intervention for more serious errors.
 touch /forcefsck
 
-# If a Cell Modem is being used, start it up.
-if /home/pi/pi_logger/scripts/test_setting.py USE_CELL_MODEM
-then
-	/home/pi/pi_logger/scripts/start_cell_modem &
-fi
-
-# The Mosquitto MQTT broker is started as a service, see: 
-# /etc/systemd/system/mosquitto.service
-
-# If requested in the mini-monitor settins file, start the service that listens 
-# for sensor readings from the MQTT broker and then posts those to a BMON server.
-if /home/pi/pi_logger/scripts/test_setting.py ENABLE_BMON_POST
-then
-	/home/pi/pi_logger/scripts/run_mqtt_to_bmon &
-fi
-
-# Always start up pi_logger because it makes a status post to api.analysisnorth.com
-/home/pi/pi_logger/scripts/run_pi_logger &
-
-# Start the programs for Utility Meter reading, if requested in the settings
-# file.
-if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
-then
-	/home/pi/pi_logger/scripts/run_rtl_tcp &
-	/home/pi/pi_logger/scripts/run_meter_reader &
-fi
-
-# Start the programs for reading 433 MHz wireless sensors, if requested in
-# the settings file.
-if /home/pi/pi_logger/scripts/test_setting.py ENABLE_RTL433_READER
-then
-	/home/pi/pi_logger/scripts/run_rtl433_reader &
-fi
-
-# Start the multi-channel pulse counter script, if requested in
-# the settings file.
-if /home/pi/pi_logger/scripts/test_setting.py ENABLE_PULSE_COUNTER_MULTI_CH
-then
-	/home/pi/pi-energy-sensors/run_pulse_counter_multi_ch &
-fi
-
-# Start the BTU meter script, if requested in the settings file.
-if /home/pi/pi_logger/scripts/test_setting.py ENABLE_BTU_METER
-then
-	/home/pi/pi-energy-sensors/run_btu_meter &
-fi
+/home/pi/pi_logger/scripts/run_rtl_tcp &
+/home/pi/pi_logger/scripts/run_meter_mobile &
 
 # Turn off he HDMI interface to save power
 /usr/bin/tvservice -o
-
-# Run the site-specific startup file.  Add any other commands to this
-# rc.local.site file, and they will execute at boot up.  Make sure 
-# rc.local.site is executable.
-/etc/rc.local.site
 
 exit 0

@@ -10,6 +10,9 @@ import os
 import cron_logging
 import utils
 
+# Cron Jobs not needed for the Mobile Reader
+sys.exit()
+
 # get the logger for the application
 logger = cron_logging.logger
 

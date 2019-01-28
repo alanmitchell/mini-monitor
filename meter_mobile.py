@@ -46,6 +46,10 @@ def shutdown(signum, frame):
 class MeterReader(threading.Thread):
 
     def __init__(self, meter_ids, reading_files=[]):
+
+        # Call main class constructor
+        threading.Thread.__init__(self)
+
         # save set of meter ids.
         self._meter_ids = meter_ids
 

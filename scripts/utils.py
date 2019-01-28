@@ -59,6 +59,8 @@ def backup_files():
             shutil.copyfile('/var/log/mosquitto.log', '/var/local/mosquitto.log')
         if os.path.exists('/var/log/mqtt_to_bmon.log'):
             shutil.copyfile('/var/log/mqtt_to_bmon.log', '/var/local/mqtt_to_bmon.log')
+        if os.path.exists('/var/log/meter_mobile.log'):
+            shutil.copyfile('/var/log/meter_mobile.log', '/var/local/meter_mobile.log')
 
         logger.info('Backed up Log files.')
 

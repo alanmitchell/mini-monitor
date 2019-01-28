@@ -108,7 +108,7 @@ class MeterReader(threading.Thread):
 # 18 loops x 5 seconds = 90 second delay
 for i in range(18):
     remaining = 90 - i*5
-    display('Warming Up\n{remaining} secs remaining')
+    display('Warming Up\n%s secs remaining' % remaining)
     time.sleep(5)
 
 # Configure logging and log a restart of the app

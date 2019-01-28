@@ -140,7 +140,7 @@ while True:
     try:
         time.sleep(2)
         ids = reader.last_ids
-        msg = '%s  %s\n%s    %s' % (
+        msg = '%s  %s\n*%s*    %s' % (
             ids[0],
             ids[1],
             ids[2],

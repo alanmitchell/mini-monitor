@@ -49,7 +49,7 @@ def display(text):
         try:
             with serial.Serial(LCD_PORT, 19200, timeout=1) as lcd:
                 lcd.write([0xFE, 0x58])    # clear screen
-                lcd.write(msg)
+                lcd.write(text)
         except:
             logging.exception('Error with Display Communication.')
 

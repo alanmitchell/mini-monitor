@@ -136,7 +136,7 @@ init_display()
 # to be cautious, break into a number delays in case time.sleep() might
 # be affected by ntpd changes to system clock.
 # 18 loops x 5 seconds = 90 second delay
-for i in range(1):       # Set this to 18 for 90 second delay
+for i in range(18):       # Set this to 18 for 90 second delay
     remaining = 90 - i*5
     display('Warming Up\r%s secs more' % remaining)
     time.sleep(5)

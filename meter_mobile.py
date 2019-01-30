@@ -34,8 +34,9 @@ def init_display():
         try:
             with serial.Serial(LCD_PORT, 19200, timeout=1) as lcd:
                 lcd.write([0xFE, 0x99, 255])    # full brightness
-                lcd.write([0xFE, 0x50, 255])    # full contrast
+                lcd.write([0xFE, 0x50, 0xE0])    # set contrast
                 lcd.write([0xFE, 0xD1, 16, 2])  # 16 x 2 LCD size
+                lcd.write([0xFE, 0x51])        # auto-scroll on
         except:
             logging.exception('Error with Display Communication.')
 
@@ -165,7 +166,7 @@ while True:
     try:
         time.sleep(2)
         ids = reader.last_ids
-        msg = '%s %s*%s*  %s' % (
+        msg = '%7s %8s*%s*  %s' % (
             str(ids[0])[-7:],       # can only fit the last 7 characters
             str(ids[1])[-8:],       # only last 8 characters
             ids[2],

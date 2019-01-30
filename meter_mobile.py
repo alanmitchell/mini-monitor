@@ -35,6 +35,7 @@ def init_display():
             with serial.Serial(LCD_PORT, 19200, timeout=1) as lcd:
                 lcd.write([0xFE, 0x99, 255])    # full brightness
                 lcd.write([0xFE, 0x50, 255])    # full contrast
+                lcd.write([0xFE, 0xD1, 16, 2])  # 16 x 2 LCD size
         except:
             logging.exception('Error with Display Communication.')
 
@@ -44,7 +45,6 @@ def display(text):
     by newline characters.  The display is first cleared before displaying
     the new message.
     """
-    print(text)
     if os.path.exists(LCD_PORT):
         try:
             with serial.Serial(LCD_PORT, 19200, timeout=1) as lcd:
@@ -113,6 +113,7 @@ class MeterReader(threading.Thread):
                 # if meter is in the list, update the list of last IDs received
                 # and log the data to the file list.
                 if meter_id in self._meter_ids:
+                    print('%s:  %s' % (meter_id, read_cur))
                     # add the new ID at the end, and bump the oldest one off
                     self.last_ids = self.last_ids[1:] + [meter_id]
 
@@ -164,11 +165,11 @@ while True:
     try:
         time.sleep(2)
         ids = reader.last_ids
-        msg = '%s %s\r*%s*   %s' % (
+        msg = '%s %s*%s*  %s' % (
             str(ids[0])[-7:],       # can only fit the last 7 characters
-            ids[1],
+            str(ids[1])[-8:],       # only last 8 characters
             ids[2],
-            reader.total_readings % 100    # last two digits
+            reader.total_readings % 1000    # last three digits
         )
         display(msg)
     except:

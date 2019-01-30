@@ -16,6 +16,7 @@ import os
 import time
 import logging
 import threading
+import serial
 import config_logging
 
 # Constants for the Program
@@ -24,6 +25,19 @@ RTLAMR_PATH = '/home/pi/gocode/bin/rtlamr'    # path to rtlamr program
 METER_ID_FILE = '/boot/meter_mobile/meters.txt'   # has list of meter IDs, one per line
 # files to write the readings into
 READING_FILES = ['/boot/meter_mobile/readings.txt', '/home/pi/readings.txt']
+LCD_PORT = '/dev/ttyACM0'
+
+def init_display():
+    """Initializes LCD display if it exists.
+    """
+    if os.path.exists(LCD_PORT):
+        try:
+            with serial.Serial(LCD_PORT, 19200, timeout=1) as lcd:
+                lcd.write([0xFE, 0x99, 255])    # full brightness
+                lcd.write([0xFE, 0x50, 255])    # full contrast
+        except:
+            logging.exception('Error with Display Communication.')
+
 
 def display(text):
     """Displays 'text' on the USB connected display; lines are delimited
@@ -31,6 +45,13 @@ def display(text):
     the new message.
     """
     print(text)
+    if os.path.exists(LCD_PORT):
+        try:
+            with serial.Serial(LCD_PORT, 19200, timeout=1) as lcd:
+                lcd.write([0xFE, 0x58])    # clear screen
+                lcd.write(msg)
+        except:
+            logging.exception('Error with Display Communication.')
 
 def shutdown(signum, frame):
     '''Kills the external processes that were started by this script
@@ -106,13 +127,16 @@ class MeterReader(threading.Thread):
                 time.sleep(2)
 
 
+# Initialize LCD display
+init_display()
+
 # Delay to make sure that rtltcp has found the RTL-SDR dongle.  Just
 # to be cautious, break into a number delays in case time.sleep() might
 # be affected by ntpd changes to system clock.
 # 18 loops x 5 seconds = 90 second delay
-for i in range(18):       # Set this to 18 for 90 second delay
+for i in range(1):       # Set this to 18 for 90 second delay
     remaining = 90 - i*5
-    display('Warming Up\n%s secs remaining' % remaining)
+    display('Warming Up\r%s secs more' % remaining)
     time.sleep(5)
 
 # Configure logging and log a restart of the app
@@ -127,7 +151,7 @@ signal.signal(signal.SIGINT, shutdown)
 try:
     meter_ids = set([int(x) for x in open(METER_ID_FILE).readlines() if len(x.strip())])
 except:
-    display('Error: No\nMeter ID List')
+    display('Error: No\rMeter ID List')
     logging.exception('Error reading Meter ID List.')
     time.sleep(3)
     sys.exit(1)
@@ -140,8 +164,8 @@ while True:
     try:
         time.sleep(2)
         ids = reader.last_ids
-        msg = '%s  %s\n*%s*    %s' % (
-            ids[0],
+        msg = '%s %s\r*%s*   %s' % (
+            str(ids[0])[-7:],       # can only fit the last 7 characters
             ids[1],
             ids[2],
             reader.total_readings % 100    # last two digits

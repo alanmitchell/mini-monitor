@@ -48,7 +48,10 @@ class LoggerController:
 
         # Create the object that reads temperature from the attached USB
         # temperature sensor.
-        self.temp_reader = readers.usb_temp1.USBtemperature1()
+        try:
+            self.temp_reader = readers.usb_temp1.USBtemperature1()
+        except:
+            logging.exception('Error initializing Temperature Sensor.')
 
 
     def add_reader(self, reader):

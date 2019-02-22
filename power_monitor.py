@@ -41,7 +41,7 @@ try:
     # Set up the MODBUS instrument used to read the sensor
     minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL=True
     instr = minimalmodbus.Instrument(settings.PWR_PORT, 1)   # Slave Address 1 assumed for sensor
-    instr.serial.timeout = 0.1
+    instr.serial.timeout = 0.2
     instr.serial.baudrate = 9600
 
 except:

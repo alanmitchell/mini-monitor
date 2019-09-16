@@ -4,10 +4,10 @@ OWFS must be installed and configured, as shown here and in other tutorials:
 https://www.packtpub.com/books/content/raspberry-pi-and-1-wire
 http://www.sheepwalkelectronics.co.uk/RPI2_software.php
 """
-from __future__ import division   # do floating point div even with integers
+   # do floating point div even with integers
 import time
 import subprocess
-import base_reader
+from . import base_reader
 
 class OWFSreader(base_reader.Reader):
     """Class to read values from the OWFS system.

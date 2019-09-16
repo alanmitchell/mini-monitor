@@ -4,7 +4,7 @@ import time
 import os
 import shutil
 import sqlite3
-import cron_logging
+from . import cron_logging
 
 # get the logger for the application
 logger = cron_logging.logger

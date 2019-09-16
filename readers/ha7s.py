@@ -5,7 +5,7 @@ The class that does the reading of the bus is HA7Sreader.
 """
 import logging, time, re, glob
 import serial
-import base_reader
+from . import base_reader
 
 # ----------- Dallas 1-wire CRC Calculations -------------
 

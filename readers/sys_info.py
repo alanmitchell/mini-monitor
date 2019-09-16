@@ -3,7 +3,7 @@
 of the monitoring system.
 """
 import time
-import base_reader
+from . import base_reader
 
 class SysInfo(base_reader.Reader):
     

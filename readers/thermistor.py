@@ -4,7 +4,7 @@ Class to convert Thermistor readings into temperatures. Also has a
 class method that determines an unknown resistance in a divider
 network.
 """
-from __future__ import division
+
 from math import log
 
 # Steinhart-Hart Coefficients for various thermistors
@@ -79,18 +79,18 @@ class Thermistor:
 if __name__=='__main__':
 
    t = Thermistor('Sure 10K')
-   print t.TfromR(35360, 'C')
+   print(t.TfromR(35360, 'C'))
 
    t = Thermistor('US Sensor 5K')
-   print t.TfromR(27665, 'C')
+   print(t.TfromR(27665, 'C'))
 
    t = Thermistor('US Sensor J')
-   print t.TfromR(2157, 'C')
+   print(t.TfromR(2157, 'C'))
 
    t = Thermistor('Tekmar 071')
-   print t.TfromR(6532, 'C')
+   print(t.TfromR(6532, 'C'))
 
    t = Thermistor('Tekmar 071', appliedV=4.73, dividerR=20500.0)
    while 1:
-      v = float(raw_input('Enter voltage: '))
-      print t.TfromV(v, unit='F')
+      v = float(input('Enter voltage: '))
+      print(t.TfromV(v, unit='F'))

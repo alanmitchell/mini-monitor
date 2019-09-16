@@ -113,7 +113,7 @@ class Tsl2591(object):
             INTEGRATIONTIME_500MS: 500.,
             INTEGRATIONTIME_600MS: 600.,
             }
-        if self.integration_time in case_integ.keys():
+        if self.integration_time in list(case_integ.keys()):
             atime = case_integ[self.integration_time]
         else:
             atime = 100.
@@ -125,7 +125,7 @@ class Tsl2591(object):
             GAIN_MAX: 9876.,
             }
 
-        if self.gain in case_gain.keys():
+        if self.gain in list(case_gain.keys()):
             again = case_gain[self.gain]
         else:
             again = 1.
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     tsl = Tsl2591()  # initialize
     full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and ir spectrum)
     lux = tsl.calculate_lux(full, ir)  # convert raw values to lux
-    print (lux, full, ir)
+    print((lux, full, ir))
     print ()
 
     def test(int_time=INTEGRATIONTIME_100MS, gain=GAIN_LOW):
@@ -193,9 +193,9 @@ if __name__ == '__main__':
         tsl.set_timing(int_time)
         full_test, ir_test = tsl.get_full_luminosity()
         lux_test = tsl.calculate_lux(full_test, ir_test)
-        print ('Lux = %f  full = %i  ir = %i' % (lux_test, full_test, ir_test))
-        print("integration time = %i" % tsl.get_timing())
-        print("gain = %i \n" % tsl.get_gain())        
+        print(('Lux = %f  full = %i  ir = %i' % (lux_test, full_test, ir_test)))
+        print(("integration time = %i" % tsl.get_timing()))
+        print(("gain = %i \n" % tsl.get_gain()))        
 
     for i in [INTEGRATIONTIME_100MS,
               INTEGRATIONTIME_200MS,

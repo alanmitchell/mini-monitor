@@ -3,7 +3,7 @@
 on a Labjack U3.
 """
 import time
-import base_reader, myU3, thermistor
+from . import base_reader, myU3, thermistor
 
 
 def readTemp(dev, th, ch, vref):

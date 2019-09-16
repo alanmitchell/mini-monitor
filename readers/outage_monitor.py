@@ -3,7 +3,7 @@
 a Raspberry Pi digital I/O pin:  1 power is present, 0 is power is absent.
 """
 import time
-import base_reader
+from . import base_reader
 import RPi.GPIO as GPIO
 
 # BCM pin number of the Raspberry Pi pin used to read current state

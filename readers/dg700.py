@@ -2,10 +2,10 @@
 """Module used with classes to read the DG-700 pressure gauge.
 Use the DG700reader class.
 """
-from __future__ import division   # do floating point div even with integers
+   # do floating point div even with integers
 import time
 import serial
-import base_reader
+from . import base_reader
 
 
 def open_DG():

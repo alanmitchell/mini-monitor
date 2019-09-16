@@ -8,7 +8,7 @@ the IMS-4000 MIB available from Sensaphone's website.
 import time
 import logging
 from pysnmp.entity.rfc3413.oneliner import cmdgen
-import base_reader
+from . import base_reader
 
 
 class SensaphoneReader(base_reader.Reader):
@@ -65,7 +65,7 @@ class SensaphoneReader(base_reader.Reader):
         rd_val_oid = '.1.3.6.1.4.1.8338.1.1.1.%d.8.1.1.7' % node
         rd_val_list = [int(val) for val in self.get_value_list(rd_val_oid)]
 
-        return zip(rd_name_list, rd_val_list)
+        return list(zip(rd_name_list, rd_val_list))
 
     def get1value(self, oid):
         '''Gets a single value for an object id, 'oid' from the sensaphone unit.
@@ -111,7 +111,7 @@ class SensaphoneReader(base_reader.Reader):
 
         # Note: the range starts at 2 because there is nothing at zero, and 1 is the number for the Host unit, which
         # only has sensors for the battery and sound.
-        for node in xrange(2, SensaphoneReader.NODE_MAX + 1):
+        for node in range(2, SensaphoneReader.NODE_MAX + 1):
 
             node_ip_oid = '.1.3.6.1.4.1.8338.1.1.1.%s.10.1.0' % node
             node_ip = self.get1value(node_ip_oid)

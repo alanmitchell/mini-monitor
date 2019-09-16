@@ -2,7 +2,7 @@
 """
 
 import random, time
-import base_reader
+from . import base_reader
 
 class TestCounterState(base_reader.Reader):
     

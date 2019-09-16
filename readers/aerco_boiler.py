@@ -1,10 +1,10 @@
 #!/usr/bin/python
 """Module used with classes to read Aerco Boiler Controls.
 """
-from __future__ import division   # do floating point div even with integers
+   # do floating point div even with integers
 import time, logging
 import minimalmodbus
-import base_reader
+from . import base_reader
 
 # Set some default MODBUS settings
 

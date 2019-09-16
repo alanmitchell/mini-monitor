@@ -4,10 +4,11 @@ Creates a MyU3 class that adds higher-level functionality to the base
 LabJack U3 class.
 '''
 
-from __future__ import division
+
 import u3
 from time import sleep
 import math
+from functools import reduce
 
 def getU3(**kargs):
    '''Returns an open MyU3 object but retries until successful if errors occur.'''
@@ -135,7 +136,7 @@ if __name__=='__main__':
       while True:
             #print '%.3f' % d.getAvg(6)
             #print '%.2f' % ( (d.getAvg(30) - 273.15)*1.8 + 32.0 )
-            print '%.3f' % d.getRMS(6)
+            print('%.3f' % d.getRMS(6))
             sleep(0.5)
    finally:
       d.close()

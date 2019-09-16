@@ -62,7 +62,7 @@ class LoggerController:
         # summarize the readings
         summarized_readings = []
         new_read_data = {}   # the new reading data structure for next interval
-        for reading_id, data in self.read_data.items():
+        for reading_id, data in list(self.read_data.items()):
             reading_type, reading_list = data
             if len(reading_list):
                 

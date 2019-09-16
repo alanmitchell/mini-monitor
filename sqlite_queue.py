@@ -8,12 +8,12 @@ Modified from the code presented at (reliability added):
     http://flask.pocoo.org/snippets/88/
 """
 import os, sqlite3
-from cPickle import loads, dumps
+from pickle import loads, dumps
 from time import sleep
 try:
-    from thread import get_ident
+    from _thread import get_ident
 except ImportError:
-    from dummy_thread import get_ident
+    from _dummy_thread import get_ident
 
 
 class SqliteReliableQueue(object):
@@ -116,7 +116,7 @@ class SqliteReliableQueue(object):
                 conn.execute(self._write_lock)
                 cursor = conn.execute(self._popleft_get)
                 try:
-                    id, obj_buffer = cursor.next()
+                    id, obj_buffer = next(cursor)
                     keep_pooling = False
                 except StopIteration:
                     conn.commit() # unlock the database

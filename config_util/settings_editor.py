@@ -20,11 +20,11 @@ partition of the Mini-Monitor SD card.  If pyinstaller is run on a Mac,
 and placed on the boot partition.
 '''
 
-from Tkinter import *
-import ttk
-import tkMessageBox
-import tkFileDialog
-import tkFont
+from tkinter import *
+import tkinter.ttk
+import tkinter.messagebox
+import tkinter.filedialog
+import tkinter.font
 import io
 import os
 import sys
@@ -50,12 +50,12 @@ def store_settings():
 
         # Do a few input checks
         if len(logger_id.strip())==0:
-            tkMessageBox.showerror('No Site Name', 'You must enter a Site Name.')
+            tkinter.messagebox.showerror('No Site Name', 'You must enter a Site Name.')
             return -1
 
         if internet_type=='wifi':
             if len(w_ssid.strip())==0:
-                tkMessageBox.showerror('No WiFi Name', 'You must enter a WiFi Network Name.')
+                tkinter.messagebox.showerror('No WiFi Name', 'You must enter a WiFi Network Name.')
                 return -1
 
         substitutions = [
@@ -104,7 +104,7 @@ def store_settings():
 
         # Write the revised settings file.
         with io.open(settings_fn, 'w', newline='\n') as f:
-            f.write(unicode(file_contents))
+            f.write(str(file_contents))
 
         # Make the proper wpa_supplicant.conf file.
         if internet_type=='wifi':
@@ -113,14 +113,14 @@ def store_settings():
             file_contents = setup_utils.wpa_sup_file()
         sup_fn = os.path.join(THIS_DIR, 'pi_logger/wpa_supplicant.conf')
         with io.open(sup_fn, 'w', newline='\n') as f:
-            f.write(unicode(file_contents))
+            f.write(str(file_contents))
 
         msg = 'The Settings were Successfully Stored!  You can now close the application or modify settings and Store again.'
-        tkMessageBox.showinfo('Success', msg)
+        tkinter.messagebox.showinfo('Success', msg)
         return 0
 
     except Exception as e:
-        tkMessageBox.showerror('Error Occurred', 'An Error occurred while attempting to store settings:\n%s' % str(e))
+        tkinter.messagebox.showerror('Error Occurred', 'An Error occurred while attempting to store settings:\n%s' % str(e))
         return -1
 
 def inet_visibility():
@@ -149,72 +149,72 @@ def gas_id_visibility():
 
 def select_other_setting():
     global other_settings_fn
-    other_settings_fn = tkFileDialog.askopenfilename()
+    other_settings_fn = tkinter.filedialog.askopenfilename()
     other_settings_var.set(SETTINGS_FILE_TMPL % other_settings_fn)
 
 root = Tk()
 root.title('Mini-Monitor Configuration')
 
 # Increase font sizes a bit
-default_font = tkFont.nametofont("TkDefaultFont")
+default_font = tkinter.font.nametofont("TkDefaultFont")
 default_font.configure(size=11)
-text_font = tkFont.nametofont("TkTextFont")
+text_font = tkinter.font.nametofont("TkTextFont")
 text_font.configure(size=11)
 
 # Main Frame to hold all widgets
-mainframe = ttk.Frame(root, padding="3 3 12 12")
+mainframe = tkinter.ttk.Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky='EWNS')
 mainframe.columnconfigure(0, weight=1)
 mainframe.rowconfigure(0, weight=1)
 
 # Site ID entry
-ttk.Label(mainframe, text='Enter Short Name for this Site (20 character max, no spaces):').grid(
+tkinter.ttk.Label(mainframe, text='Enter Short Name for this Site (20 character max, no spaces):').grid(
     column=0, row=0, sticky=W)
-site_entry = ttk.Entry(mainframe, width=20)
+site_entry = tkinter.ttk.Entry(mainframe, width=20)
 site_entry.grid(column=0, row=1, sticky=W)
 
 # Gas Meter Reader related
 enable_gas = StringVar()
-enable_gas_check = ttk.Checkbutton(mainframe,
+enable_gas_check = tkinter.ttk.Checkbutton(mainframe,
                                    text='Enable Meter Reader',
                                    variable=enable_gas,
                                    command=gas_id_visibility)
 enable_gas.set('1')
 enable_gas_check.grid(column=0, row=3, sticky=W)
-meter_ids_label = ttk.Label(mainframe, text='Enter Meter ID. Separate Multiple IDs with commas. Leave Blank to read All meters.')
+meter_ids_label = tkinter.ttk.Label(mainframe, text='Enter Meter ID. Separate Multiple IDs with commas. Leave Blank to read All meters.')
 meter_ids_label.grid(column=0, row=4, sticky=W)
-meter_ids_entry = ttk.Entry(mainframe, width=50)
+meter_ids_entry = tkinter.ttk.Entry(mainframe, width=50)
 meter_ids_entry.grid(column=0, row=5, sticky=W)
 
 #---- Internet Access
-inet_frame = ttk.LabelFrame(mainframe, text='Internet Access Type')
+inet_frame = tkinter.ttk.LabelFrame(mainframe, text='Internet Access Type')
 inet_frame.grid(column=0, row=6, sticky=W)
 inet_type = StringVar()
-ttk.Radiobutton(inet_frame, text='WiFi', variable=inet_type, value='wifi', command=inet_visibility).grid(column=0, row=0)
-ttk.Radiobutton(inet_frame, text='Ethernet', variable=inet_type, value='ethernet', command=inet_visibility).grid(column=1, row=0)
-ttk.Radiobutton(inet_frame, text='Cellular (requires modem)', variable=inet_type, value='cellular', command=inet_visibility).grid(column=2, row=0)
+tkinter.ttk.Radiobutton(inet_frame, text='WiFi', variable=inet_type, value='wifi', command=inet_visibility).grid(column=0, row=0)
+tkinter.ttk.Radiobutton(inet_frame, text='Ethernet', variable=inet_type, value='ethernet', command=inet_visibility).grid(column=1, row=0)
+tkinter.ttk.Radiobutton(inet_frame, text='Cellular (requires modem)', variable=inet_type, value='cellular', command=inet_visibility).grid(column=2, row=0)
 inet_type.set('wifi')
 for child in inet_frame.winfo_children():
     child.grid_configure(padx=10, pady=5)
 
 # WiFi credentials
-wifi_frame = ttk.Frame(mainframe)
+wifi_frame = tkinter.ttk.Frame(mainframe)
 wifi_frame.grid(column=0, row=7, sticky=W)
-ttk.Label(wifi_frame, text='WiFi Network Name:').grid(column=0, row=0, sticky=E)
-wifi_ssid_entry = ttk.Entry(wifi_frame, width=30)
+tkinter.ttk.Label(wifi_frame, text='WiFi Network Name:').grid(column=0, row=0, sticky=E)
+wifi_ssid_entry = tkinter.ttk.Entry(wifi_frame, width=30)
 wifi_ssid_entry.grid(column=1, row=0)
-ttk.Label(wifi_frame, text='WiFi Password (leave blank if Open network):').grid(column=0, row=1, sticky=E)
-wifi_pass_entry = ttk.Entry(wifi_frame, width=30)
+tkinter.ttk.Label(wifi_frame, text='WiFi Password (leave blank if Open network):').grid(column=0, row=1, sticky=E)
+wifi_pass_entry = tkinter.ttk.Entry(wifi_frame, width=30)
 wifi_pass_entry.grid(column=1, row=1, sticky=W)
 for child in wifi_frame.winfo_children():
     child.grid_configure(padx=5, pady=5)
 
 # Cellular Modem Type
-cell_frame = ttk.Frame(mainframe)
+cell_frame = tkinter.ttk.Frame(mainframe)
 cell_frame.grid(column=0, row=8, sticky=W, padx=5, pady=5)
-ttk.Label(cell_frame, text='Cellular Modem Model:').grid(column=0, row=0, sticky=E)
+tkinter.ttk.Label(cell_frame, text='Cellular Modem Model:').grid(column=0, row=0, sticky=E)
 cell_modem = StringVar()
-cell_modem_combo = ttk.Combobox(cell_frame, textvariable=cell_modem)
+cell_modem_combo = tkinter.ttk.Combobox(cell_frame, textvariable=cell_modem)
 cell_modem_combo.grid(column=1, row=0, padx=5, pady=5)
 modem_text = ('Huawei E173', 'Huawei E3276', 'Huawei E1756C', 'ZTE MF197 Serial')
 modem_values = ('E173', 'E3276', 'E1756C', 'MF197')
@@ -227,14 +227,14 @@ SETTINGS_FILE_TMPL = 'Other Settings File: %s'
 other_settings_fn = ''
 other_settings_var = StringVar()
 other_settings_var.set(SETTINGS_FILE_TMPL % other_settings_fn)
-other_frame = ttk.Frame(mainframe)
+other_frame = tkinter.ttk.Frame(mainframe)
 other_frame.grid(column=0, row=9, sticky=W)
-ttk.Label(other_frame, text='Select File containing Other Settings:').grid(column=0, row=0, sticky=W, padx=5, pady=5)
-ttk.Button(other_frame, text='Select File', command=select_other_setting).grid(column=1, row=0, sticky=W, padx=5, pady=5)
-ttk.Label(mainframe, textvariable=other_settings_var).grid(column=0, row=10, sticky=W)
+tkinter.ttk.Label(other_frame, text='Select File containing Other Settings:').grid(column=0, row=0, sticky=W, padx=5, pady=5)
+tkinter.ttk.Button(other_frame, text='Select File', command=select_other_setting).grid(column=1, row=0, sticky=W, padx=5, pady=5)
+tkinter.ttk.Label(mainframe, textvariable=other_settings_var).grid(column=0, row=10, sticky=W)
 
-ttk.Separator(mainframe, orient=HORIZONTAL).grid(column=0, row=11, sticky='EW')
-ttk.Button(mainframe, text='Store these Configuration Settings', command=store_settings).grid(column = 0, row=12)
+tkinter.ttk.Separator(mainframe, orient=HORIZONTAL).grid(column=0, row=11, sticky='EW')
+tkinter.ttk.Button(mainframe, text='Store these Configuration Settings', command=store_settings).grid(column = 0, row=12)
 
 # Add some padding to all widgets in mainframe
 for child in mainframe.winfo_children():

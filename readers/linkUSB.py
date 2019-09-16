@@ -4,7 +4,7 @@
 """
 import logging, time, re
 import serial
-import base_reader
+from . import base_reader
 
 # ----------- Dallas 1-wire CRC Calculations -------------
 

@@ -10,7 +10,7 @@ import signal
 import sys
 import logging
 import threading
-import Queue
+import queue
 import numpy as np
 import mqtt_poster
 import config_logging
@@ -28,7 +28,7 @@ class RTLreceiver(threading.Thread):
         # If only thing left running are daemon threads, Python will exit.
         self.daemon = True
         self._rtl433 = subprocess.Popen(['/usr/local/bin/rtl_433', '-R40', '-Fjson', '-U'], stdout=subprocess.PIPE)
-        self._lines = Queue.Queue()
+        self._lines = queue.Queue()
         self._stop_thread = False
 
     def run(self):
@@ -153,7 +153,7 @@ if __name__=="__main__":
             logging.exception('Error processing a sensor reading: %s' % lin)
 
         # process any items in the reading list that have 3 values or are older than 4 seconds ago
-        for ky, vals in readings.items():
+        for ky, vals in list(readings.items()):
             try:
                 ts_str, id = ky
                 ts = time.strptime(ts_str, '%Y-%m-%d %H:%M:%S')
@@ -179,7 +179,7 @@ if __name__=="__main__":
             next_log_time = max(next_log_time + settings.LOG_INTERVAL, time.time() + settings.LOG_INTERVAL - 2.0)
 
             lines_to_post = []
-            for reading_id, reading_list in final_read_data.items():
+            for reading_id, reading_list in list(final_read_data.items()):
                 try:
                     # make a separate numpy array of values and time stamps
                     rd_arr = np.array(reading_list)

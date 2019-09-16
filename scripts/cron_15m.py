@@ -7,8 +7,8 @@ import time
 import sys
 import calendar
 import os
-import cron_logging
-import utils
+from . import cron_logging
+from . import utils
 
 # get the logger for the application
 logger = cron_logging.logger

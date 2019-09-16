@@ -3,7 +3,7 @@
 (see owfs.org).  The class the does the reading of the bus is OneWireReader.
 """
 import logging, glob, os, time
-import base_reader
+from . import base_reader
 
 MNT_POINT = '/mnt/1wire'
 

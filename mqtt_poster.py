@@ -1,6 +1,6 @@
 import threading
 import time
-import Queue
+import queue
 import socket
 import paho.mqtt.publish as publish
 
@@ -19,7 +19,7 @@ class MQTTposter(threading.Thread):
         self.daemon = True    # exit if main thread is gone
         self.host = host
         self.port = port
-        self.q = Queue.Queue()
+        self.q = queue.Queue()
 
     def run(self):
         """Processes (publishes) any items in the Queue.

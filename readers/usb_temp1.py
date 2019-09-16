@@ -7,7 +7,7 @@ This was developed for Marco Castillo's Enstar project.
 """
 import time
 import subprocess
-import base_reader
+from . import base_reader
 
 # The name of the digitemp Program being used.
 # This depends on the 1-wire master being used, and choices are:

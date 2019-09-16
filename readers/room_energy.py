@@ -2,11 +2,11 @@
 """Module used with classes to read the sensors on the Room Energy
 Add-on board: temperature, humidity, light and CO2.
 """
-from __future__ import division   # do floating point div even with integers
+   # do floating point div even with integers
 import time
 import smbus
-import base_reader
-import lib.tsl2591
+from . import base_reader
+from . import lib.tsl2591
 
 def co2(i2c_bus):
     i2c_bus.write_i2c_block_data(0x15, 0x04, [0x13, 0x8B, 0x00, 0x01])

@@ -2,10 +2,10 @@
 """Module used with classes to read Sage Boiler Controls.
 Sage21Reader class reads Sage 2.1 Boiler controls.
 """
-from __future__ import division   # do floating point div even with integers
+   # do floating point div even with integers
 import time
 import minimalmodbus
-import base_reader
+from . import base_reader
 
 # Set some default MODBUS settings
 

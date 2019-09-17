@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Script to test a setting in the mini-monitor settings file.
 """
 import sys

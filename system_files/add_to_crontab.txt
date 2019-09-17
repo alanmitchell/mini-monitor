@@ -1,8 +1,8 @@
 # Add the following lines to the root crontab, using sudo crontab -e
 
 # Run pi_logger scripts every 15 minutes, every hour, and very day
-*/15 * * * * /home/pi/pi_logger/scripts/cron_15m.py &
+*/15 * * * * /home/pi/pi_logger/scripts/cron_15m.py
 
 # Check health of system and set LED
-@reboot /home/pi/pi_logger/scripts/set_health_led.py &
-*/10 * * * * /home/pi/pi_logger/scripts/set_health_led.py &
+@reboot /home/pi/pi_logger/scripts/set_health_led.py
+*/10 * * * * /home/pi/pi_logger/scripts/set_health_led.py

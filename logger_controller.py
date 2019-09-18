@@ -128,6 +128,7 @@ class LoggerController:
             post_str = '\n'.join([ '%s\t%s\t%s' % (ts, sensor_id, val) for ts, sensor_id, val in summarized_readings])
             try:
                 self.poster.publish('readings/final/pi_logger', post_str)
+                logging.debug(f'logger_controller MQTT post: {post_str}')
             except:
                 logging.exception('Error posting readings to MQTT broker.')
 

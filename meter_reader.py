@@ -162,12 +162,14 @@ while True:
             rate = (read_cur - read_last) * 3600.0 * multiplier / (ts_cur - ts_last)
             
             # time stamp in the middle of the reading period
-            ts_post = (ts_cur + ts_last) / 2.0
-
+            ts_post = int((ts_cur + ts_last) / 2.0)
+            post_str = f'{ts_post}\t{settings.LOGGER_ID}_{commod_type:02d}_{meter_id}\t{rate}'
             mqtt.publish(
                 'readings/final/meter_reader',
-                '%s\t%s_%02d_%s\t%s' % (int(ts_post), settings.LOGGER_ID, commod_type, meter_id, rate)
+                post_str
             )
+            logging.debug(f'meter_reader MQTT post: {post_str}')
+
             set_last(meter_id, ts_cur, read_cur)
 
     except:

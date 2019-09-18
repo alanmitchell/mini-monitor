@@ -73,6 +73,7 @@ def on_message(client, userdata, msg):
         if len(line.strip())==0:
             # skip blank lines
             continue
+        logging.debug(f'mqtt_to_bmon received: {line}')
         try:
             ts, sensor_id, val = line.split('\t')
             reads.append( (float(ts), sensor_id, float(val)) )

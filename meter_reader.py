@@ -108,7 +108,8 @@ commod_map = {
 while True:
 
     try:
-        flds = rtlamr.stdout.readline().strip().split(',')
+        line = rtlamr.stdout.readline().strip()
+        flds = line.split(',')
 
         if len(flds) != 9:
             # valid readings have nine fields
@@ -173,5 +174,5 @@ while True:
             set_last(meter_id, ts_cur, read_cur)
 
     except:
-        logging.exception('Error processing reading %s' % flds)
+        logging.exception('Error processing reading %s' % line)
         time.sleep(2)

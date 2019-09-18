@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used with classes to read the sensors on the Room Energy
 Add-on board: temperature, humidity, light and CO2.
 """

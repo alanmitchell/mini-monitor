@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used to read devices on a Dallas 1-wire bus with an Embedded
 Devices HA7S master.
 The class that does the reading of the bus is HA7Sreader.

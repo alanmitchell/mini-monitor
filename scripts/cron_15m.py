@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Run by cron every 15 minutes.  Does numerous health checks, applying 
 remedies and rebooting if needed.
 """

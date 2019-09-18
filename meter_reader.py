@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 '''Script to read utility meter transmissions and post the rate of change 
 in meter reading (reading change per hour) at a specified interval.  Values 
 are posted to the 'readings/final/meter_reader' topic on the MQTT broker running 

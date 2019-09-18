@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used with classes to read Aerco Boiler Controls.
 """
    # do floating point div even with integers

@@ -2,7 +2,7 @@
 # This scripts starts and restarts, if necessary, the power_monitor.py program.
 # Sleep a bit to let the clock synchronize.
 sleep 15
-until /usr/bin/python3 /home/pi/pi_logger/power_monitor.py; do
+until /home/pi/pi_logger/power_monitor.py; do
     echo "Server 'power_monitor.py' crashed with exit code $?.  Respawning.." >&2
     sleep 2
 done

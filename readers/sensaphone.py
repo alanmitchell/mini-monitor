@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 '''Module used to read sensor values from a Sensaphone IMS-4000 system.
 If changes need to be made, it is helpful to download the free MIB browser available at:
 http://www.ireasoning.com/ . To use this properly you have to "Load mib" and then load

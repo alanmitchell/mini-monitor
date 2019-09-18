@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Script to read and post to BMON Acurite 592TXR Temperature/Humidity Wireless sensors,
 which operate in the 433 MHz band.
 """

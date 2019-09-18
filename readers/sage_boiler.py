@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used with classes to read Sage Boiler Controls.
 Sage21Reader class reads Sage 2.1 Boiler controls.
 """

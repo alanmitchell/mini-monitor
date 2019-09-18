@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used to read devices on a Dallas 1-wire bus using the OWFS library
 (see owfs.org).  The class the does the reading of the bus is OneWireReader.
 """

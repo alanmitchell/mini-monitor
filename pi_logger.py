@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Main script to start and control the data logger.
 """
 from os.path import dirname, realpath, join, exists

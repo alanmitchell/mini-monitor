@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python3
 '''
 Creates a MyU3 class that adds higher-level functionality to the base 
 LabJack U3 class.

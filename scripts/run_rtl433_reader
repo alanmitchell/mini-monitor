@@ -4,7 +4,7 @@
 # Also, this lets the clock synchronize with the Internet.
 sleep 60
 
-until /usr/bin/python3 /home/pi/pi_logger/rtl433_reader.py; do
+until /home/pi/pi_logger/rtl433_reader.py; do
     echo "Server 'rtl433_reader.py' crashed with exit code $?.  Respawning.." >&2
     sleep 2
 done

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used to read temperature sensors connected to the thermistor board
 on a Labjack U3.
 """

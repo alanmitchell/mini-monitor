@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Reader module for reporting information about the operation
 of the monitoring system.
 """

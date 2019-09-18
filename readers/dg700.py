@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used with classes to read the DG-700 pressure gauge.
 Use the DG700reader class.
 """

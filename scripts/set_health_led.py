@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Script to do basic health checks of the system and turn on an LED on
 BCM pin 12 (pin 32 on header) if they pass, turn Off otherwise.
 """

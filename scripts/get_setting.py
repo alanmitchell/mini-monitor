@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Script to get a setting in the mini-monitor settings file and write it
 to stdout so that it can be used in a shell script.
 """

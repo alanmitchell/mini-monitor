@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Script to read a PZEM-016 Electric Power sensor.  Readings are posted
 to the readings/final/power_monitor MQTT topic.
 

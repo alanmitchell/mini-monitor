@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """Module used to read Maxim 1-Wire sensors using the OWFS software.
 OWFS must be installed and configured, as shown here and in other tutorials:
 https://www.packtpub.com/books/content/raspberry-pi-and-1-wire

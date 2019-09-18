@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Reader module for reading one 1-Wire temperature sensor connected to a 
 DS9097 1-wire adapter connected to /dev/ttyUSB0 on the Raspberry Pi.  This
 uses the DigiTemp command line program, https://www.digitemp.com/, to read

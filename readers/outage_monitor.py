@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Reader module for detecting a  power outage as indicated by the state of
 a Raspberry Pi digital I/O pin:  1 power is present, 0 is power is absent.
 """

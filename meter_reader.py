@@ -82,7 +82,7 @@ mqtt.start()
 # start the rtlamr program.
 rtlamr = subprocess.Popen(['/home/pi/gocode/bin/rtlamr', 
     '-gainbyindex=24',   # index 24 was found to be the most sensitive
-    '-format=csv'], stdout=subprocess.PIPE)
+    '-format=csv'], stdout=subprocess.PIPE, text=True)
 
 # Get the Meter multipliers from the Settings file and put
 # them into a dictionary.

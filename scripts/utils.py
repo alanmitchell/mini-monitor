@@ -15,12 +15,12 @@ def reboot():
     """
     # wrap the reporting in a try except so that reboot is attempted for sure
     try:
-        report = 'lsusb:\n%s' % subprocess.check_output('/usr/bin/lsusb')
-        report += '\nls /mnt/1wire:\n%s' % subprocess.check_output(['/bin/ls', '/mnt/1wire'])
-        report += '\nuptime:\n%s' % subprocess.check_output('/usr/bin/uptime')
-        report += '\nfree:\n%s' % subprocess.check_output('/usr/bin/free')
-        report += '\ndf:\n%s' % subprocess.check_output('/bin/df')
-        report += '\nifconfig:\n%s' % subprocess.check_output('/sbin/ifconfig')
+        report = 'lsusb:\n%s' % subprocess.check_output('/usr/bin/lsusb', text=True)
+        report += '\nls /mnt/1wire:\n%s' % subprocess.check_output(['/bin/ls', '/mnt/1wire'], text=True)
+        report += '\nuptime:\n%s' % subprocess.check_output('/usr/bin/uptime', text=True)
+        report += '\nfree:\n%s' % subprocess.check_output('/usr/bin/free', text=True)
+        report += '\ndf:\n%s' % subprocess.check_output('/bin/df', text=True)
+        report += '\nifconfig:\n%s' % subprocess.check_output('/sbin/ifconfig', text=True)
         logger.info(report)
 
     except:
@@ -108,7 +108,7 @@ def ip_addrs():
     error occurs.
     """
     try:
-        result = subprocess.check_output("ifconfig | grep 'inet addr' | cut -f 2 -d : | cut -f 1 -d ' '", shell=True)
+        result = subprocess.check_output("ifconfig | grep 'inet addr' | cut -f 2 -d : | cut -f 1 -d ' '", shell=True, text=True)
         ips = [ip for ip in result.splitlines() if ip != '127.0.0.1']
     except:
         ips = []

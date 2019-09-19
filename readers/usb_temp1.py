@@ -34,7 +34,7 @@ class USBtemperature1(base_reader.Reader):
         # read the attached sensor(s).  Assume the last sensor in the list is the
         # temperature sensor. This reader is meant to be used with one sensor attached,
         # thus justifying the assumption.
-        result = subprocess.check_output('%s -a' % DIGITEMP_CMD, shell=True)
+        result = subprocess.check_output('%s -a' % DIGITEMP_CMD, shell=True, text=True)
         last_line = result.splitlines()[-1]
         temperature_value = float(last_line.split()[-1])
 

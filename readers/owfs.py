@@ -19,10 +19,10 @@ class OWFSreader(base_reader.Reader):
         readings = []
         ts = time.time()
 
-        for dev in subprocess.check_output(['owdir']).splitlines():
+        for dev in subprocess.check_output(['owdir'], text=True).splitlines():
             if dev.startswith('/28.'):
                 try:
-                    val = subprocess.check_output(['owread', '/uncached%s/temperature' % dev])
+                    val = subprocess.check_output(['owread', '/uncached%s/temperature' % dev], text=True)
                     val = float(val)*1.8 + 32.0    # convert to deg F
                     readings.append(
                         [ts, '%s_%s' % (self._settings.LOGGER_ID, dev[1:]), val, base_reader.VALUE]

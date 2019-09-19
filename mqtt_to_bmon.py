@@ -69,7 +69,8 @@ def on_message(client, userdata, msg):
     #   Unix timestamp  -  Sensor ID  -  Sensor value
     # Need to convert this to a list of 3-element tuples
     reads = []
-    for line in msg.payload.split('\n'):
+    msg_str = str(msg.payload.decode('utf-8'))
+    for line in msg_str.split('\n'):
         if len(line.strip())==0:
             # skip blank lines
             continue

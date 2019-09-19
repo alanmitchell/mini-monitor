@@ -75,7 +75,7 @@ class SqliteReliableQueue(object):
     def __iter__(self):
         with self._get_conn() as conn:
             for id, obj_buffer in conn.execute(self._iterate):
-                yield loads(str(obj_buffer))
+                yield loads(obj_buffer)
 
     def __str__(self):
         res = 'Queue:\n'
@@ -99,9 +99,9 @@ class SqliteReliableQueue(object):
     def append(self, obj):
         """Adds an item to the queue.
         """
-        obj_buffer = buffer(dumps(obj, 2))
+        obj_pkl = dumps(obj, 2)
         with self._get_conn() as conn:
-            conn.execute(self._append, (obj_buffer,))
+            conn.execute(self._append, (obj_pkl,))
             # the 'with' statement commits the insert.
 
     def popleft(self, sleep_wait=True):
@@ -129,7 +129,7 @@ class SqliteReliableQueue(object):
             if id:
                 conn.execute(self._popleft_del, (id,))
                 conn.execute(self._processing_append, (id, obj_buffer))
-                return id, loads(str(obj_buffer))
+                return id, loads(obj_buffer)
         return None, None
 
     def peek(self):
@@ -138,7 +138,7 @@ class SqliteReliableQueue(object):
         with self._get_conn() as conn:
             cursor = conn.execute(self._peek)
             try:
-                return loads(str(cursor.next()[0]))
+                return loads(cursor.next()[0])
             except StopIteration:
                 return None
                 
@@ -154,5 +154,5 @@ class SqliteReliableQueue(object):
         """
         with self._get_conn() as conn:
             for id, obj_buffer in conn.execute(self._processing_iterate):
-                yield loads(str(obj_buffer))
+                yield loads(obj_buffer)
         

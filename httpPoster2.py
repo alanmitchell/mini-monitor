@@ -16,6 +16,8 @@ import threading, json, logging
 import requests
 import sqlite_queue
 
+requests.packages.urllib3.disable_warnings()
+
 class HttpPoster:
     """A class to post readings to a URL via HTTP.  The readings to be posted
     are delivered to this object via the addReadings() method.

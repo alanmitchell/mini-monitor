@@ -27,7 +27,10 @@ class RTLreceiver(threading.Thread):
 
         # If only thing left running are daemon threads, Python will exit.
         self.daemon = True
-        self._rtl433 = subprocess.Popen(['/usr/local/bin/rtl_433', '-R40', '-Fjson', '-U'], stdout=subprocess.PIPE)
+        self._rtl433 = subprocess.Popen(
+            ['/usr/local/bin/rtl_433', '-R40', '-Fjson', '-U'], 
+            stdout=subprocess.PIPE,
+            text=True)
         self._lines = queue.Queue()
         self._stop_thread = False
 

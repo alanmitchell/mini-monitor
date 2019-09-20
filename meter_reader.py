@@ -47,14 +47,16 @@ def shutdown(signum, frame):
     '''Kills the external processes that were started by this script
     '''
     # Hard kill these processes and I have found them difficult to kill with SIGTERM
-    subprocess.call('/usr/bin/pkill -9 rtlamr', shell=True)
-    subprocess.call('/usr/bin/pkill -9 rtl_tcp', shell=True)
+    subprocess.call('/usr/bin/pkill -f "/bin/bash /home/pi/pi_logger/scripts/run_rtl_tcp"', shell=True)
+    subprocess.call('/usr/bin/pkill -f "/bin/bash /home/pi/pi_logger/scripts/run_meter_reader"', shell=True)
+    subprocess.call('/usr/bin/pkill --signal 9 rtlamr', shell=True)
+    subprocess.call('/usr/bin/pkill --signal 9 rtl_tcp', shell=True)
     # Also found that I need to hard kill this process as well (suicide)
-    subprocess.call('/usr/bin/pkill -9 meter_reader', shell=True)
-    sys.exit(0)
+    subprocess.call('/usr/bin/pkill --signal 9 -f "python3 /home/pi/pi_logger/meter_reader.py"', shell=True)
 
 # If process is being killed, go through shutdown process
 signal.signal(signal.SIGTERM, shutdown)
+signal.signal(signal.SIGKILL, shutdown)
 signal.signal(signal.SIGINT, shutdown)
 
 # Dictionary keyed on Meter ID that holds the last 

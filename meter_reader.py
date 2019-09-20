@@ -56,7 +56,6 @@ def shutdown(signum, frame):
 
 # If process is being killed, go through shutdown process
 signal.signal(signal.SIGTERM, shutdown)
-signal.signal(signal.SIGKILL, shutdown)
 signal.signal(signal.SIGINT, shutdown)
 
 # Dictionary keyed on Meter ID that holds the last 

@@ -4,10 +4,10 @@ import time
 import os
 import shutil
 import sqlite3
-import cron_logging
+import scripts.cron_logging
 
 # get the logger for the application
-logger = cron_logging.logger
+logger = scripts.cron_logging.logger
 
 def reboot():
     """Reboot the system but first include some system info in the cron_log

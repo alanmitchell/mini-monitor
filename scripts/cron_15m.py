@@ -7,18 +7,18 @@ import time
 import sys
 import calendar
 import os
-import cron_logging
-import utils
+import scripts.cron_logging
+from scripts.utils import reboot
 
 # get the logger for the application
-logger = cron_logging.logger
+logger = scripts.cron_logging.logger
 
 try:
     # parse seconds of uptime out of proc file.
     uptime = float( open('/proc/uptime').read().split()[0] )
 except:
     logger.exception('Error determining uptime. Rebooting.')
-    utils.reboot()
+    reboot()
 
 # don't do these tests if the system has not been up for 20 minutes
 # sys.exit() throws an exception so need to do this outside the above try
@@ -38,7 +38,7 @@ try:
     # a reboot.  Never reboot if REBOOT_DAYS=0.
     if settings.REBOOT_DAYS>0 and uptime > settings.REBOOT_DAYS * 3600 * 24:
         logger.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
-        utils.reboot()
+        reboot()
 
     # if WiFi is being used (as evidenced by an SSID in the wpa_supplicant file)
     # try to ping Google and if no response, cycle the WiFi interface.
@@ -65,10 +65,10 @@ try:
                     error_ct += 1
         if error_ct > 50:
             logger.error('Rebooting due to %s errors during last 5 minutes.' % error_ct)
-            utils.reboot()
+            reboot()
 except:
     logger.exception('Error performing health checks. Rebooting.')
-    utils.reboot()
+    reboot()
 
 # Check to see if last successful post was too long ago
 # If so, reboot.
@@ -91,13 +91,13 @@ try:
             last_post_time = float(open('/var/run/last_post_time').read())
             if (time.time() - last_post_time) > post_max:
                 logger.error('Rebooting due to last successful post being too long ago.')
-                utils.reboot()
+                reboot()
 except:
     # could get an error from missing last_post_time file, but it should be
     # there as we don't execute this test until enough time has passed for a
     # post to occur.
     logger.exception('Error checking last post time. Rebooting.')
-    utils.reboot()
+    reboot()
 
 # only run these tasks once per hour (at the 30 minute time point)
 if cur_min > 20 and cur_min < 40:

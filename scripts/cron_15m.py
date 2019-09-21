@@ -34,6 +34,21 @@ try:
     sys.path.insert(0, '/boot/pi_logger')
     import settings
 
+    # If the meter reader is running and there hasn't been a gas reading
+    # in the last 15 minutes, reboot.
+    if settings.ENABLE_METER_READER:
+        # the file that holds the last gas reading
+        gas_file = '/var/run/last_gas'
+        if not os.path.exists(gas_file):
+            # No gas reading at all has occurred
+            reboot()
+        else:
+            # Get the time the file was last modified, indicating the 
+            # last valid reading.  If not modified in the last
+            # 15 minutes, reboot.
+            if time.time() - os.path.getmtime(gas_file) > 15 * 60:
+                reboot()
+
     # if the system has been up for more than settings.REBOOT_DAYS, force
     # a reboot.  Never reboot if REBOOT_DAYS=0.
     if settings.REBOOT_DAYS>0 and uptime > settings.REBOOT_DAYS * 3600 * 24:

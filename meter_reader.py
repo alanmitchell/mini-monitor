@@ -116,6 +116,11 @@ while True:
             # valid readings have nine fields
             continue
 
+        # Make a reading received file. This is used to determine whether the gas
+        # reader is working or not.
+        with open('/var/run/last_gas', 'w') as read_file:
+            read_file.write('reading received')
+
         # If the list of Meter IDs to record is not empty, make sure this ID
         # is in the list of IDs to record.
         meter_id = int(flds[3])

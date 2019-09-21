@@ -7,8 +7,11 @@ import time
 import sys
 import calendar
 import os
+from pathlib import Path
 
-sys.path.insert(0, '../')
+# insert parent directory into Python path
+par_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(par_dir))
 
 import scripts.cron_logging
 from scripts.utils import reboot, backup_files

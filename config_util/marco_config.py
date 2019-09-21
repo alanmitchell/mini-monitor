@@ -93,7 +93,7 @@ def store_settings():
             file_contents = setup_utils.wpa_sup_file(ssid=w_ssid, psk=w_pass)
         else:
             file_contents = setup_utils.wpa_sup_file()
-        sup_fn = os.path.join(THIS_DIR, 'pi_logger/wpa_supplicant.conf')
+        sup_fn = os.path.join(THIS_DIR, 'wpa_supplicant.conf')
         with io.open(sup_fn, 'w', newline='\n') as f:
             f.write(str(file_contents))
 

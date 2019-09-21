@@ -13,9 +13,9 @@ def wpa_sup_file(ssid=None, psk=None):
     of connecting to the Internet.
     """
     # start of the file
-    header = '''country=US
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+    header = '''ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
+country=US
 '''
 
     # WiFi connection part of file

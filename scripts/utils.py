@@ -108,8 +108,12 @@ def ip_addrs():
     error occurs.
     """
     try:
-        result = subprocess.check_output("ifconfig | grep 'inet addr' | cut -f 2 -d : | cut -f 1 -d ' '", shell=True, text=True)
-        ips = [ip for ip in result.splitlines() if ip != '127.0.0.1']
+        ips = []
+        result = subprocess.check_output('ifconfig | grep "inet "', shell=True, text=True)
+        for lin in result.splitlines():
+            flds = lin.strip().split(' ')
+            if flds[1] != '127.0.0.1':
+                ips.append(flds[1])
     except:
         ips = []
 

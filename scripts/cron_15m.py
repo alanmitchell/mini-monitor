@@ -7,8 +7,11 @@ import time
 import sys
 import calendar
 import os
+
+sys.path.insert(0, '../')
+
 import scripts.cron_logging
-from scripts.utils import reboot
+from scripts.utils import reboot, backup_files
 
 # get the logger for the application
 logger = scripts.cron_logging.logger
@@ -118,5 +121,5 @@ except:
 if cur_min > 20 and cur_min < 40:
 
     # backup log and Post database files to non-volatile storage
-    utils.backup_files()
+    backup_files()
 

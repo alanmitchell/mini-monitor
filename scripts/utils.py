@@ -2,8 +2,12 @@ import subprocess
 import logging
 import time
 import os
+import sys
 import shutil
 import sqlite3
+
+sys.path.insert(0, '../')
+
 import scripts.cron_logging
 
 # get the logger for the application

@@ -52,7 +52,6 @@ fi
 # file.
 if /home/pi/pi_logger/scripts/test_setting.py ENABLE_METER_READER
 then
-	/home/pi/pi_logger/scripts/run_rtl_tcp &
 	/home/pi/pi_logger/scripts/run_meter_reader &
 fi
 

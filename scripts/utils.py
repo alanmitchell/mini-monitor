@@ -5,9 +5,7 @@ import os
 import sys
 import shutil
 import sqlite3
-
-sys.path.insert(0, '../')
-
+from pathlib import Path
 import scripts.cron_logging
 
 # get the logger for the application
@@ -20,7 +18,8 @@ def reboot():
     # wrap the reporting in a try except so that reboot is attempted for sure
     try:
         report = 'lsusb:\n%s' % subprocess.check_output('/usr/bin/lsusb', text=True)
-        report += '\nls /mnt/1wire:\n%s' % subprocess.check_output(['/bin/ls', '/mnt/1wire'], text=True)
+        if Path('/mnt/1wire').exists():
+            report += '\nls /mnt/1wire:\n%s' % subprocess.check_output(['/bin/ls', '/mnt/1wire'], text=True)
         report += '\nuptime:\n%s' % subprocess.check_output('/usr/bin/uptime', text=True)
         report += '\nfree:\n%s' % subprocess.check_output('/usr/bin/free', text=True)
         report += '\ndf:\n%s' % subprocess.check_output('/bin/df', text=True)

@@ -24,7 +24,9 @@ def reboot():
         report += '\nfree:\n%s' % subprocess.check_output('/usr/bin/free', text=True)
         report += '\ndf:\n%s' % subprocess.check_output('/bin/df', text=True)
         report += '\nifconfig:\n%s' % subprocess.check_output('/sbin/ifconfig', text=True)
-        logger.info(report)
+        # write this to a special file in /var/local
+        with open('/var/local/reboot_info.txt', 'w') as fout:
+            fout.write(report)
 
     except:
         pass

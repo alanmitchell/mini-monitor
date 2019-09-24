@@ -41,9 +41,9 @@ GUI Configuration Program
 
 The SD card has a partition that is readable on a Windows PC, Mac, or
 Linux computer. On a Windows PC it will show up as a drive labeled ``boot``.
-On is partition there is a GUI-based setup utility available that can
+On this partition is a GUI-based setup utility available that can
 easily configure Internet access
-and a few other key settings.  It can be run from the Windows PC or the Mac PC
+and a few other key settings.  The utility can be run from the Windows PC or the Mac PC
 that created the card.  The file
 name of the utility is ``settings_editor_win.exe`` for use on a Windows PC, and
 ``settings_editor_mac`` for use on a Mac PC.  This utility allows for setting up

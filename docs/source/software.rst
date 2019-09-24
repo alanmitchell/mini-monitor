@@ -25,26 +25,36 @@ The Raspberry Pi uses an SD card as a solid-state drive for the storage of
 the operating system, programs, and user data. We have made a
 complete image of the SD card containing the Raspbian Linux Operating
 System and the entire Mini-Monitor software application. This image is based
-on the Raspbian Stretch Lite image so is compatible with the Raspberry Pi 3 Model B+ 
-hardware. You can download a zipped version of this image from the link below. 
+on the Raspbian Buster Lite image. You can download a zipped version of this
+image from the link below. 
 The file is about 1 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (0.8 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2018-06-19.zip>`_
+`Mini-Monitor SD Card Image (1.1 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2019-09-22.zip>`_
 
-First unzip the file to extract an '.img' file, which is the SD card image. Use the `instructions
-here <https://www.raspberrypi.org/documentation/installation/installing-images/>`_
-under the "WRITING AN IMAGE TO THE SD CARD" heading to write the image
-to an 8 GB micro-SD card, if you are using a Raspberry Pi B+, 2 or 3; or
-a standard 8 GB SD card for the older model B Pi.
+Use the `instructions
+here <https://www.raspberrypi.org/documentation/installation/installing-images/README.md>`_
+under the "Writing an image to the SD card" heading to write the image
+to an 8 GB micro-SD card.
 
-Setup Internet Access
----------------------
+GUI Configuration Program
+----------------------------
 
 The SD card has a partition that is readable on a Windows PC, Mac, or
 Linux computer. On a Windows PC it will show up as a drive labeled ``boot``.
-There are some configuration files on this partition that need
-attention before running the Mini-Monitor.
+On is partition there is a GUI-based setup utility available that can
+easily configure Internet access
+and a few other key settings.  It can be run from the Windows PC or the Mac PC
+that created the card.  The file
+name of the utility is ``settings_editor_win.exe`` for use on a Windows PC, and
+``settings_editor_mac`` for use on a Mac PC.  This utility allows for setting up
+an ID for the logger, configuration Internet access, and configuring the Utility
+meter reader software.
 
+Manually Set up Internet Access
+-------------------------------
+
+Configuration can also be performed manually by editing files on the ``boot``
+partition of the SD card.
 Although these files are usable on a Windows PC, they are text files
 that use the line-ending format ("\n") used on Linux computers. It is important
 to preserve that type of line-ending when editing the files. The
@@ -62,11 +72,7 @@ The first issue to address is setting up Internet Access. Here are three possibi
 *  Wireless Internet access either through the built-in WiFi adapter present on the
    Raspberry 3, or through a USB WiFi adapter plugged into a USB port. For more details
    on setting up a WiFi connection for the Raspberry Pi,
-   `click here <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>`_.
-   Note that the ``wpa_supplicant.conf`` file discussed in the document is available in
-   the same directory as the Settings file discussed in the next section, i.e.
-   ``pi_logger/wpa_supplicant.conf``.  It can be edited directly from the PC that
-   wrote the image onto the SD card.
+   `click here <https://www.raspberrypi.org/forums/viewtopic.php?t=191252>`_.
 *  Internet access through a Cellular Modem connecting to a mobile data network.  For
    certain Huawei cellular modems (models E173u-6, E173s-65, E3276s-500, E3276s-505, and
    E1756C) connecting to the GCI (Alaska) mobile data network, configuration just involves
@@ -77,11 +83,6 @@ The first issue to address is setting up Internet Access. Here are three possibi
    documentation of the `WvDial program <https://linux.die.net/man/1/wvdial>`_
    for further information.
 
-There is a now a GUI-based setup utility available that can easily configure Internet access
-and a few other key settings.  This utility is found in the root directory on the SD
-card, and can be run from the Windows PC or the Mac PC that created the card.  The file
-name of the utility is ``settings_editor_win.exe`` for use on a Windows PC, and
-``settings_editor_mac`` for use on a Mac PC.
 
 If you need to set up a static IP address for the Raspberry Pi, the ``pi_logger/dhcpcd.conf``
 is available for that purpose.  See

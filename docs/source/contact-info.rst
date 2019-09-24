@@ -8,10 +8,10 @@ Contact Information
 The Alaska Housing Finance Corporation funded the development of the Mini-Monitor software. 
 
 | The primary contact for the project is:
-| Scott Waterman
+| Tyler Boyes
 | `Alaska Housing Finance Corporation <http://www.ahfc.us/>`_
-| Email: swaterman at ahfc.us
-| Phone: (907) 330-8195
+| Email: tboyes at ahfc.us
+| Phone: (907) 330-8115
 |
 | The primary software developer of the Mini-Monitor application is:
 | Alan Mitchell

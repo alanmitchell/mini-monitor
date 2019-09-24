@@ -11,9 +11,9 @@ provide higher level documentation for the application. It is
 recommended that the :ref:`<software>` document be
 read as a prerequisite to this document.
 
-Mini-Monitor is a Python 2 application and is currently running with
-Python 2.7.9 on the Raspberry Pi running a Raspbian Jessie Light Linux
-distribution, March 2017 version. On the Raspberry Pi, the Python code
+Mini-Monitor is a Python 3 application and is currently running with
+Python 3.7.3 on the Raspberry Pi running a Raspbian Buster Lite Linux
+distribution, July 2019 version. On the Raspberry Pi, the Python code
 for the application is found in the ``pi`` user's directory space in the
 folder ``/home/pi/pi_logger``. References to file paths in the following
 text will all be relative to that directory.
@@ -30,7 +30,7 @@ Mini-Monitor is `Mosquitto <https://mosquitto.org/>`_. The broker runs
 as a daemon on the Raspberry Pi and is started via the systemd script
 ``/etc/systemd/system/mosquitto.service``.
 
-As of version 1.7, there are two different processes that acquire sensor
+As of version 1.7, there are a few different processes that acquire sensor
 readings and publish them to the MQTT broker:
 
 *  ``pi_logger.py``: This script instantiates "Readers" that are enabled
@@ -46,8 +46,15 @@ readings and publish them to the MQTT broker:
    apply. Instead, a separate script is available that listens for these
    readings and publishes rates of change of the cumulative meter value
    to the MQTT broker.
+*  ``rtl433_reader.py``: The Mini-Monitor has the ability to read
+   Acurite 592TXR Temperature/Humidity Wireless sensors by using a
+   RTL2832U USB-connected software defined radio (the same device used
+   by the meter reader script described above.)
+*  ``power_monitor.py``: The Mini-Monitor can read a
+   Peacefair PZEM-016 Electric Power sensor through use of this script.
 
-Both of these sensor reading scripts are started by the standard
+
+These sensor reading scripts are started by the standard
 ``rc.local`` script that the Raspberry Pi runs at the end of its boot up
 process. In order to include the ``rc.local`` script in the Mini-Monitor
 source code, a symlink is created from the standard ``/etc/rc.local``
@@ -56,8 +63,8 @@ at ``system_files/rc.local``. It is valuable to look at this file for
 other details on the Mini-Monitor start-up process.
 
 ``pi_logger.py`` is only started if at least one Reader file is enabled
-in the Settings file. ``meter_reader.py`` is only started if the Utility
-Meter reader feature is enabled in the Settings file.
+in the Settings file. The other scripts described above are started
+depending on flags found in the ``/boot/pi_logger/settings.py`` file.
 
 As of Version 1.7, there is only one possible consumer of sensor
 readings published to the MQTT broker: the ``mqtt_to_bmon.py`` script,
@@ -146,40 +153,5 @@ card image already includes all of these configuration changes. The
 information in this section is meant for developers attempting to
 understand or modify the Mini-Monitor system.
 
-A number of Mini-Monitor start up tasks are performed in the standard
-``/etc/rc.local`` file. In order to keep this file under source control
-so that it can be updated with Mini-Monitor software updates, the
-``/etc/rc.local`` file was symlinked to
-``/home/pi/pi_logger/system_files/rc.local``. ``git pull`` updates to
-the source code can also update that start up file.
-
-A couple modifications were made to reduce the number write operations
-to the SD card. This improves the life of the card and also reduces the
-chance of file corruption, which can occur if power is removed from the
-Mini-Monitor during a SD card write operation. Actual occurrences of
-file corruption were experienced, motivating the following changes.
-
-The Swap file was permanently removed using the following commands:
-
-::
-
-    sudo apt-get remove dphys-swapfile
-    sudo rm /var/swap
-
-This reduces writes to the SD Card (although it rarely, if ever, was used)
-and it also frees up space on the SD card. More free space improves the
-life of the card because the write-leveling that occurs with the SD card
-has more storage to work with.
-
-A number of directories on the Pi file system were mounted on a RAM disk
-via the following lines in the ``/etc/fstab`` file.
-
-::
-
-    tmpfs  /tmp      tmpfs  defaults,noatime,nosuid,size=100m            0 0
-    tmpfs  /var/tmp  tmpfs  defaults,noatime,nosuid,size=30m             0 0
-    tmpfs  /var/log  tmpfs  defaults,noatime,nosuid,mode=0755,size=100m  0 0
-
-These directories, particularly the ``/var/log`` directory experience
-numerous write operations, and mounting these on a RAM disk eliminates
-the SD wear and file corruption chance from those writes.
+The modifications to the base Raspbian Buster Lite image are described
+in `this document <https://docs.google.com/document/d/1krK4SUJQ8QCZ8LMNzKjnxBVDQX0RGkTSsTipWMGA_z4/edit?usp=sharing>`_

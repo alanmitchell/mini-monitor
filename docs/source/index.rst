@@ -28,9 +28,11 @@ including:
 *  The `AERCO BMS II Boiler controller <http://www.aerco.com/Products/Accessories/Controls/BMS-II-Model-5R5-384>`_,
    which controls a set of AERCO boilers. The Raspberry Pi interfaces via a serial RS-232 MODBUS interface.
 *  Thermistors connected to a `Labjack U3 data acquisition board <http://labjack.com/u3>`_.
+*  `Acurite 592TXR Temperature/Humidity Wireless sensors <https://www.acurite.com/kbase/General/592TXR.html>`_.
+*  `Peacefair PZEM-016 Electric Power Sensor <https://community.openenergymonitor.org/t/pzem-016-single-phase-modbus-energy-meter/7780>`_.
 *  Gauge air pressure measured by an `Energy Conservatory DG-700 Pressure Gauge <http://products.energyconservatory.com/dg-700-pressure-and-flow-gauge/>`_.
 *  Sensaphone's Infrastructure Monitoring System (`IMS-4000 <http://www.sensaphone.com/pdf/LIT-0064_IMS-4000_Manualv3.0_WEB.pdf>`_).
-   Data can be obtained from up to 32 remote nodes, each with the capacity to record 8 different sensors. The Raspberry Pi obtains data
+   Data can be obtained from up to 32 remote nodes, each with the capacity to reco`rd 8 different sensors. The Raspberry Pi obtains data
    using the `Simple Network Management Protocol <https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol>`_
    (SNMP).
 

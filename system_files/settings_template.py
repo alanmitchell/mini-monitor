@@ -68,6 +68,7 @@ READERS = [
 #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000
 #'outage_monitor.OutageMonitor',  # Detects Power Outages through state of GPIO pin
 #'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor on a USB 1-wire master
+#'rms_6ch.RMS_6ch',                # 6 channel RMS voltage reader
 'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]
 
@@ -212,3 +213,17 @@ BTU_BOTH_EDGES = False
 # sensors.  Degrees F.
 CALIBRATE_ADJ_HOT = 0.0
 CALIBRATE_ADJ_COLD = 0.0
+
+# -------------------- 6 channel RMS Voltage Reader ---------------------
+# Associated reader is rms_6ch.py
+
+# Gain setting for the ADS1015 ADC converter.  See documentation
+# of ADS1015 for values and meanings.  This can be a single value
+# applied to all 6 channels, or a list of 6 different values.
+
+RMS_6CH_GAIN = 1         # +/- 4.096 V
+
+# These multipliers are applied to the RMS voltage reading on each
+# channel to convert to other units.  It can be one value applied
+# to all channels, or a list of 6 separate values.
+RMS_6CH_MULT = 1.0

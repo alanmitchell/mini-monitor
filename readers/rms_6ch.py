@@ -17,20 +17,12 @@ RMS_6CH_MULT:  A list of 6 values, one for each channel, or one value applied
 
 Python packages needed beyond the base mini-monitor packages.  Use
 "sudo pip3 install" to install these:
-    RPI.GPIO
     adafruit-blinka
     adafruit-circuitpython-ads1x15
 
-
-Also, 
-    sudo apt-get install python3-numpy 
-    sudo apt-get install python3-smbus    # not really sure necessary
-    sudo apt-get install i2c-tools        # just helpful, not necessary
-
-i2c must enabled via the sudo raspi-config utility.
-
-sudo i2cdetect -y 1
-will show the i2c device addresses present.
+    sudo i2cdetect -y 1
+will show the i2c device addresses present, which should be 48 and 49
+for the 6 channel RMS board.
 """
 
 import time

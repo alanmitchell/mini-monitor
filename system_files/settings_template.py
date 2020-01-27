@@ -60,6 +60,7 @@ POST_STORE_KEY = 'Store Key Goes Here'
 # A list of Sensor Reader classes goes here.
 # Comment out any Sensor Readers that are not being used.
 READERS = [
+#'onewire.OneWire',               # 1-Wire Sensors using USB-to-DS2480B Adapter
 #'ha7s.HA7Sreader',                # 1-Wire Sensors
 #'sage_boiler.Sage21Reader',      # Burnham Alpine Boilers w/ Sage 2.1 controller
 #'aerco_boiler.BMS2reader',       # AERCO BMS II Boiler Mangager

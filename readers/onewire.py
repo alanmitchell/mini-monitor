@@ -1,117 +1,130 @@
-#!/usr/bin/env python3
-"""Module used to read devices on a Dallas 1-wire bus using the OWFS library
-(see owfs.org).  The class the does the reading of the bus is OneWireReader.
+"""Contains a Maxim 1-Wire Sensor Reader class that is designed to work with a DS2480B
+adapter attached to USB port through an FTDI USB-to-Serial converter.  The Reader is 
+currently configured to read the DS18B20 temperature sensor and the DS2406 Digital Input
+sensor (used with the Analysis North Motor Sensor).  But, other 1-Wire sensors can be
+added to this list by modifying the TARGET_SENSORS constant below.
+
+Beyond the Python module dependencies that are listed in the main requirements.txt
+file, this module depends on the following installations:
+
+sudo apt install owserver python3-ow
+
 """
-import logging, glob, os, time
+import ow
+import psutil
+import subprocess
+from pathlib import Path
+import time
+import serial
 from . import base_reader
 
-MNT_POINT = '/mnt/1wire'
-
-def ds2406(rd_val):
-    """Converts the sensed.A file value of the DS2406 to one integer digital
-    reading.
-    """
-    return [ (int(rd_val), '') ]
-    
-def ds2423(rd_val):
-    """Converts the counter.ALL file value of the DS2423 dual counter to an
-    A and a B counter reading.
-    """
-    a_ct, b_ct = rd_val.split(',')
-    return [ (int(a_ct), 'A'), (int(b_ct), 'B') ]
-
-# Dictionary that contains info about how to read various 1-wire sensors.
-# The keys are Family Codes for the sensors handled by this system; the values 
-# are 4-tuples of the format (reading type from the 'base_reader' module, file 
-# name in the OWFS file system to read the current value of the sensor, function 
-# used to convert the read value into a set of readings, True/False value that
-# if True reads the sensor from the 'uncached' OWFS directory, forcing an actual
-# read of the sensor instead of using a cached value).  If there is no 
-# conversion function, the read value from the file is converted to a floating 
-# point value by applying the Python 'float' function to the contents of the
-# OWFS file.  If there is a conversion function, it must return a list of
-# 2-tuples of the form: (sensor value, ID suffix); this accomodates chips with 
-# multiple channels.  The 'ID suffix' is appended to the unique 1-wire ID of the 
-# sensor chip to create a unique identifier for the channel; the 1-wire ID and 
-# the suffix are separated by a period.
-FAMILY_INFO = {
-'28': (base_reader.VALUE, 'temperature10', None, False),   # DS18B20
-'10': (base_reader.VALUE, 'temperature', None, False),     # DS18S20
-'22': (base_reader.VALUE, 'temperature10', None, False),   # DS1822
-'12': (base_reader.STATE, 'sensed.A', ds2406, True),      # DS2406, read from uncached
-'1D': (base_reader.COUNTER, 'counter.ALL', ds2423, True), # DS2423 dual counter from uncached
+# Dictionary below determines which 1-Wire Sensor Families are targeted
+# by this reader module, the attributes from those sensors that constitute the
+# readings, and the type of reading.
+# Keys are the Sensor type (e.g. DS18B20, DS2406), and the tuple items are the attribute
+# to read for the sensor, its reading type, and the optional function to apply to the value.
+# If there is no function to apply, use None for the third element.
+TARGET_SENSORS = {
+    'DS18B20': ('temperature10', base_reader.VALUE, lambda x: x * 1.8 + 32.0),
+    'DS2406': ('sensed_A', base_reader.STATE, None)
 }
 
-class OneWireReader(base_reader.Reader):
-    """Class that reads the sensors on the 1-wire bus.  The read() method
-    performs the read action.  The OWFS 1-wire library is used.
+def port_has_1wire_adapter(portstr):
+    """Checks to see if there is a USB-DS2480B 1-Wire Adapter installed on the
+    'portstr' port (e.g. /dev/ttyUSB0).  Returns True if so, False otherwise.
     """
+    try:
+        p = serial.Serial(str(portstr), timeout=0.5)
+        p.reset_input_buffer()
+        p.write(b'\xE3\xC1')        # Go to Command mode and issue Reset
+        val = p.read(1)
+        return val in (b'\xcd', b'\xed') # This is what is returned by C1 Reset command
+    except:
+        return False
+
+def owserver_running():
+    """Returns True if the process owserver is running, False otherwise.
+    """
+    for proc in psutil.process_iter():
+        if 'owserver' in proc.name():
+            return True
+    return False
+
+
+class OneWire(base_reader.Reader):
     
     def __init__(self, settings=None):
-        """'settings' is the general settings file for the application.
-        """
+        
         # Call constructor of base class
-        super(OneWireReader, self).__init__(settings)
+        super(OneWire, self).__init__(settings)
         
-        # Set some one-wire settings.
-        # Increasing the cache life below keeps read times shorter, which are
-        # important for detecting state changes on one-wire digial I/O devices.
-        onewire_settings = ( ('units/temperature_scale', 'F'),
-                     ('timeout/volatile', '30'),
-                     ('timeout/directory', '120'),
-                     ('timeout/presence', '240'),
-                   )
-        for fname, val in onewire_settings:
-            try:
-                open(os.path.join(MNT_POINT, 'settings', fname), 'w').write(val)
-            except:
-                logging.exception('Error initializing one-wire setting %s' % fname)
-            
-    
-    def read(self):
-        """Read the 1-wire sensors matching family codes in the FAMILY_INFO
-        dictionary.  Returns a list of readings (perhaps multiple readings for
-        one sensor if it has multiple channels).  The reading list consists of
-        4-tuples of the form (UNIX timestamp in seconds, reading ID string, 
-        reading value, reading type which is a value from the 'base_reader' module.
+        # Tracks the port that the 1-wire interface is on
+        self.known_port = ''
+        
+        # start owserver
+        self.start_server_if_needed()
+
+    def start_server_if_needed(self):
+        """Checks to see if the owserver is running and starts it if not.  Needs to find
+        the serial port that has the 1-wire adapter attached to it.
+        Returns True if the server is already running or successfully started.  Returns
+        False if it can't start the server due to not finding an adapter.
         """
+        # Number of seconds required for owserver to start up.
+        SECONDS_FOR_STARTUP = 3.0
         
-        # the reading list to return.
+        if not owserver_running():
+
+            if len(self.known_port):
+                # has been started before using port self.known_port 
+                if port_has_1wire_adapter(self.known_port):
+                    subprocess.run(["/usr/bin/owserver", "-d", self.known_port])
+                    time.sleep(SECONDS_FOR_STARTUP)  # give server time to start
+                    return True
+                else:
+                    return False
+                    
+            else:
+                # Find the port that has the adapter.  The adapter uses an FTDI
+                # USB-to-Serial chip, so only search those ports.
+                for p_path in base_reader.Reader.available_ftdi_ports:
+                    if port_has_1wire_adapter(p_path):
+                        # Save the port in case we need to restart the server later.
+                        self.known_port = p_path
+                        
+                        # Remove this port from the Master list so other readers
+                        # don't try to use it.
+                        base_reader.Reader.available_ftdi_ports.remove(p_path)
+                        
+                        subprocess.run(["/usr/bin/owserver", "-d", p_path])
+                        time.sleep(SECONDS_FOR_STARTUP)  # give server time to start
+                        return True
+
+                return False
+
+        else:
+            return True
+
+    def read(self):
+        
+        # Check to see if the one-wire server is running.  If not, start it.
+        if not self.start_server_if_needed():
+            # no owserver, so no readings
+            return []
+        
+        ts = int(time.time())   # same timestamp used for all readings
         readings = []
         
-        # loop through all the 1-wire devices at the OWFS mount point
-        for fname in glob.glob(os.path.join(MNT_POINT, '??.*')):
-            try:
-                one_wire_id = os.path.basename(fname)
-                family_code = one_wire_id.split('.')[0]
-                if family_code in FAMILY_INFO:
-                    # get the reading info about this family code.
-                    read_type, val_file, convert_func, uncached = FAMILY_INFO[family_code]
-                    
-                    # create a filename that holds the value data for the sensor.
-                    # this filename depends on whether we are reading the cached 
-                    # or uncached value.
-                    read_fname = os.path.join(MNT_POINT, 'uncached', one_wire_id, val_file) if uncached \
-                        else os.path.join(fname, val_file)
-                    value_data = open(read_fname).read()
-                    
-                    # apply the conversion function to parse the file data
-                    if convert_func:
-                        values = convert_func(value_data)
-                    else:
-                        values = [ (float(value_data), '') ]
-    
-                    # add the readings from this sensor to the list
-                    ts = time.time()
-                    for val, suffix in values:
-                        read_id = '%s.%s' % (one_wire_id, suffix) if len(suffix) else one_wire_id
-                        readings.append( (ts, read_id, val, read_type) )
-            except:
-                logging.exception('Error reading 1-wire sensor %s' % fname)
-
+        # loop across all sensors, reading the ones that appear in the target
+        # list defined above.
+        ow.init('localhost:4304')
+        for sensor in ow.Sensor('/').sensorList():
+            if sensor.type in TARGET_SENSORS:
+                attr, rd_type, conv_func = TARGET_SENSORS[sensor.type]
+                sensor.useCache(False)
+                val = float(getattr(sensor, attr))
+                if conv_func:
+                    val = conv_func(val)
+                readings.append((ts, f'{sensor.family}.{sensor.id}', val, rd_type))
+        
         return readings
-
-if __name__=='__main__':
-    from pprint import pprint
-    reader = OneWireReader()
-    pprint(reader.read())

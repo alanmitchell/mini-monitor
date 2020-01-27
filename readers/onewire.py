@@ -71,7 +71,7 @@ class OneWire(base_reader.Reader):
         False if it can't start the server due to not finding an adapter.
         """
         # Number of seconds required for owserver to start up.
-        SECONDS_FOR_STARTUP = 3.0
+        SECONDS_FOR_STARTUP = 4.0
         
         if not owserver_running():
 

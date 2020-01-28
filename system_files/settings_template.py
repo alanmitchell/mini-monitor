@@ -61,14 +61,13 @@ POST_STORE_KEY = 'Store Key Goes Here'
 # Comment out any Sensor Readers that are not being used.
 READERS = [
 #'onewire.OneWire',               # 1-Wire Sensors using USB-to-DS2480B Adapter
-#'ha7s.HA7Sreader',                # 1-Wire Sensors
 #'sage_boiler.Sage21Reader',      # Burnham Alpine Boilers w/ Sage 2.1 controller
 #'aerco_boiler.BMS2reader',       # AERCO BMS II Boiler Mangager
 #'dg700.DG700reader',             # Energy Conservatory DG-700 Pressure Gauge
 #'labjack.LabjackTempReader',     # Thermistors connected to Labjack U3
 #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000
 #'outage_monitor.OutageMonitor',  # Detects Power Outages through state of GPIO pin
-#'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor on a USB 1-wire master
+#'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor for Marco project. USB master.
 #'rms_6ch.RMS_6ch',                # 6 channel RMS voltage reader
 'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]

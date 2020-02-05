@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Run by cron every 15 minutes.  Does numerous health checks, applying 
-remedies and rebooting if needed.
+remedies and rebooting if needed.  This is run as the root user.
 """
 import subprocess
 import time
@@ -34,11 +34,11 @@ if uptime > 90:
         subprocess.run('/bin/ping -q -c2 8.8.8.8', shell=True, check=True)
     except:
         # ping failed, cycle the Ethernet and WiFi interfaces
-        subprocess.run('sudo ifconfig eth0 down', shell=True)
-        subprocess.run('sudo ifconfig wlan0 down', shell=True)
+        subprocess.run('ifconfig eth0 down', shell=True)
+        subprocess.run('ifconfig wlan0 down', shell=True)
         time.sleep(1)
-        subprocess.run('sudo ifconfig eth0 up', shell=True)
-        subprocess.run('sudo ifconfig wlan0 up', shell=True)
+        subprocess.run('ifconfig eth0 up', shell=True)
+        subprocess.run('ifconfig wlan0 up', shell=True)
 
 # don't do these following tests if the system has not been up for 20 minutes
 # sys.exit() throws an exception so need to do this outside the above try

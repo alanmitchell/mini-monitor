@@ -26,7 +26,21 @@ except:
     logger.exception('Error determining uptime. Rebooting.')
     reboot()
 
-# don't do these tests if the system has not been up for 20 minutes
+# if the system has been up for at least 90 seconds, check to see if the Internet
+# is working, and if not cycle the Ethernet and WiFi interfaces
+if uptime > 90:
+    try:
+        # See if a ping of Google succeeds
+        subprocess.run('/bin/ping -q -c2 8.8.8.8', shell=True, check=True)
+    except:
+        # ping failed, cycle the Ethernet and WiFi interfaces
+        subprocess.run('sudo ifconfig eth0 down', shell=True)
+        subprocess.run('sudo ifconfig wlan0 down', shell=True)
+        time.sleep(1)
+        subprocess.run('sudo ifconfig eth0 up', shell=True)
+        subprocess.run('sudo ifconfig wlan0 up', shell=True)
+
+# don't do these following tests if the system has not been up for 20 minutes
 # sys.exit() throws an exception so need to do this outside the above try
 # block.
 if uptime < 20 * 60:
@@ -60,14 +74,6 @@ try:
     if settings.REBOOT_DAYS>0 and uptime > settings.REBOOT_DAYS * 3600 * 24:
         logger.info('Reboot due to %s days of uptime.' % settings.REBOOT_DAYS)
         reboot()
-
-    # if WiFi is being used (as evidenced by an SSID in the wpa_supplicant file)
-    # try to ping Google and if no response, cycle the WiFi interface.
-    if 'ssid' in open('/etc/wpa_supplicant/wpa_supplicant.conf').read():
-        subprocess.call(
-            '/bin/ping -q -c2 8.8.8.8 || (/sbin/ifdown --force wlan0;/sbin/ifup wlan0)',
-            shell=True
-        )
 
     # Count the number of logged errors that occurred in the last 5 minutes and
     # reboot if an excessive count.

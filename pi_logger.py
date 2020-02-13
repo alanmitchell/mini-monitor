@@ -6,7 +6,6 @@ import os
 import sys, logging, logging.handlers, json
 import shutil
 import time
-import signal
 import subprocess
 import requests
 import logger_controller
@@ -44,17 +43,6 @@ import settings
 #
 settings.VERSION = 3.1
 #***********************************************************************
-
-def shutdown(signum, frame):
-    '''Kills the external processes that were started by this script
-    '''
-    # Kill one-wire server.  Will not throw an error if it is not running.
-    subprocess.call('/usr/bin/pkill owserver', shell=True)
-
-# If process is being killed, go through shutdown process
-signal.signal(signal.SIGTERM, shutdown)
-signal.signal(signal.SIGINT, shutdown)
-
 
 # Create the object to control the reading and logging process
 controller = logger_controller.LoggerController(read_interval=settings.READ_INTERVAL, 

@@ -1,15 +1,20 @@
 #!/bin/sh
 #
-# rc.local
+# This script is executed by /etc/rc.local at bootup.  The contents of
+# /etc/rc.local should be:
+
+# --------------------
+# #!/bin/sh
+# set +e
+# /home/pi/pi_logger/system_files/startup.sh
 #
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
+# # Run the site-specific startup file.  Add any other commands to this
+# # rc.local.site file, and they will execute at boot up.  Make sure 
+# # rc.local.site is executable.
+# /etc/rc.local.site
 #
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
+# exit 0
+# --------------------
 
 # From here on, do NOT exit the script if any errors occur
 # (this may already be the case, since I removed the "-e" option from
@@ -84,10 +89,3 @@ fi
 
 # Turn off he HDMI interface to save power
 /usr/bin/tvservice -o
-
-# Run the site-specific startup file.  Add any other commands to this
-# rc.local.site file, and they will execute at boot up.  Make sure 
-# rc.local.site is executable.
-/etc/rc.local.site
-
-exit 0

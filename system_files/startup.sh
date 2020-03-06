@@ -8,10 +8,7 @@
 # set +e
 # /home/pi/pi_logger/system_files/startup.sh
 #
-# # Run the site-specific startup file.  Add any other commands to this
-# # rc.local.site file, and they will execute at boot up.  Make sure 
-# # rc.local.site is executable.
-# /etc/rc.local.site
+# # Add any additional startup commands here.
 #
 # exit 0
 # --------------------

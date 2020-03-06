@@ -27,14 +27,14 @@ complete image of the SD card containing the Raspbian Linux Operating
 System and the entire Mini-Monitor software application. This image is based
 on the Raspbian Buster Lite image. You can download a zipped version of this
 image from the link below. 
-The file is about 1 GB in size so will take some time to download.
+The file is about 1.4 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.1 GB) <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2019-09-22.zip>`_
+`Mini-Monitor SD Card Image (1.4 GB), version 3.1 <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2020-03-06.zip>`_
 
 Use the `instructions
 here <https://www.raspberrypi.org/documentation/installation/installing-images/README.md>`_
 under the "Writing an image to the SD card" heading to write the image
-to an 8 GB micro-SD card.
+to an 8 GB or greater micro-SD card.
 
 GUI Configuration Program
 ----------------------------

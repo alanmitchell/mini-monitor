@@ -69,6 +69,7 @@ READERS = [
 #'outage_monitor.OutageMonitor',  # Detects Power Outages through state of GPIO pin
 #'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor for Marco project. USB master.
 #'rms_6ch.RMS_6ch',                # 6 channel RMS voltage reader
+#'modbus_tcp.ModbusTCPreader',     # Reads values from Modbus TCP servers.
 'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]
 
@@ -227,3 +228,92 @@ RMS_6CH_GAIN = 1         # +/- 4.096 V
 # channel to convert to other units.  It can be one value applied
 # to all channels, or a list of 6 separate values.
 RMS_6CH_MULT = 1.0
+
+# ------------------- Modbus TCP Server Reader -------------------------
+# Associated reader: modbus_tcp.ModbusTCPreader
+
+# The reader uses the MODBUS_TARGETS setting below.  Because the setting
+# contains a lot of information, it is most clearly created by first creating
+# variables holding Modbus device information and variables holding information
+# about registers to read.  In the example below, those variables are:
+#     device1, device1_sensors, device2, device2_sensors
+# These variables are not required, are not used directly by the Reader, and are
+# only present to make consutruction of the MODBUS_TARGETS setting more clear.
+# The example below is explained in comments beneath the example.
+
+device1 = ('abc.dyndns.org', 30000)
+device1_sensors = (
+    (2084, 'heat_rate'),
+    (2086, 'total_heat', dict(datatype='uint32', reading_type='counter')),
+    (2105, 'ret_temp', dict(register_type='input', transform='val/10')),
+)
+
+device2 = ('abc.dyndns.org', 30000, dict(endian='little', device_addr=2))
+device2_sensors = (
+    (2103, 'hsout', dict(transform='val/10')),
+    (2102, 'hsin', dict(transform='val/10')),
+)
+
+MODBUS_TARGETS = (
+    (device1, device1_sensors),      # a Modbus device and values that should be read
+    (device2, device2_sensors),
+)
+
+# First, the structure of MODBUS_TARGETS is a tuple (or list) of tuples.  Each
+# contained tuple describes one Modbus Device and the values that should be read from 
+# that device.  In the example above, 'device1' describes the first Modbus device to query
+# and 'device1_sensors' describes the values that should be read from that device.  
+# 
+# The first two elements of the 'device1' tuple are required and give the Host name or IP 
+# address, and the Port.  'device1' in the example above is the minimal required description
+# and only contains those two elements.
+#
+# There is an optional third element in the Modbus device description, which is a
+# dictionary of other information about the device.  'device2' in the example above uses that
+# optional dictionary to provide more information about the device.  Valid keys in that dictionary
+# are:
+#    endian:       Can have the values of 'big' (the default) or 'little'.  For sensor values that
+#                  use more than one Modbus register (e.g. a floating point value), 'big' 
+#                  endian means that the most-significant word is the first register address.
+#                  'little' endian means the least-signficant word is the first address.
+#    device_addr:  This is the Modbus unit or device address of the device being read.
+#                  It defaults to 1, but can the value from 1 to 247.
+#
+# For each Modbus device to be queried, there is a list of sensors or values to be read from the
+# device.  In the example above, 'device1_sensors' and 'device2_sensors' are two such lists (tuples 
+# in this case).  Each item in the list a sensor or value, which is in turn described by a tuple
+# of information.  The first device1 sensor is (2084, 'heat_rate').  These two pieces of information
+# are the only required elments of the sensor descripiton.  2084 is the Modbus register address, and
+# 'heat_rate' is the name that will be used in mini-monitor to create a sensor ID.  Mini-monitor Sensor IDs
+# are created by concatenating the LOGGER_ID and this name.  If the LOGGER_ID in the settings file were
+# 'test', the final Sensor ID for this sensor woudl be 'test_heat_rate'.
+#
+# Each sensor can also have a third optional element of description, which is dictionary.  In the example
+# above, most sensors in 'device1_sensors' and 'device2_sensors' have this third dictionary element.
+# The valid keys in this dictionary are:
+#     datatype: The dataype of the value being read from the register(s).  Possible values are:
+#               uint16:  (the default) unsigned, 16 bit integer, 1 Modbus register
+#               int16:   signed 16 bit integer, 1 Modbus register
+#               unint32: unsigned 32 bit integer, 2 registers
+#               int32:   signed 32 bit integer, 2 registers
+#               float:   32 bit floating point value, 2 registers
+#               float32: same as 'float'
+#               double:  64 bit floating point value, 4 registers
+#               float64: same as 'double'
+#               Some of these datatypes occupy multiple Modbus registers, so require the reading of 
+#               multiple registers.
+#     register_type: The type of Modbus register to read.  Possible values are:
+#               'holding': (the default) holding register
+#               'input':   input register
+#               'coil':    coil register
+#               'discrete': discrete input register
+#     transform: Some Modbus values need to be transformed or coverted into final engineering units.
+#                This dictionary item can provide a transform function for that purpose.  The raw
+#                Modbus value is held in the variable named 'val', so that a transform of 'val/10'
+#                means divide the Modbus value by 10.
+#     reading_type: This entry tells Mini-Monitor what type of a value this reading is.  Possible
+#                values are:
+#                'value': (the default) a continuosly variable analog value like temperature, humidity, power.
+#                'state': a discrete value that indicates the particular state or status of a device.
+#                'counter': a cumulative counter value (such as total energy use, total water use, etc)
+#                       that increases over time as a quantity is used or measured.

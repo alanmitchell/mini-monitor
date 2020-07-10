@@ -25,6 +25,7 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
+# Version 3.2:  Added Modbus TCP Reader.
 # Version 3.1:  Added onewire.OneWire Reader.  Upgraded raspbian packages.
 #               Added delay between starting rtl_tcp and rtlamr.
 # Version 3.0:  Python 3 version.

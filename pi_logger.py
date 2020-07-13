@@ -42,7 +42,7 @@ import settings
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 3.1
+settings.VERSION = 3.2
 #***********************************************************************
 
 # Create the object to control the reading and logging process

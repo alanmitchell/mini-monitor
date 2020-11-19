@@ -1,9 +1,9 @@
-"""Contains a Reader class that can read values from Modbus TCP servers.
+"""Contains a Reader class that can read values from Modbus RTU servers.
 
 Uses the following settings from the main settings.py file:
 
 LOGGER_ID:  Used to create the final sensor_id for each value read from the Modbus server.
-MODBUS_TARGETS: Lists the Modbus Servers, Devices, and Registers that will be read.
+MODBUS_RTU_TARGETS: Lists the Serial Ports, devices, and Registers that will be read.
 
 See further documentation of these settings in the system_files/settings_template.py file.
 
@@ -13,34 +13,35 @@ READ_INTERVAL setting in the settings file.
 import time
 import struct
 import logging
-from pymodbus.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
 from . import base_reader
 
-class ModbusTCPreader(base_reader.Reader):
+class ModbusRTUreader(base_reader.Reader):
     
     def read(self):
 
         # list to hold final readings
         readings = []
 
-        for device_info, sensors in self._settings.MODBUS_TARGETS:
+        for device_info, sensors in self._settings.MODBUS_RTU_TARGETS:
 
             # use the same timestamp for all of the sensors on this device
             ts = time.time()
             try:
                 try:
-                    host, port, kwargs = device_info
+                    serial_port, device_addr, kwargs = device_info
                 except:
-                    host, port = device_info
+                    serial_port, device_addr = device_info
                     kwargs = {}
-                device_addr = kwargs.get('device_addr', 1)
                 endian = kwargs.get('endian', 'big')
+                timeout = kwargs.get('timeout', 1.0)
+                baudrate = kwargs.get('baudrate', 9600)
 
                 if endian not in ('big', 'little'):
                     raise ValueError(f'Improper endian value for Modbus device {device_info}') 
 
-                with ModbusClient(host=host, port=port) as client:
+                with ModbusClient(method='rtu', port=serial_port, timeout=timeout, baudrate=baudrate) as client:
                     for sensor_info in sensors:
                         try:
                             try:
@@ -93,7 +94,6 @@ class ModbusTCPreader(base_reader.Reader):
                                 logging.exception(f'Invalid Reading Type for Sensor {sensor_info}')
                                 continue
 
-
                             result = read_func(register, reg_count, unit=device_addr)
                             if not hasattr(result, 'registers'):
                                 raise ValueError(f'An error occurred while reading Sensor {sensor_info} from Modbus Device {device_info}')
@@ -137,3 +137,27 @@ class ModbusTCPreader(base_reader.Reader):
                 continue   # on to next device
 
         return readings
+
+if __name__ == '__main__':
+    # To run this, from root repo directory run:
+    #   python3 -m readers.modbus_rtu
+
+    from pprint import pprint
+
+    stg = base_reader.DummySettings()
+
+    # Use a PZEM-016 Power sensor for testing
+    device1 = ('/dev/ttyUSB0', 1, dict(endian='little'))
+    d1_sensors = (
+        (0, 'voltage', dict(register_type='input', transform='val/10')),
+        (1, 'current', dict(datatype='uint32', register_type='input', transform='val/1000')),
+        (3, 'power', dict(datatype='uint32', register_type='input', transform='val/10')),
+        (7, 'frequency', dict(register_type='input', transform='val/10')),
+        (8, 'power_factor', dict(register_type='input', transform='val/100')),
+    )
+    stg.MODBUS_RTU_TARGETS = (
+        (device1, d1_sensors),
+    )
+
+    rdr = ModbusRTUreader(settings=stg)
+    pprint(rdr.read())

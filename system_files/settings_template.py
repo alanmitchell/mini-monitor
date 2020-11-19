@@ -70,6 +70,7 @@ READERS = [
 #'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor for Marco project. USB master.
 #'rms_6ch.RMS_6ch',                # 6 channel RMS voltage reader
 #'modbus_tcp.ModbusTCPreader',     # Reads values from Modbus TCP servers.
+#'modbus_rtu.ModbusRTUreader',     # Reads values from Modbus RTU servers.
 'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]
 
@@ -317,3 +318,45 @@ MODBUS_TARGETS = (
 #                'state': a discrete value that indicates the particular state or status of a device.
 #                'counter': a cumulative counter value (such as total energy use, total water use, etc)
 #                       that increases over time as a quantity is used or measured.
+
+# ------------------- Modbus RTU Server Reader -------------------------
+# Associated reader: modbus_rtu.ModbusRTUreader
+
+# The settings format for this reader is very similar to the prior Modbus TCP reader.
+# The configuration of the "sensors" (values) to read from the Modbus device is exactly the
+# same as the prior TCP reader.  The only difference for the RTU reader is the tuple
+# that describes the Modbus device to read.
+
+# Here is an example configuration to read a PZEM-016 power sensor, with explanation below
+# the examples
+
+rtu_device1 = ('/dev/ttyUSB0', 1, dict(endian='little'))
+d1_sensors = (
+    (0, 'voltage', dict(register_type='input', transform='val/10')),
+    (1, 'current', dict(datatype='uint32', register_type='input', transform='val/1000')),
+    (3, 'power', dict(datatype='uint32', register_type='input', transform='val/10')),
+    (7, 'frequency', dict(register_type='input', transform='val/10')),
+    (8, 'power_factor', dict(register_type='input', transform='val/100')),
+)
+
+# Here is the required Settings variable to use the Modbus RTU reader.  The above variables
+# were just used to make a clearer presentation.
+MODBUS_RTU_TARGETS = (
+    (rtu_device1, d1_sensors),
+)
+
+# The 'rtu_device1' variable holds the device configuration.  The first two elements of the tuple
+# are required.  The first element is the Serial port used to communicate with the Modbus RTU device.
+# The second required element is the Modbus address of the device, a number from 1 to 247.
+# The third element of the tuple is optional, but if present is a dictionary of additional keyword
+# arguments related to the device.  Possible keywords are:
+#    endian:  Can have the values of 'big' (the default) or 'little'.  For sensor values that
+#             use more than one Modbus register (e.g. a floating point value), 'big' 
+#             endian means that the most-significant word is the first register address.
+#            'little' endian means the least-signficant word is the first address.
+#    timeout: The number of seconds this computer will wait for a response from the device
+#             before timing out with an error.  Defaults to 1.0.
+#    baudrate:  The baudrate used for the serial port, defaults to 9600.
+
+# The sensor configuration, 'd1_sensors' in this example, is exactly as described in the Modbus
+# TCP setup before.

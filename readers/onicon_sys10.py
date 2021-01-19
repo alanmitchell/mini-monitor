@@ -16,7 +16,7 @@ class OniconSystem10(modbus_rtu.ModbusRTUreader):
     def read(self):
 
         readings = super().read()
-        
+
         # find the kBtu and MBtu readings in the returned list, and make a new total BTU reading.
         # delete the original readings.
         ix = 0
@@ -30,8 +30,8 @@ class OniconSystem10(modbus_rtu.ModbusRTUreader):
                 mbtu_ts = ts
             ix += 1
         # delete the original kBtu and MBtu values out of the readings list.
-        del reading[kbtu_ix]
-        del reading[mbtu_ix]
+        del readings[kbtu_ix]
+        del readings[mbtu_ix]
         # make a reading that combines the MBtu and kBtu values into one floating point MBtu value.
         readings.append( (mbtu_ts, f'{self._settings.LOGGER_ID}_mbtu', mbtu + kbtu/1000.0, base_reader.VALUE) )
 

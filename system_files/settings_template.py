@@ -71,6 +71,7 @@ READERS = [
 #'rms_6ch.RMS_6ch',                # 6 channel RMS voltage reader
 #'modbus_tcp.ModbusTCPreader',     # Reads values from Modbus TCP servers.
 #'modbus_rtu.ModbusRTUreader',     # Reads values from Modbus RTU servers.
+#'onicon_sys10.OniconSystem10',    # Reads BTU, flow & temperature values from an Onicon System 10 BTU meter.
 'sys_info.SysInfo',              # System uptime, CPU temperature, software version
 ]
 

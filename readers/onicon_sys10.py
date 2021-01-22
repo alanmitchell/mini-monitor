@@ -56,8 +56,13 @@ class OniconSystem10(modbus_rtu.ModbusRTUreader):
         # delete the original kBtu and MBtu values out of the readings list.
         del readings[kbtu_ix]
         del readings[mbtu_ix]
+
         # make a reading that combines the MBtu and kBtu values into one floating point MBtu value.
-        readings.append( (mbtu_ts, f'{self._settings.LOGGER_ID}_mbtu', mbtu + kbtu/1000.0, base_reader.COUNTER) )
+        # Put this value in twice so that a Btu/hour rate sensor can be created and a sensor that shows
+        # the cumulative energy count can be shown.
+        mbtu_float = mbtu + kbtu/1000.0
+        readings.append( (mbtu_ts, f'{self._settings.LOGGER_ID}_mbtu', mbtu_float, base_reader.COUNTER) )
+        readings.append( (mbtu_ts, f'{self._settings.LOGGER_ID}_mbtu_total', mbtu_float, base_reader.COUNTER) )
 
         return readings
 

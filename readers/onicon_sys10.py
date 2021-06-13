@@ -18,6 +18,7 @@ d1_sensors = (
     (22, 'temp_return', dict(transform='val/100')),
     (25, 'kbtu', dict(reading_type='counter')),
     (26, 'mbtu', dict(reading_type='counter')),
+    (27, 'gbtu', dict(reading_type='counter')),
 )
 
 # Here is the required Settings variable to use the Modbus RTU reader.  The above variables
@@ -41,9 +42,8 @@ class OniconSystem10(modbus_rtu.ModbusRTUreader):
 
         readings = super().read()
 
-        # find the kBtu and MBtu readings in the returned list, and make a new total BTU reading.
+        # find the kBtu, MBtu, & GBtu readings in the returned list, and make a new total BTU reading.
         # delete the original readings.
-        ix = 0
         for reading in readings:
             ts, sensor_id, val, reading_type_code = reading
             if sensor_id == f'{self._settings.LOGGER_ID}_kbtu':
@@ -53,15 +53,18 @@ class OniconSystem10(modbus_rtu.ModbusRTUreader):
                 mbtu = val
                 mbtu_rdg = reading
                 mbtu_ts = ts
-            ix += 1
-        # delete the original kBtu and MBtu values out of the readings list.
+            if sensor_id == f'{self._settings.LOGGER_ID}_gbtu':
+                gbtu = val
+                gbtu_rdg = reading
+        # delete the original kBtu, MBtu & GBtu values out of the readings list.
         readings.remove(kbtu_rdg)
         readings.remove(mbtu_rdg)
+        readings.remove(gbtu_rdg)
 
         # make a reading that combines the MBtu and kBtu values into one floating point MBtu value.
         # Put this value in twice so that a Btu/hour rate sensor can be created and a sensor that shows
         # the cumulative energy count can be shown.
-        mbtu_float = mbtu + kbtu/1000.0
+        mbtu_float = gbtu*1000. + mbtu + kbtu/1000.0
         readings.append( (mbtu_ts, f'{self._settings.LOGGER_ID}_mbtu', mbtu_float, base_reader.COUNTER) )
         readings.append( (mbtu_ts, f'{self._settings.LOGGER_ID}_mbtu_total', mbtu_float, base_reader.COUNTER) )
 

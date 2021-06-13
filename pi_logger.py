@@ -25,7 +25,8 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
-# Version 3.4   Added Onicon System 10 Reader
+# Version 3.5:  Fixed bugs in Onicon System 10 Reader
+# Version 3.4:  Added Onicon System 10 Reader
 # Version 3.3:  Added Modbus RTU Reader.
 # Version 3.2:  Added Modbus TCP Reader.
 # Version 3.1:  Added onewire.OneWire Reader.  Upgraded raspbian packages.
@@ -44,7 +45,7 @@ import settings
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 3.4
+settings.VERSION = 3.5
 #***********************************************************************
 
 # Create the object to control the reading and logging process

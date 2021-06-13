@@ -44,18 +44,19 @@ class OniconSystem10(modbus_rtu.ModbusRTUreader):
         # find the kBtu and MBtu readings in the returned list, and make a new total BTU reading.
         # delete the original readings.
         ix = 0
-        for ts, sensor_id, val, reading_type_code in readings:
+        for reading in readings:
+            ts, sensor_id, val, reading_type_code = reading
             if sensor_id == f'{self._settings.LOGGER_ID}_kbtu':
                 kbtu = val
-                kbtu_ix = ix
+                kbtu_rdg = reading
             if sensor_id == f'{self._settings.LOGGER_ID}_mbtu':
                 mbtu = val
-                mbtu_ix = ix
+                mbtu_rdg = reading
                 mbtu_ts = ts
             ix += 1
         # delete the original kBtu and MBtu values out of the readings list.
-        del readings[kbtu_ix]
-        del readings[mbtu_ix]
+        readings.remove(kbtu_rdg)
+        readings.remove(mbtu_rdg)
 
         # make a reading that combines the MBtu and kBtu values into one floating point MBtu value.
         # Put this value in twice so that a Btu/hour rate sensor can be created and a sensor that shows

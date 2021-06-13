@@ -1,3 +1,4 @@
+env/
 settings.py
 last_post_time
 *.sqlite

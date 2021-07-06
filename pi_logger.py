@@ -25,6 +25,7 @@ import settings
 # ************* KEEP THIS UPDATED AS CHANGES ARE MADE ******************
 # Set the Software Version number as a property on the Settings module
 #
+# Version 3.7:  Improved settings example for Onicon System 10 meter.
 # Version 3.6:  Add GBtu reading to Onicon energy totals.
 # Version 3.5:  Fixed bugs in Onicon System 10 Reader
 # Version 3.4:  Added Onicon System 10 Reader
@@ -46,7 +47,7 @@ import settings
 # Version 1.5:  Added posting of IP Addresses in initial debug output.
 # Version 1.4:  Added Sensaphone reader class.
 #
-settings.VERSION = 3.6
+settings.VERSION = 3.7
 #***********************************************************************
 
 # Create the object to control the reading and logging process

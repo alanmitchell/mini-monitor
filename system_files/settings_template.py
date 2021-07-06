@@ -329,8 +329,9 @@ MODBUS_TARGETS = (
 # that describes the Modbus device to read.
 
 # Here is an example configuration to read a PZEM-016 power sensor, with explanation below
-# the examples
+# the examples (remove triple-quotes surrounding code block to use):
 
+'''
 rtu_device1 = ('/dev/ttyUSB0', 1, dict(endian='little'))
 d1_sensors = (
     (0, 'voltage', dict(register_type='input', transform='val/10')),
@@ -345,6 +346,7 @@ d1_sensors = (
 MODBUS_RTU_TARGETS = (
     (rtu_device1, d1_sensors),
 )
+'''
 
 # The 'rtu_device1' variable holds the device configuration.  The first two elements of the tuple
 # are required.  The first element is the Serial port used to communicate with the Modbus RTU device.
@@ -361,3 +363,29 @@ MODBUS_RTU_TARGETS = (
 
 # The sensor configuration, 'd1_sensors' in this example, is exactly as described in the Modbus
 # TCP setup before.
+
+# --------------------
+# Here is a MODBUS RTU example for the Onicon System 10 BTU meter (remove triple quotes
+# surrounding code block to use):
+
+'''
+ONICON_ADDR = 17       # Modbus address of the Onicon meter. Default is 17
+rtu_device1 = ('/dev/ttyUSB0', ONICON_ADDR)      # substitute the proper serial port
+d1_sensors = (
+    (10, 'flow', dict(transform='val/60')),                       # GPH / 60 will give GPM with good resolution
+    (21, 'temp_supply', dict(transform='val/100')),
+    (22, 'temp_return', dict(transform='val/100')),
+    (25, 'kbtu', dict(reading_type='counter')),
+    (26, 'mbtu', dict(reading_type='counter')),
+    (27, 'gbtu', dict(reading_type='counter')),
+)
+
+# Here is the required Settings variable to use the Modbus RTU reader.  The above variables
+# were just used to make a clearer presentation.
+MODBUS_RTU_TARGETS = (
+    (rtu_device1, d1_sensors),
+)
+'''
+
+# The only critical names are "gbtu", "kbtu" and "mbtu" for this class to work.  Temperature and flow variables
+# could be named differently.

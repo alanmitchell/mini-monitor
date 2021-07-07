@@ -25,16 +25,14 @@ The Raspberry Pi uses an SD card as a solid-state drive for the storage of
 the operating system, programs, and user data. We have made a
 complete image of the SD card containing the Raspbian Linux Operating
 System and the entire Mini-Monitor software application. This image is based
-on the Raspbian Buster Lite image. You can download a zipped version of this
+on the Raspberry Pi OS Lite image. You can download a zipped version of this
 image from the link below. 
-The file is about 1.4 GB in size so will take some time to download.
+The file is about 1.5 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.4 GB), version 3.1 <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2020-03-06.zip>`_
+`Mini-Monitor SD Card Image (1.5 GB), version 3.7 <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2021-07-06.zip>`_
 
-Use the `instructions
-here <https://www.raspberrypi.org/documentation/installation/installing-images/README.md>`_
-under the "Writing an image to the SD card" heading to write the image
-to an 8 GB or greater micro-SD card.
+Use the `Raspberry Pi Imager software <https://www.raspberrypi.org/software/>`_
+to write the image to an 8 GB or greater micro-SD card.
 
 GUI Configuration Program
 ----------------------------

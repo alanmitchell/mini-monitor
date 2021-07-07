@@ -29,7 +29,7 @@ on the Raspberry Pi OS Lite image. You can download a zipped version of this
 image from the link below. 
 The file is about 1.5 GB in size so will take some time to download.
 
-`Mini-Monitor SD Card Image (1.5 GB), version 3.7 <http://analysisnorth.com/mini_monitor/mini_monitor_sd_2021-07-06.zip>`_
+`Mini-Monitor SD Card Image (1.5 GB), version 3.7 <https://ahfc.bmon.org/mini-monitor/mini_monitor_sd_2021-07-06.zip>`_
 
 Use the `Raspberry Pi Imager software <https://www.raspberrypi.org/software/>`_
 to write the image to an 8 GB or greater micro-SD card.

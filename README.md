@@ -14,6 +14,7 @@ The Mini-Monitor software is data acquisition software that runs on a [Raspberry
 - The [AERCO BMS II Boiler controller](http://www.aerco.com/Products/Accessories/Controls/BMS-II-Model-5R5-384), which controls a set of AERCO boilers.  The Raspberry Pi interfaces via a serial RS232 MODBUS interface.
 - Thermistors connected to a [Labjack U3 data acquisition board](http://labjack.com/u3).
 - Gauge air pressure measured by an [Energy Conservatory DG-700 Pressure Gauge](http://products.energyconservatory.com/dg-700-pressure-and-flow-gauge/).
+- Sensaphone’s Infrastructure Monitoring System ([IMS-4000](https://www.sensaphone.com/pdf/LIT-0064_IMS-4000_Manualv3.0_WEB.pdf). Data can be obtained from up to 32 remote nodes, each with the capacity to record 8 different sensors. The Raspberry Pi obtains data using the [Simple Network Management Protocol](https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol) (SNMP).
 
 The software design is flexible and allows for the easy addition of other data sources.  To add a new data source, an appropriate "Reader" class written in Python must be created, and can then be combined with other Reader classes to create a customized data acquisition system.
 
@@ -23,4 +24,4 @@ Here is a picture of a Mini-Monitor installed in a boiler room connecting to Bur
 
 For detailed information about this software: 
 
-### Please see the [Mini-Monitor Dcoumentation](http://mini-monitor-documentation.readthedocs.io/en/latest/index.html)
+### Please see the [Mini-Monitor Documentation](http://mini-monitor-documentation.readthedocs.io/en/latest/index.html)

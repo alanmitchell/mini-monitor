@@ -1,1 +1,1 @@
-Sphinx~=2.2
+docutils<0.18

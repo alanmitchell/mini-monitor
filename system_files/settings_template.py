@@ -65,6 +65,7 @@ READERS = [
 #'aerco_boiler.BMS2reader',       # AERCO BMS II Boiler Mangager
 #'dg700.DG700reader',             # Energy Conservatory DG-700 Pressure Gauge
 #'labjack.LabjackTempReader',     # Thermistors connected to Labjack U3
+#'labjack_analog.LabjackAnalog',  # Reads 4 analog channels on Labjack U3
 #'sensaphone.SensaphoneReader',   # Reads Node sensors from Sensaphone IMS 4000
 #'outage_monitor.OutageMonitor',  # Detects Power Outages through state of GPIO pin
 #'usb_temp1.USBtemperature1',      # Reads one 1-wire temperature sensor for Marco project. USB master.

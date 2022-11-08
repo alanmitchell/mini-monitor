@@ -90,7 +90,7 @@ class HA7_port(serial.Serial):
         '''
         ret = ''
         while True:
-            c = self.read(1)
+            c = self.read(1).decode("utf-8")
             if len(c)==0 or c=='\r':
                 return ret
             ret += c
@@ -98,7 +98,7 @@ class HA7_port(serial.Serial):
     def reset(self):
         '''Issues a one-wire reset command.  Returns nothing.
         '''
-        self.write('R')
+        self.write('R'.encode('utf-8'))
         self.readline()
 
     regex_dev = re.compile('^[0-9A-F]{16}$')
@@ -115,7 +115,7 @@ class HA7_port(serial.Serial):
         # shows up.
         for i in range(3):
             self.flushInput()
-            self.write('S')
+            self.write('S'.encode('utf-8'))
             lin = self.readline()
             if HA7_port.regex_dev.search(lin):
                 break
@@ -137,7 +137,7 @@ class HA7_port(serial.Serial):
                 rec['id'] = '%s.%s' % (rec['family'], rec['addr'][2:-2])
                 dev_list.append(rec)
     
-            self.write('s')
+            self.write('s'.encode('utf-8'))
             lin = self.readline()
     
         return dev_list
@@ -150,11 +150,11 @@ class HA7_port(serial.Serial):
         '''
         # Determine the length of the string to be written, expressed
         # in HEX, two digits, without leading 0x.
-        byte_len = hex(len(hex_str)/2)[2:].upper()
+        byte_len = hex(len(hex_str)//2)[2:].upper()
         if len(byte_len)==1:
             byte_len = '0' + byte_len
         
-        self.write('W%s%s\r' % (byte_len, hex_str))
+        self.write(('W%s%s\r' % (byte_len, hex_str)).encode('utf-8'))
         return self.readline()
 
 
@@ -182,7 +182,7 @@ class HA7Sreader(base_reader.Reader):
                 try:
                     port = HA7_port(p_path)
                     port.flushInput()
-                    port.write('S')     # searches for first device
+                    port.write('S'.encode('utf-8'))     # searches for first device
                     res = port.readline()
                     if HA7_port.regex_dev.search(res):
                         self.port_path = p_path

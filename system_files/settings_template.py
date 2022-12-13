@@ -46,6 +46,30 @@ USE_CELL_MODEM = False
 CELL_MODEM_MODEL = 'E173'
 
 # ----------------------------------------------------
+# Blues Wireless Notecard server settings. Mini-monitor can post readings
+# through a Blues Wireless Notecard.  The settings below control startup of
+# the server and import configuration.
+
+# Set to True to start Notecard server
+ENABlE_NOTECARD = False               
+
+# The project ID on the Notehub 
+NOTECARD_PRODUCT = 'us.ahfc.tboyes:sensor_readings'
+
+# A string that identifies this Notecard and Pi
+NOTECARD_SN_STRING = 'ID String'
+
+# A comma-separated list of destinations for the sensor readings. These will be 
+# used to route the data the Blues Notehub to BMON systems or other servers that
+# can accept the data.
+NOTECARD_DESTINATIONS = 'ahfc_bmon'
+
+# *** IMPORTANT NOTE *** You must set the POST_URL setting in the next section 
+# to "http://localcost:5000/minimon" to use the Notecard server.  The POST_STORE_KEY
+# setting is irrelevant and can be set to anything.
+
+
+# ----------------------------------------------------
 
 # Set following to True to enable posting to a BMON server
 ENABLE_BMON_POST = True
@@ -54,6 +78,8 @@ ENABLE_BMON_POST = True
 # An example BMON URL is "https://bms.ahfc.us"
 # The Store Key must match the Store Key in the settings file for
 # the BMON server.
+# NOTE: if using the Blues Notecard to transmit data, complete settings in the section
+# above, and set POST_URL to "http://localhost:5000/minimon"
 POST_URL = '[BMON URL goes here]/readingdb/reading/store/'
 POST_STORE_KEY = 'Store Key Goes Here'
 

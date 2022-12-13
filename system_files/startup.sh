@@ -47,6 +47,14 @@ then
 	/home/pi/pi_logger/scripts/run_mqtt_to_bmon &
 fi
 
+# If requested, start the Blues Wireless Notecard server, which can be used by
+# mini-monitor to post readings via a cellular network.
+if /home/pi/pi_logger/scripts/test_setting.py ENABLE_NOTECARD
+then
+	/home/pi/notecard-server/env/bin/python /home/pi/notecard-server/notecard-server/server.py /boot/pi_logger/settings.py &
+fi
+
+
 # Always start up pi_logger because it makes a status post to api.analysisnorth.com
 /home/pi/pi_logger/scripts/run_pi_logger &
 

@@ -51,9 +51,9 @@ CELL_MODEM_MODEL = 'E173'
 # the server and import configuration.
 
 # Set to True to start Notecard server
-ENABlE_NOTECARD = False               
+ENABlE_NOTECARD = False
 
-# The project ID on the Notehub 
+# The project ID on the Notehub
 NOTECARD_PRODUCT = 'us.ahfc.tboyes:sensor_readings'
 
 # A string that identifies this Notecard and Pi

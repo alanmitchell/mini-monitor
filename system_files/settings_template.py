@@ -51,7 +51,7 @@ CELL_MODEM_MODEL = 'E173'
 # the server and import configuration.
 
 # Set to True to start Notecard server
-ENABlE_NOTECARD = False
+ENABLE_NOTECARD = False
 
 # The project ID on the Notehub
 NOTECARD_PRODUCT = 'us.ahfc.tboyes:sensor_readings'

@@ -10,65 +10,6 @@ LOGGER_ID = 'test'
 READ_INTERVAL = 5   # seconds between readings
 LOG_INTERVAL = 10*60  # seconds between logging data
 
-# ----------- Cellular Modem Related -------------
-# Set following to True if you are using a USB Cellular modem
-# to connect to the Internet, **except** that some types of
-# modems such as the ZTE MF197 appear as an Ethernet port on the
-# Pi.  With these modems, leave the "USE_CELL_MODEM" parameter 
-# set to  False.
-USE_CELL_MODEM = False
-
-# If you are using a cell modem, set the following to a string indicating
-# the type of cell modem you are using.  This string must be one of the
-# "Dialer" sections in the wvdial.conf file found in the /boot/pi_logger
-# folder (the folder also containing the Mini-Monitor settings file.)
-# Currently, the following value are supported:
-#
-#     E173: Works with the Huawei E173 mdoem
-#     E3276: Works with the Huawei E3276 modem
-#     E1756C: Works with the Huawei E1756C modem
-#     MF197: Works with the ZTE MF197 modem when operating in serial mode
-#        Note that this modem sometimes ships with firmware that makes it
-#        appear as a USB-to-Ethernet converter.  For that firmware, set
-#        USE_CELL_MODEM to False.
-#
-# Mini-Monitor uses the WvDial Linux utility to connect the cell modem
-# to the Internet.  The /boot/pi_logger/wvdial.conf is the configuration
-# file for WvDial and can be edited to modify configuration settings and/or
-# enter new Dialer sections to support different models of modems.  Also,
-# The wvdial.conf file is set up with the APN of the GCI carrier in Alaska.
-# (see the Init3 configuration settings). This can be modified for other carriers.
-# See documentation of the Linux WvDial program for further information on
-# the configuration file.
-# NOTE: some versions of the E1756C modem did not reliably connect using
-# the current wvdial.conf settings.  Use the E173 or E3276 modems if possible.
-# *** This value must be in single or double quotes ***
-CELL_MODEM_MODEL = 'E173'
-
-# ----------------------------------------------------
-# Blues Wireless Notecard server settings. Mini-monitor can post readings
-# through a Blues Wireless Notecard.  The settings below control startup of
-# the server and import configuration.
-
-# Set to True to start Notecard server
-ENABLE_NOTECARD = False
-
-# The project ID on the Notehub
-NOTECARD_PRODUCT = 'us.ahfc.tboyes:sensor_readings'
-
-# A string that identifies this Notecard and Pi
-NOTECARD_SN_STRING = 'ID String'
-
-# A comma-separated list of destinations for the sensor readings. These will be 
-# used to route the data the Blues Notehub to BMON systems or other servers that
-# can accept the data.
-NOTECARD_DESTINATIONS = 'ahfc_bmon'
-
-# *** IMPORTANT NOTE *** You must set the POST_URL setting in the next section 
-# to "http://localcost:5000/minimon" to use the Notecard server.  The POST_STORE_KEY
-# setting is irrelevant and can be set to anything.
-
-
 # ----------------------------------------------------
 
 # Set following to True to enable posting to a BMON server
@@ -126,6 +67,73 @@ LAST_POST_REBOOT_DELAY = 4.0    # hours
 # Levels in order from least to greatest severity are:  DEBUG, INFO, WARNING,
 # ERROR, CRITICAL
 LOG_LEVEL = logging.INFO
+
+# ----------------------------------------------------
+# Blues Wireless Notecard server settings. Mini-monitor can post readings
+# through a Blues Wireless Notecard.  The settings below control startup of
+# the server and import configuration.
+
+# Set to True to start Notecard server
+ENABLE_NOTECARD = False
+
+# The project ID on the Notehub
+NOTECARD_PRODUCT = 'us.ahfc.tboyes:sensor_readings'
+
+# A string that identifies this Notecard and Pi
+NOTECARD_SN_STRING = 'ID String'
+
+# The port that the Notecard is connected.  Either a serial port such as
+# '/dev/ttyUSB0' or an i2c port such as '/dev/i2c-1'. '/dev/i2c-1' is correct
+# for a Notecard connected to a Raspberry Pi via a Notecarrier Pi Hat.
+NOTECARD_PORT_NAME = '/dev/i2c-1'
+
+# The number of minutes between uploads of readings by the Notecard.  Readings 
+# are queued when they arrive at the Notecard and are uploaded at this interval,
+# measured in minutes.  60 minutes is a good choice and will allow for multi-year
+# free data usage by the Notecard.
+NOTECARD_UPLOAD_PERIOD = 60.0
+
+
+# *** IMPORTANT NOTE *** You must set the POST_URL setting above 
+# to "http://localcost:5000/minimon" to use the Notecard server.  The POST_STORE_KEY
+# setting is irrelevant and can be set to anything.
+
+
+# ----------- Cellular Modem Related -------------
+# Set following to True if you are using a USB Cellular modem
+# to connect to the Internet, **except** that some types of
+# modems such as the ZTE MF197 appear as an Ethernet port on the
+# Pi.  With these modems, leave the "USE_CELL_MODEM" parameter 
+# set to  False.
+USE_CELL_MODEM = False
+
+# If you are using a cell modem, set the following to a string indicating
+# the type of cell modem you are using.  This string must be one of the
+# "Dialer" sections in the wvdial.conf file found in the /boot/pi_logger
+# folder (the folder also containing the Mini-Monitor settings file.)
+# Currently, the following value are supported:
+#
+#     E173: Works with the Huawei E173 mdoem
+#     E3276: Works with the Huawei E3276 modem
+#     E1756C: Works with the Huawei E1756C modem
+#     MF197: Works with the ZTE MF197 modem when operating in serial mode
+#        Note that this modem sometimes ships with firmware that makes it
+#        appear as a USB-to-Ethernet converter.  For that firmware, set
+#        USE_CELL_MODEM to False.
+#
+# Mini-Monitor uses the WvDial Linux utility to connect the cell modem
+# to the Internet.  The /boot/pi_logger/wvdial.conf is the configuration
+# file for WvDial and can be edited to modify configuration settings and/or
+# enter new Dialer sections to support different models of modems.  Also,
+# The wvdial.conf file is set up with the APN of the GCI carrier in Alaska.
+# (see the Init3 configuration settings). This can be modified for other carriers.
+# See documentation of the Linux WvDial program for further information on
+# the configuration file.
+# NOTE: some versions of the E1756C modem did not reliably connect using
+# the current wvdial.conf settings.  Use the E173 or E3276 modems if possible.
+# *** This value must be in single or double quotes ***
+CELL_MODEM_MODEL = 'E173'
+
 
 # ---------------------------------------------------------------------------
 # Below are settings that are only used for certain pi_logger Sensor Readers and

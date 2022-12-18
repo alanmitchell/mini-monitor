@@ -23,4 +23,4 @@ Here is a picture of a Mini-Monitor installed in a boiler room connecting to Bur
 
 For detailed information about this software: 
 
-### Please see the [Mini-Monitor Dcoumentation](http://mini-monitor-documentation.readthedocs.io/en/latest/index.html)
+### Please see the [Mini-Monitor Documentation](http://mini-monitor-documentation.readthedocs.io/en/latest/index.html)
